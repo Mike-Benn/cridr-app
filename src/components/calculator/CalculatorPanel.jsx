@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { payRates } from "../../utils/calculator/rates";
 import NumberField from "../general/form-fields/NumberField";
-import TextField from "../general/form-fields/TextField";
+import BonusListField from "./BonusListField";
+import { v4 as uuidv4 } from "../../../node_modules/uuid"
+import { calculatePaycheck, getItemWithId } from "../../utils/calculator/utils";
 
 
 
@@ -14,6 +16,16 @@ function CalculatorPanel() {
     const [weekend , setWeekend] = useState("");
     const [bonus , setBonus] = useState("");
     const [timesEarned, setTimesEarned] = useState("");
+    const [bonusList , setBonusList] = useState([]);
+    const paycheckValues = {
+        regularHours: regular,
+        overtimeHours: overtime,
+        nightShiftHours: nightShift,
+        weekendHours: weekend,
+        bonusList: bonusList,
+    }
+    const selectedId = "kermit";
+    const calculatedPay = calculatePaycheck(selectedId , paycheckValues , payRates);
     
     //   Regular Hours   //
 
@@ -45,12 +57,64 @@ function CalculatorPanel() {
         setBonus(e.target.value);
     }
 
+    const handleBonusSubmit = () => {
+        if (bonus && timesEarned) {
+            let newBonus = {
+                id: uuidv4(),
+                amount: bonus,
+                quantity: timesEarned,
+            }
+            let updatedBonusList = bonusList.concat([newBonus]);
+            setBonusList(updatedBonusList);
+            resetBonusForm();
+        } else {
+            alert("Missing information");
+        }
+    }
+
+    const handleBonusEdit = (id) => {
+        let bonusObject = getItemWithId(id , bonusList);
+        let bonus = bonusObject.item;
+        let updatedBonusList = bonusObject.arr;
+        setBonus(bonus.amount);
+        setTimesEarned(bonus.quantity);
+        setBonusList(updatedBonusList);
+    }
+
+    const handleBonusDelete = (id) => {
+        let updatedBonusList = bonusList.filter(bonus => 
+            id !== bonus.id
+        );
+        setBonusList(updatedBonusList)
+    }
+
+    const resetBonusForm = () => {
+        setBonus("");
+        setTimesEarned("");
+    }
+
+
     //   Times earned   //
 
     const handleTimesEarnedChange = (e) => {
         setTimesEarned(e.target.value);
     }
 
+    //   Data to be passed as props   //
+
+    const bonusListeners = {
+        handleBonusHoursChange,
+        handleTimesEarnedChange,
+        handleBonusSubmit,
+        handleBonusDelete,
+        handleBonusEdit,
+    }
+
+    const currValues = {
+        bonus: bonus,
+        quantity: timesEarned,
+
+    }
 
     return (
         <form action="" className="calculator">
@@ -63,11 +127,13 @@ function CalculatorPanel() {
             </fieldset>
             <fieldset>
                 <legend>Bonuses</legend>
-
+                <BonusListField bonusList={bonusList} bonusListeners={bonusListeners} currValues={currValues}/>
             </fieldset>
-            
-
-
+            <fieldset>
+                <legend>Gross and Net Pay</legend>
+                <NumberField fieldName="Gross Pay" value={calculatedPay.currGrossPay} />
+                <NumberField fieldName="Net Pay" value={calculatedPay.currNetPay} />
+            </fieldset>
         </form>
     )
 }
