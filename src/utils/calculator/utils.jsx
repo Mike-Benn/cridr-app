@@ -28,8 +28,8 @@ function calculatePaycheck(id , paycheckValues , rates) {
     let nightShiftPay = (paycheckValues.nightShiftHours ? Number(paycheckValues.nightShiftHours) * userRates.nightShiftDifferential : 0);
     let bonusTotal = (paycheckValues.bonusList.length > 0 ? calculateBonus(paycheckValues.bonusList) : 0);
 
-    let currGrossPay = basePay + overtimePay + weekendPay + nightShiftPay + bonusTotal;
-    let currNetPay = Math.round(currGrossPay * userRates.taxRate);
+    let currGrossPay = Math.round((basePay + overtimePay + weekendPay + nightShiftPay + bonusTotal) * 100 ) / 100;
+    let currNetPay = Math.round((currGrossPay * userRates.taxRate) * 100) / 100;
 
     return {currGrossPay , currNetPay};
 }
