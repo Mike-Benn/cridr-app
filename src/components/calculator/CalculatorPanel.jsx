@@ -57,7 +57,8 @@ function CalculatorPanel() {
         setBonus(e.target.value);
     }
 
-    const handleBonusSubmit = () => {
+    const handleBonusSubmit = (e) => {
+        e.preventDefault();
         if (bonus && timesEarned) {
             let newBonus = {
                 id: uuidv4(),
@@ -70,6 +71,7 @@ function CalculatorPanel() {
         } else {
             alert("Missing information");
         }
+        
     }
 
     const handleBonusEdit = (id) => {
@@ -115,7 +117,7 @@ function CalculatorPanel() {
         quantity: timesEarned,
 
     }
-
+    
     return (
         <form action="" className="calculator">
             <fieldset>
@@ -131,8 +133,8 @@ function CalculatorPanel() {
             </fieldset>
             <fieldset>
                 <legend>Gross and Net Pay</legend>
-                <NumberField fieldName="Gross Pay" value={calculatedPay.currGrossPay} />
-                <NumberField fieldName="Net Pay" value={calculatedPay.currNetPay} />
+                <NumberField fieldName="Gross Pay" value={calculatedPay.currGrossPay} readOnly={true} />
+                <NumberField fieldName="Net Pay" value={calculatedPay.currNetPay} readOnly={true} />
             </fieldset>
         </form>
     )
