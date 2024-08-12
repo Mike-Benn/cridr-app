@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import NumberField from '../general/form-fields/NumberField';
 import SubmitFormButton from '../general/buttons/SubmitFormButton';
-import EditableBonusList from '../general/lists/EditableBonusList';
+import EditableBonusList from './EditableBonusList';
 
 
 
@@ -16,8 +16,8 @@ function BonusListField({ bonusList , bonusListeners , currValues  }) {
     return (
         <div>
             <EditableBonusList bonusList={bonusList} bonusListeners={bonusListeners} />
-            <NumberField fieldName="Bonus Amount" value={currValues.bonus} />
-            <NumberField fieldName="Times Earned" value={currValues.quantity} onKeyDown={enterPressed} />
+            <NumberField fieldName="Bonus Amount" value={currValues.bonus} onChange={bonusListeners.handleBonusHoursChange}/>
+            <NumberField fieldName="Times Earned" value={currValues.quantity} onChange={bonusListeners.handleTimesEarnedChange} onKeyDown={enterPressed} />
             <SubmitFormButton buttonText='Submit Bonus' onClick={bonusListeners.handleBonusSubmit}/>
         </div>
     )
