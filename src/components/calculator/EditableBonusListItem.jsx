@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import EditListItemButton from '../buttons/EditListItemButton';
-import DeleteListItemButton from '../buttons/DeleteListItemButton';
+import EditListItemButton from '../general/buttons/EditListItemButton';
+import DeleteListItemButton from '../general/buttons/DeleteListItemButton';
 
 function EditableBonusListItem({ bonusData , onDelete , onEdit }) {
     return (
         <li>
             <p>{bonusData.amount} x {bonusData.quantity}</p>
             <div>
-                <EditListItemButton onEdit={onEdit} />
-                <DeleteListItemButton onDelete={onDelete} />
+                <EditListItemButton id={bonusData.id} onEdit={onEdit} />
+                <DeleteListItemButton id={bonusData.id} onDelete={onDelete} />
             </div>
         </li>
     )
