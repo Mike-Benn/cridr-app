@@ -1,6 +1,6 @@
-import PropTypes from 'PropTypes';
+import PropTypes from 'prop-types';
 
-function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelClass }) {
+function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelClass , onChange , value}) {
     let forVal = fieldName.split(' ').join('');
     
     return (
@@ -12,6 +12,8 @@ function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelCl
                 id={forVal}
                 name={forVal}
                 placeholder={placeHolder}
+                onChange={onChange}
+                value={value}
                 />
         </div>
     )   
@@ -23,6 +25,8 @@ TextField.propTypes = {
     placeHolder: PropTypes.string,
     inputClass: PropTypes.string,
     labelClass: PropTypes.string,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
 }
 
 export default TextField;

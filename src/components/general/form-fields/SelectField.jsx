@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types'
 
 
-function SelectField({ options , initValue }) {
+function SelectField({ options , onChange , value}) {
     
     let optionList = options.map(option =>
         <option key={option.id} value={option.value}>{option.text}</option>
     )
 
     return (
-        <select value={initValue}>{optionList}</select>
+        <select value={value} onChange={onChange}>{optionList}</select>
     )
 }
 
 SelectField.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object),
-    initValue: PropTypes.string,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
 }
 
 
