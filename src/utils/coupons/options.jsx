@@ -9,6 +9,12 @@ export { CARD_OPTIONS,
 const CARD_OPTIONS = [
     {
         id: uuidv4(),
+        text: "Select credit card",
+        value: "default",
+    },
+
+    {
+        id: uuidv4(),
         text: "Chase Freedom Unlimited",
         value: "cfu"
     },
