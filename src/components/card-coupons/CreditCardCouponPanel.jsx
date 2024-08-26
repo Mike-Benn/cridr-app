@@ -1,77 +1,36 @@
 import SelectField from "../general/form-fields/SelectField";
-import { v4 as uuidv4 } from '../../../node_modules/uuid'
-import { useState } from "react";
+import { COUPON_TYPES_FILTER, SORT_OPTIONS } from "../../utils/coupons/options";
+import { useState , useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import glass from "../../images/magnifying.png"
+import CouponList from "./CouponList";
 
 function CreditCardCouponPanel() {
 
+    const navigate = useNavigate();
+    const [coupons , setCoupons] = useState([]);
 
-    const [tab , setTab] = useState("default");
-    
+    useEffect(() => {
+        const savedCoupons = JSON.parse(localStorage.getItem('coupons')) || [];
+        setCoupons(savedCoupons);
+    }, []);
 
-    
-
-    const couponOptions = [
-        {
-            id: uuidv4(),
-            text: "All Coupons",
-            value: "default",
-        },
-
-        {
-            id: uuidv4(),
-            text: "Restaurants",
-            value: "restaurants",
-        },
-
-        {
-            id: uuidv4(),
-            text: "Hotels",
-            value: "hotels",
-        },
-
-        {
-            id: uuidv4(),
-            text: "Shopping",
-            value: "shopping",
-        },
-
-        {
-            id: uuidv4(),
-            text: "Miscellaneous",
-            value: "misc",
-        }
-    ];
-
-    const sortOptions = [
-        {
-            id: uuidv4(),
-            text: "By Expiration",
-            value: "expiration",
-        },
-
-        {
-            id: uuidv4(),
-            text: "A to Z",
-            value: "alphabetical-ascen",
-        },
-
-        {
-            id: uuidv4(),
-            text: "Z to A",
-            value: "alphabetical-descen"
-        }
-    ]
+    const handleAddCoupon = () => {
+        navigate('/coupon/add')
+    }
 
     return (
-    <>
-        <button type="button">Make new coupon!</button>
-        <div>
+    <section>
+        <button type="button" onClick={handleAddCoupon}>Make new coupon!</button>
+        <div className="coupon-header">
             <button type="button"><img src={glass} alt="Search coupons" /></button>
-            <SelectField values={couponOptions} />
-            <SelectField values={sortOptions} />
+            <SelectField options={COUPON_TYPES_FILTER} />
+            <SelectField options={SORT_OPTIONS} />
         </div>
-    </>
+        <div className="coupon-list">
+            <CouponList couponList={coupons} />
+        </div>
+    </section>
     )
 }
 
