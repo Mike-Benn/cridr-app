@@ -1,9 +1,18 @@
 
-import CreditCardCouponPanel from "./components/card-coupons/CreditCardCouponPanel"
+import { useNavigate } from "react-router-dom"
 import "./css/styles.css"
 function App() {
+  
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('/coupon');
+  }
+  
   return (
-    <CreditCardCouponPanel />
+    <>
+      <button type="button" onClick={handleNavigate}>Coupons</button>
+    </>
   )
 }
 
