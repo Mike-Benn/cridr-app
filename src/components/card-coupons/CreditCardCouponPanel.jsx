@@ -16,7 +16,7 @@ function CreditCardCouponPanel() {
     }, []);
 
     const handleAddCoupon = () => {
-        navigate('/coupon/add')
+        navigate('/coupon/new')
     }
 
     return (

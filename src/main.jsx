@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <CreditCardCouponPanel />
   },
   {
-    path: "/coupon/add",
+    path: "/coupon/new",
     element: <AddCouponPanel />
   }
 ])
