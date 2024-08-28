@@ -85,13 +85,13 @@ function AddCouponPanel() {
         <form action='' onSubmit={handleSubmitForm}>
             <fieldset>
                 <legend>Coupon Info</legend>
-                <SelectField options={CARD_OPTIONS} onChange={handleCardChange} value={card}/>
-                <SelectField options={COUPON_TYPES} onChange={handleCouponTypeChange} value={couponType}/>
-                <SelectField options={CASHBACK_TYPE} onChange={handleCashbackTypeChange} value={cashbackType}/>
-                <TextField fieldName="Establishment/Service Name" onChange={handleBusinessNameChange} value={businessName}/>
-                <NumberField fieldName="Cashback Amount" placeHolder="% or raw amount, must be number" onChange={handleAmountChange} value={amount}/>
-                <NumberField fieldName="Cashback Limit" placeHolder="Must be number, 0 for no limit" onChange={handleLimitChange} value={limit}/>
-                <DateField fieldName="Expiration Date" onChange={handleExpirationDateChange} value={expirationDate}/>
+                <SelectField options={CARD_OPTIONS} onChange={handleCardChange} value={card} name="cardName"/>
+                <SelectField options={COUPON_TYPES} onChange={handleCouponTypeChange} value={couponType} name="couponType"/>
+                <SelectField options={CASHBACK_TYPE} onChange={handleCashbackTypeChange} value={cashbackType} name="cashbackType"/>
+                <TextField fieldName="Establishment/Service Name" onChange={handleBusinessNameChange} value={businessName} name="businessName"/>
+                <NumberField fieldName="Cashback Amount" placeHolder="% or raw amount, must be number" onChange={handleAmountChange} value={amount} name="amount"/>
+                <NumberField fieldName="Cashback Limit" placeHolder="Must be number, 0 for no limit" onChange={handleLimitChange} value={limit} name="limit"/>
+                <DateField fieldName="Expiration Date" onChange={handleExpirationDateChange} value={expirationDate} name="expirationDate"/>
                 <SubmitFormButton buttonText='Submit Coupon'/>
             </fieldset>
         </form>
