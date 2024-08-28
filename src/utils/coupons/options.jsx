@@ -84,7 +84,7 @@ const CASHBACK_TYPE = [
     {
         id: uuidv4(),
         text: "Raw cash back",
-        value: "raw",
+        value: "cash",
     }
 ]
 
