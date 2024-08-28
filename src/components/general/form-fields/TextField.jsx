@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelClass , onChange , value}) {
+function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelClass , onChange , value , name}) {
     let forVal = fieldName.split(' ').join('');
     
     return (
@@ -10,7 +10,7 @@ function TextField({ fieldName , fieldClass , placeHolder , inputClass , labelCl
                 type="text"
                 className={inputClass}
                 id={forVal}
-                name={forVal}
+                name={name}
                 placeholder={placeHolder}
                 onChange={onChange}
                 value={value}
@@ -27,6 +27,7 @@ TextField.propTypes = {
     labelClass: PropTypes.string,
     onChange: PropTypes.func,
     value: PropTypes.string,
+    name: PropTypes.string,
 }
 
 export default TextField;

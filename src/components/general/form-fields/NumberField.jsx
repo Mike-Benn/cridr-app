@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-function NumberField({ fieldName , fieldClass , placeHolder , inputClass , labelClass , value , onChange , onKeyDown , readOnly }) {
+function NumberField({ fieldName , fieldClass , placeHolder , inputClass , labelClass , value , onChange , onKeyDown , readOnly , name }) {
     let forVal = fieldName.split(' ').join('');
     
     return (
@@ -10,7 +10,7 @@ function NumberField({ fieldName , fieldClass , placeHolder , inputClass , label
                 type="number"
                 className={inputClass}
                 id={forVal}
-                name={forVal}
+                name={name}
                 placeholder={placeHolder}
                 value={value}
                 onChange={onChange}
@@ -34,6 +34,7 @@ NumberField.propTypes = {
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
     readOnly: PropTypes.bool,
+    name: PropTypes.name,
 
 }
 
