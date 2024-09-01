@@ -5,6 +5,7 @@ import DateField from "../general/form-fields/DateField"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import { useState } from 'react'
+import axios from 'axios'
 
 import { CARD_OPTIONS , COUPON_TYPES , CASHBACK_TYPE } from '../../utils/coupons/options'
 import { useNavigate } from 'react-router-dom'
@@ -50,26 +51,39 @@ function AddCouponPanel() {
         setExpirationDate(e.target.value);
     }
 
-    const handleSubmitForm = (e) => {
-        e.preventDefault();
-        const coupons = JSON.parse(localStorage.getItem('coupons')) || [];
-        const newCoupon = {
-            id: uuidv4(),
-            card,
-            couponType,
-            cashbackType,
-            businessName,
-            amount,
-            limit,
-            expirationDate,
-        };
-        coupons.push(newCoupon);
-        localStorage.setItem('coupons' , JSON.stringify(coupons));
-        clearForm();
-        navigate('/coupon')
+    
+const handleSubmitForm = async (e) => {
+    e.preventDefault();
 
+    const newCoupon = {
+        id: uuidv4(), 
+        card,
+        couponType,
+        cashbackType,
+        businessName,
+        amount,
+        limit,
+        expirationDate,
+    };
 
+    try {
+        const response = await axios.post('https://api.mike-benn.com/coupon/add', newCoupon, {
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+        });
+
+        if (response.status === 200) {
+            console.log('Coupon added successfully:', response.data);
+            clearForm();
+            navigate('/coupon');
+        } else {
+            console.error('Failed to add coupon:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error while adding coupon:', error);
     }
+};
     
     const clearForm = () => {
         setCard("default");
