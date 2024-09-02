@@ -14,6 +14,7 @@ function CalculatorPanel() {
     const [overtime , setOvertime] = useState("");
     const [nightShift , setNightShift] = useState("");
     const [weekend , setWeekend] = useState("");
+    const [holiday , setHoliday] = useState("");
     const [bonus , setBonus] = useState("");
     const [timesEarned, setTimesEarned] = useState("");
     const [bonusList , setBonusList] = useState([]);
@@ -21,6 +22,7 @@ function CalculatorPanel() {
         regularHours: regular,
         overtimeHours: overtime,
         nightShiftHours: nightShift,
+        holidayHours: holiday,
         weekendHours: weekend,
         bonusList: bonusList,
     }
@@ -55,6 +57,12 @@ function CalculatorPanel() {
 
     const handleBonusHoursChange = (e) => {
         setBonus(e.target.value);
+    }
+
+    //   Holiday Hours   //
+
+    const handleHolidayHoursChange = (e) => {
+        setHoliday(e.target.value);
     }
 
     const handleBonusSubmit = (e) => {
@@ -126,6 +134,7 @@ function CalculatorPanel() {
                 <NumberField fieldName="Overtime Hours" value={overtime} onChange={handleOvertimeChange}/>
                 <NumberField fieldName="Night Shift Hours" value={nightShift} onChange={handleNightShiftChange}/>
                 <NumberField fieldName="Weekend Hours" value={weekend} onChange={handleWeekendChange} />
+                <NumberField fieldName="Holiday Hours" value={holiday} onChange={handleHolidayHoursChange} />
             </fieldset>
             <fieldset>
                 <legend>Bonuses</legend>
