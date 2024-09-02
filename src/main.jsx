@@ -5,6 +5,7 @@ import CreditCardCouponPanel from './components/card-coupons/CreditCardCouponPan
 
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import AddCouponPanel from './components/card-coupons/AddCouponPanel.jsx'
+import ProfilePanel from './components/profile/ProfilePanel.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,12 @@ const router = createBrowserRouter([
   {
     path: "/coupon/new",
     element: <AddCouponPanel />
+  },
+  {
+    path: "/profile",
+    element: <ProfilePanel />
   }
+
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
