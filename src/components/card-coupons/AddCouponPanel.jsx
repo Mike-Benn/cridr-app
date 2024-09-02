@@ -17,7 +17,7 @@ function AddCouponPanel() {
     const [cashbackType , setCashbackType] = useState("default");
     const [businessName , setBusinessName] = useState("");
     const [amount , setAmount] = useState("");
-    const [limit , setLimit] = useState("");
+    const [cashback_limit , setLimit] = useState("");
     const [expirationDate , setExpirationDate] = useState("");
 
     const navigate = useNavigate();
@@ -61,8 +61,8 @@ const handleSubmitForm = async (e) => {
         couponType,
         cashbackType,
         businessName,
-        amount,
-        limit,
+        amount: Number(amount),
+        cashback_limit: Number(cashback_limit),
         expirationDate,
     };
 
@@ -104,7 +104,7 @@ const handleSubmitForm = async (e) => {
                 <SelectField options={CASHBACK_TYPE} onChange={handleCashbackTypeChange} value={cashbackType} name="cashbackType"/>
                 <TextField fieldName="Establishment/Service Name" onChange={handleBusinessNameChange} value={businessName} name="businessName"/>
                 <NumberField fieldName="Cashback Amount" placeHolder="% or raw amount, must be number" onChange={handleAmountChange} value={amount} name="amount"/>
-                <NumberField fieldName="Cashback Limit" placeHolder="Must be number, 0 for no limit" onChange={handleLimitChange} value={limit} name="limit"/>
+                <NumberField fieldName="Cashback Limit" placeHolder="Must be number, 0 for no limit" onChange={handleLimitChange} value={cashback_limit} name="limit"/>
                 <DateField fieldName="Expiration Date" onChange={handleExpirationDateChange} value={expirationDate} name="expirationDate"/>
                 <SubmitFormButton buttonText='Submit Coupon'/>
             </fieldset>
