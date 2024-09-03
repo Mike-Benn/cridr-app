@@ -67,7 +67,7 @@ const handleSubmitForm = async (e) => {
     };
 
     try {
-        const response = await axios.post('https://api.mike-benn.com/coupon/add', newCoupon, {
+        const response = await axios.post('https://cridr-app-backend-production.up.railway.app/coupon/add', newCoupon, {
             headers: {
                 'Content-Type': 'application/json', 
             },
