@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-function ProfileOption({ optionTitle , optionBio , linkAddress }) {
+function ProfileOption({ optionTitle , linkAddress }) {
 
 
 
@@ -9,7 +9,6 @@ function ProfileOption({ optionTitle , optionBio , linkAddress }) {
         <li>
             <Link to={linkAddress}>
                 <h4>{optionTitle}</h4>
-                <p>{optionBio}</p>
             </Link>
         </li>
     )
@@ -17,7 +16,6 @@ function ProfileOption({ optionTitle , optionBio , linkAddress }) {
 
 ProfileOption.propTypes = {
     optionTitle: PropTypes.string,
-    optionBio: PropTypes.string,
     linkAddress: PropTypes.string,
 }
 
