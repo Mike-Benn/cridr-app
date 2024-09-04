@@ -65,7 +65,7 @@ const handleSubmitForm = async (e) => {
     };
     console.log(newCoupon);
     try {
-        const response = await axios.post('https://www.mike-benn.com/coupon/submit-coupon', newCoupon, {
+        const response = await axios.post('https://api.mike-benn.com/add/submit-coupon', newCoupon, {
             headers: {
                 'Content-Type': 'application/json', 
             },
