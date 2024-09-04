@@ -3,7 +3,6 @@ import TextField from '../general/form-fields/TextField'
 import NumberField from '../general/form-fields/NumberField'
 import DateField from "../general/form-fields/DateField"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
-import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import { useState } from 'react'
 import axios from 'axios'
 
@@ -56,7 +55,6 @@ const handleSubmitForm = async (e) => {
     e.preventDefault();
 
     const newCoupon = {
-        id: uuidv4(), 
         card,
         couponType,
         cashbackType,
@@ -65,7 +63,7 @@ const handleSubmitForm = async (e) => {
         cashback_limit: Number(cashback_limit),
         expirationDate,
     };
-
+    console.log(newCoupon);
     try {
         const response = await axios.post('https://www.mike-benn.com/coupon/submit-coupon', newCoupon, {
             headers: {
