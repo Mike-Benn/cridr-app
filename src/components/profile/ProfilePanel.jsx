@@ -1,10 +1,15 @@
 
+import { useEffect } from "react"
 import ProfileBanner from "./ProfileBanner"
 import ProfileOption from "./ProfileOption"
 
 
 function ProfilePanel() {
 
+    useEffect(() => {
+        document.title = "My Profile | Cridr";
+    }, []);
+    
     return (
         <>
             <ProfileBanner userFullName="Mike Bennett" />

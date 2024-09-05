@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { payRates } from "../../utils/calculator/rates";
 import NumberField from "../general/form-fields/NumberField";
 import BonusListField from "./BonusListField";
@@ -29,6 +29,10 @@ function CalculatorPanel() {
     const selectedId = "kermit";
     const calculatedPay = calculatePaycheck(selectedId , paycheckValues , payRates);
     
+    useEffect(() => {
+        document.title = "Calculator | Cridr"
+    } , []);
+
     //   Regular Hours   //
 
     const handleRegularChange = (e) => {

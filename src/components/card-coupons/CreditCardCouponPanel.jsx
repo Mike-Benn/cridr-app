@@ -4,14 +4,14 @@ import { COUPON_TYPES_FILTER, SORT_OPTIONS } from "../../utils/coupons/options";
 import { useNavigate } from "react-router-dom";
 import glass from "../../images/magnifying.png"
 import CouponList from "./CouponList";
+import { useEffect } from "react";
 
 function CreditCardCouponPanel() {
 
+    useEffect(() => {
+        document.title = "Coupons | Cridr";
+    }, []);
     const navigate = useNavigate();
-    //const [coupons , setCoupons] = useState([]);
-
-    
-
     const handleAddCoupon = () => {
         navigate('/coupon/new')
     }

@@ -3,7 +3,7 @@ import TextField from '../general/form-fields/TextField'
 import NumberField from '../general/form-fields/NumberField'
 import DateField from "../general/form-fields/DateField"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import { CARD_OPTIONS , COUPON_TYPES , CASHBACK_TYPE } from '../../utils/coupons/options'
@@ -18,9 +18,11 @@ function AddCouponPanel() {
     const [amount , setAmount] = useState("");
     const [cashback_limit , setLimit] = useState("");
     const [expirationDate , setExpirationDate] = useState("");
-
     const navigate = useNavigate();
 
+    useEffect(() => {
+        document.title = "Add Coupon | Cridr";
+    }, []);
 
     const handleCardChange = (e) => {
         setCard(e.target.value);
