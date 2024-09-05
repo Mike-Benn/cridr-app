@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import RootPanel from './components/root/RootPanel.jsx'
 import CreditCardCouponPanel from './components/card-coupons/CreditCardCouponPanel.jsx'
+import CalculatorPanel from './components/calculator/CalculatorPanel.jsx'
 
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import AddCouponPanel from './components/card-coupons/AddCouponPanel.jsx'
@@ -10,7 +11,7 @@ import ProfilePanel from './components/profile/ProfilePanel.jsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <RootPanel />
   },
   {
     path: "/coupon",
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePanel />
+  },
+  {
+    path: "/calculator",
+    element: <CalculatorPanel />
   }
 
 ])
