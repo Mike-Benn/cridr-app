@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import TopNav from "../header/TopNav";
+import BottomNav from "../footer/BottomNav";
 
 function MainLayout() {
 
@@ -7,7 +8,7 @@ function MainLayout() {
     <>
         <TopNav />
         <main><Outlet /></main>
-        <footer></footer>
+        <BottomNav />
     </>
     )
 }
