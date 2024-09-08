@@ -6,30 +6,23 @@ import CalculatorPanel from './components/calculator/CalculatorPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import AddCouponPanel from './components/card-coupons/AddCouponPanel.jsx'
 import ProfilePanel from './components/profile/ProfilePanel.jsx'
+import MainLayout from './components/layouts/MainLayout.jsx'
+import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootPanel />
+    element: <MainLayout />,
+    children: [
+      { path: "/", element: <RootPanel /> },
+      { path: "/coupon", element: <CreditCardCouponPanel /> },
+      { path: "/coupon/new", element: <AddCouponPanel /> },
+      { path: "/profile", element: <ProfilePanel /> },
+      { path: "/profile/personal", element: <ProfilePersonalInfoPanel /> },
+      { path: "/calculator", element: <CalculatorPanel /> },
+    ],
   },
-  {
-    path: "/coupon",
-    element: <CreditCardCouponPanel />
-  },
-  {
-    path: "/coupon/new",
-    element: <AddCouponPanel />
-  },
-  {
-    path: "/profile",
-    element: <ProfilePanel />
-  },
-  {
-    path: "/calculator",
-    element: <CalculatorPanel />
-  }
-
-])
+]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
