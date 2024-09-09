@@ -8,6 +8,7 @@ import AddCouponPanel from './components/card-coupons/AddCouponPanel.jsx'
 import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
+import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/coupon/new", element: <AddCouponPanel /> },
       { path: "/profile", element: <ProfilePanel /> },
       { path: "/profile/personal", element: <ProfilePersonalInfoPanel /> },
+      { path: "/profile/my-cards", element: <ManageCardsPanel /> },
       { path: "/calculator", element: <CalculatorPanel /> },
     ],
   },

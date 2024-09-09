@@ -13,7 +13,7 @@ function ManageCardsPanel() {
     useEffect(() => {
         const fetchCards = async () => {
             try {
-                const response = await axios.get('https://api.mike-benn.com/profile/credit-cards/get-cards')
+                const response = await axios.get('https://api.mike-benn.com/profile/my-cards/get-cards')
                 if (response.status === 200) {
                     setCardList(response.data.split(", "));
                 } else {
