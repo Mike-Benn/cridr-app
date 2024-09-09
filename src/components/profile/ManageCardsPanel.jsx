@@ -16,7 +16,7 @@ function ManageCardsPanel() {
                 const response = await axios.get('https://api.mike-benn.com/profile/my-cards/get-cards')
                 if (response.status === 200) {
                     console.log(response);
-                    setCardList(response.data.split(", "));
+                    setCardList(response.data.data.split(", "));
                 } else {
                     console.error('Failed to fetch cards:', response.statusText);
                 }
