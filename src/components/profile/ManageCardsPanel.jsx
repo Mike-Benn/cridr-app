@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect , useState } from "react";
 import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import CardListItem from "./CardListItem";
+import AddItemButton from '../general/buttons/AddItemButton'
 
 
 function ManageCardsPanel() {
@@ -27,8 +28,13 @@ function ManageCardsPanel() {
         fetchCards();
     }, []);
 
+
+
     return (
-        <ul>{cardListItems}</ul>
+        <section>
+            <ul>{cardListItems}</ul>
+            <AddItemButton buttonText="Add Card"/>
+        </section>
     )
 }
 
