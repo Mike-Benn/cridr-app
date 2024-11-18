@@ -64,6 +64,7 @@ const handleSubmitForm = async (e) => {
         amount: Number(amount),
         cashback_limit: Number(cashback_limit),
         expirationDate,
+        username: "Mike",
     };
     try {
         const response = await axios.post('https://api.mike-benn.com/coupon/submit-coupon', newCoupon, {

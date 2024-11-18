@@ -10,7 +10,6 @@ function RootPanel() {
     <ul>
         <li><Link to='/coupon'><button type='button'>Coupons</button></Link></li>
         <li><Link to='/calculator'><button type='button'>Calculator</button></Link></li>
-        <li><Link to='/profile'><button type='button'>Profile</button></Link></li>
     </ul>
   )
 }
