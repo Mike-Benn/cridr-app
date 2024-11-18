@@ -7,11 +7,12 @@ import TextField from "../general/form-fields/TextField";
 function ProfilePersonalInfoPanel() {
     const [fullName , setFullName] = useState("");
     
-
+    
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchName = async () => {
             try {
-                const response = await axios.get('https://api.mike-benn.com/profile/personal/get-name');
+                const response = await axios.get(`${apiUrl}/profile/personal/get-name`);
                 if (response.status === 200) {
                     setFullName(response.data.data);
                 } else {
@@ -22,7 +23,7 @@ function ProfilePersonalInfoPanel() {
             }
         };
         fetchName();
-    }, []);
+    }, [apiUrl]);
 
     const handleNameChange = (e) => {
         setFullName(e.target.value);
@@ -31,12 +32,12 @@ function ProfilePersonalInfoPanel() {
     const handleSubmitForm = async (e) => {
         e.preventDefault();
 
-        const newUpdate = {
+        const nameUpdate = {
             fullName,
         };
 
         try {
-            const response = await axios.post('https://api.mike-benn.com/profile/personal/submit-info-change', newUpdate, {
+            const response = await axios.post(`${apiUrl}/profile/personal/submit-info-change`, nameUpdate, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

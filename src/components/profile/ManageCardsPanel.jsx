@@ -11,10 +11,11 @@ function ManageCardsPanel() {
         <CardListItem key={uuidv4()} data={item} />
     )
 
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchCards = async () => {
             try {
-                const response = await axios.get('https://api.mike-benn.com/profile/my-cards/get-cards')
+                const response = await axios.get(`${apiUrl}/profile/my-cards/get-cards`)
                 if (response.status === 200) {
                     setCardList(response.data.data.split(", "));
                 } else {
@@ -26,7 +27,7 @@ function ManageCardsPanel() {
         };
 
         fetchCards();
-    }, []);
+    }, [apiUrl]);
 
 
 

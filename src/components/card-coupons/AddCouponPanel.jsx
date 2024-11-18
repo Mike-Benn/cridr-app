@@ -19,7 +19,7 @@ function AddCouponPanel() {
     const [cashback_limit , setLimit] = useState("");
     const [expirationDate , setExpirationDate] = useState("");
     const navigate = useNavigate();
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
         document.title = "Add Coupon | Cridr";
     }, []);
@@ -67,7 +67,7 @@ const handleSubmitForm = async (e) => {
         username: "Mike",
     };
     try {
-        const response = await axios.post('https://api.mike-benn.com/coupon/submit-coupon', newCoupon, {
+        const response = await axios.post(`${apiUrl}/coupon/submit-coupon`, newCoupon, {
             headers: {
                 'Content-Type': 'application/json', 
             },
