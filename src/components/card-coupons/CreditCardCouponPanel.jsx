@@ -1,27 +1,27 @@
 import SelectField from "../general/form-fields/SelectField";
 import { COUPON_TYPES_FILTER, SORT_OPTIONS } from "../../utils/coupons/options";
-
+import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import { useNavigate } from "react-router-dom";
 import glass from "../../images/magnifying.png"
-import CouponList from "./CouponList";
-
-import { useEffect} from "react";
+import CouponListItem from "./CouponListItem";
+import { useEffect , useState } from "react";
 import axios from "axios";
 
 
 function CreditCardCouponPanel() {
-    /*const [couponList, setCouponList] = useState([]);
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const [couponList, setCouponList] = useState([]);
     const couponListItems = couponList.map(item => 
         <CouponListItem key={uuidv4()} data={item} />
-    )*/
-    const apiUrl = import.meta.env.VITE_API_URL;
+    )
+    
     useEffect(() => {
         document.title = "Coupons | Cridr";
         const fetchCoupons = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/coupon/all`)
-                if (response.status === 200) {
-                    console.log(response.data)
+                const response = await axios.get(`${apiUrl}/coupon/all`);
+                if (response.status === 200 && response.data) {
+                    setCouponList(response.data.data);
                 } else {
                     console.error('Failed to fetch coupons:', response.statusText);
                 }
@@ -47,9 +47,7 @@ function CreditCardCouponPanel() {
             <SelectField options={COUPON_TYPES_FILTER} />
             <SelectField options={SORT_OPTIONS} />
         </div>
-        <div className="coupon-list">
-            <CouponList couponList={[]} />
-        </div>
+        <ul className="coupon-list">{couponListItems}</ul>
     </section>
     )
 }

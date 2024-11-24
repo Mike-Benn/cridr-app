@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 function CouponListItem({ data }) {
     return (
         <li>
-            <p>{data.card} x {data.businessName}</p>
+            <p>{data.card_name} x {data.business_name}</p>
         </li>
     )
 }
