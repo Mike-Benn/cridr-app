@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter };
+export { getPathName , capitalizeFirstLetter , getReadableDate};
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -16,5 +16,18 @@ function getPathName(pathName) {
     
 }
 
+function getReadableDate(date) {
+    date = new Date(date);
+    let currentDate = new Date();
+    let timeLeft = ((date - currentDate) / (1000 * 60 * 60 * 24));
+
+    if (timeLeft > 1) {
+        return `${Math.ceil(timeLeft)}d left`;
+    } else {
+        return `${(timeLeft / 1) * 24}d left`;
+
+    }
+
+}
 
 
