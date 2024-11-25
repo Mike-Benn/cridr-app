@@ -5,8 +5,8 @@ import DateField from "../general/form-fields/DateField"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
-import { CARD_OPTIONS , COUPON_TYPES , CASHBACK_TYPE } from '../../utils/coupons/options'
+import { COUPON_TYPES , CASHBACK_TYPE } from '../../utils/coupons/couponOptions'
+import { CARD_OPTIONS } from '../../utils/cards/cardOptions'
 import { useNavigate } from 'react-router-dom'
 
 function AddCouponPanel() {

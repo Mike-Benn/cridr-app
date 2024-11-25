@@ -1,5 +1,3 @@
-import SelectField from "../general/form-fields/SelectField";
-import { COUPON_TYPES_FILTER, SORT_OPTIONS } from "../../utils/coupons/options";
 import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import { useNavigate } from "react-router-dom";
 import glass from "../../images/magnifying.png"
@@ -44,8 +42,6 @@ function CreditCardCouponPanel() {
         <button type="button" onClick={handleAddCoupon}>Make new coupon!</button>
         <div className="coupon-header">
             <button type="button"><img src={glass} alt="Search coupons" /></button>
-            <SelectField options={COUPON_TYPES_FILTER} />
-            <SelectField options={SORT_OPTIONS} />
         </div>
         <ul className="coupon-list">{couponListItems}</ul>
     </section>
