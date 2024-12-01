@@ -9,6 +9,8 @@ import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
 import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
+import FuelPointsPanel from './components/fuel-points/FuelPointsPanel.jsx'
+import AddFuelPointsPanel from './components/fuel-points/AddFuelPointsPanel.jsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,8 @@ const router = createBrowserRouter([
       { path: "/profile/personal", element: <ProfilePersonalInfoPanel /> },
       { path: "/profile/my-cards", element: <ManageCardsPanel /> },
       { path: "/calculator", element: <CalculatorPanel /> },
+      { path: "/fuel-points", element: <FuelPointsPanel />},
+      { path: "/fuel-points/new", element: <AddFuelPointsPanel />},
     ],
   },
 ]);
