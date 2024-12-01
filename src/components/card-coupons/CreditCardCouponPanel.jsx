@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "../../../node_modules/uuid"
 import { useNavigate } from "react-router-dom";
 import glass from "../../images/magnifying.png"
 import CouponListItem from "./CouponListItem";
@@ -9,10 +8,29 @@ import axios from "axios";
 function CreditCardCouponPanel() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [couponList, setCouponList] = useState([]);
+
+    const deleteCoupon = async (id) => {
+        const couponListCopy = couponList;
+        const updatedCouponList = couponList.filter((coupon) => coupon.id !== id);
+        setCouponList(updatedCouponList);
+
+        try {
+            const response = axios.delete(`${apiUrl}/coupon/${id}`);
+            console.log("Coupon deleted successfully!", response.data);
+        } catch (error) {
+            console.error('Error deleting coupon:', error.response ? error.response.data : error.message);
+            setCouponList(couponListCopy);
+        }
+
+
+    }
+
     const couponListItems = couponList.map(item => 
-        <CouponListItem key={uuidv4()} data={item} />
+        <CouponListItem key={item.id} data={item} deleteCoupon={deleteCoupon}/>
     )
+
     
+
     useEffect(() => {
         document.title = "Coupons | Cridr";
         const fetchCoupons = async () => {
@@ -34,7 +52,7 @@ function CreditCardCouponPanel() {
     const navigate = useNavigate();
 
     const handleAddCoupon = () => {
-        navigate('/coupon/new')
+        navigate('new')
     }
 
     return (

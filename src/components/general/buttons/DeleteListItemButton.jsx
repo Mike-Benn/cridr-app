@@ -1,20 +1,22 @@
-import PropTypes from 'prop-types';
-import x from '../../../images/x.png';
+import PropTypes from "prop-types";
 
-function DeleteListItemButton({ id , onDelete }) {
-    const handleClose = () => {
-        onDelete(id);
+function DeleteListItemButton({ id , onClick }) {
+
+    const handleDelete = () => {
+        onClick(id);
     }
 
     return (
-        <button type='button' onClick={handleClose}><img src={x} alt="Delete (X button)" /></button>
+        <>
+            <button key={id} type="button" onClick={handleDelete}>Delete</button>
+        </>
     )
 }
 
 DeleteListItemButton.propTypes = {
     id: PropTypes.string,
-    onDelete: PropTypes.func,
+    onClick: PropTypes.func,
 
 }
 
-export default DeleteListItemButton;
+export default DeleteListItemButton
