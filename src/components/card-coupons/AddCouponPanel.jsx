@@ -67,19 +67,13 @@ const handleSubmitForm = async (e) => {
         username: "Mike",
     };
     try {
-        const response = await axios.post(`${apiUrl}/coupon/submit-coupon`, newCoupon, {
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-        });
+        const response = await axios.post(`${apiUrl}/coupon/submit-coupon`, newCoupon);
 
         if (response.status === 200) {
             console.log('Coupon added successfully:', response.data);
             clearForm();
             navigate('/coupon');
-        } else {
-            console.error('Failed to add coupon:', response.statusText);
-        }
+        } 
     } catch (error) {
         console.error('Error while adding coupon:', error);
     }
