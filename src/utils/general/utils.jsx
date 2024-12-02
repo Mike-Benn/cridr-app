@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate};
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings};
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -28,6 +28,22 @@ function getReadableDate(date) {
 
     }
 
+}
+
+function calculateFuelPointSavings(fuelPointsTransactions) {
+    if (fuelPointsTransactions.length < 1) {
+        return 0;
+    } else {
+        let total = 0;
+        let gallons = 0
+        let pointsRedeemed = 0;
+        for (let i = 0; i < fuelPointsTransactions.length; i++) {
+            gallons = fuelPointsTransactions[i].gallons;
+            pointsRedeemed = Number((fuelPointsTransactions[i].points_redeemed / 1000).toFixed(2));
+            total += gallons * pointsRedeemed;
+        }
+        return total;
+    }
 }
 
 
