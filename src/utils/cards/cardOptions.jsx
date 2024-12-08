@@ -10,18 +10,18 @@ const CARD_OPTIONS = [
 
     {
         id: uuidv4(),
-        text: "Chase Freedom Unlimited",
-        value: "Chase Freedom Unlimited"
+        text: "Freedom Unlimited",
+        value: "Freedom Unlimited"
     },
     {
         id: uuidv4(),
-        text: "Chase Freedom Flex",
-        value: "Chase Freedom Flex"
+        text: "Freedom Flex",
+        value: "Freedom Flex"
     },
     {
         id: uuidv4(),
-        text: "Chase Sapphire Preferred",
-        value: "Chase Sapphire Preferred"
+        text: "Sapphire Preferred",
+        value: "Sapphire Preferred"
     }
 ];
 
