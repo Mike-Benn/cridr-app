@@ -53,7 +53,6 @@ function AddFuelPointsPanel() {
             const response = await axios.post(`${apiUrl}/fuel-points/submit-fuel-points`, newFuelPoints)
 
             if (response.status === 200) {
-                console.log("Fuel Points added successfully!");
                 clearForm();
                 navigate('/fuel-points');
             }
