@@ -11,6 +11,10 @@ import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPa
 import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
 import FuelPointsPanel from './components/fuel-points/FuelPointsPanel.jsx'
 import AddFuelPointsPanel from './components/fuel-points/AddFuelPointsPanel.jsx'
+import CardPointsPanel from './components/card-points/CardPointsPanel.jsx'
+import AddCardPointsPanel from './components/card-points/AddCardPointsPanel.jsx'
+import RetailerSavingsPanel from './components/retailer-savings/RetailerSavingsPanel.jsx'
+import AddRetailerSavingsPanel from './components/retailer-savings/AddRetailerSavingsPanel.jsx'
 
 const router = createBrowserRouter([
   {
@@ -26,6 +30,10 @@ const router = createBrowserRouter([
       { path: "/calculator", element: <CalculatorPanel /> },
       { path: "/fuel-points", element: <FuelPointsPanel />},
       { path: "/fuel-points/new", element: <AddFuelPointsPanel />},
+      { path: "/card-points", element: <CardPointsPanel />},
+      { path: "/card-points/new", element: <AddCardPointsPanel />},
+      { path: "/retailer-savings", element: <RetailerSavingsPanel />},
+      { path: "/retailer-savings/new", element: <AddRetailerSavingsPanel />},
     ],
   },
 ]);
