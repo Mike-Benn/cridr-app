@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints};
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings};
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -57,4 +57,10 @@ function calculateCardPoints(cardPointsTransactions) {
         return total;
     }
 }
+
+function calculateRetailItemSavings(quantity , retailerPricePer , competitorPricePer) {
+    return (competitorPricePer - retailerPricePer) * quantity
+}
+
+
 
