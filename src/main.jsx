@@ -15,6 +15,8 @@ import CardPointsPanel from './components/card-points/CardPointsPanel.jsx'
 import AddCardPointsPanel from './components/card-points/AddCardPointsPanel.jsx'
 import RetailerSavingsPanel from './components/retailer-savings/RetailerSavingsPanel.jsx'
 import AddRetailerSavingsPanel from './components/retailer-savings/AddRetailerSavingsPanel.jsx'
+import IncentivesPanel from './components/incentives/IncentivesPanel.jsx'
+import AddIncentivePanel from './components/incentives/AddIncentivesPanel.jsx'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,8 @@ const router = createBrowserRouter([
       { path: "/card-points/new", element: <AddCardPointsPanel />},
       { path: "/retailer-savings", element: <RetailerSavingsPanel />},
       { path: "/retailer-savings/new", element: <AddRetailerSavingsPanel />},
+      { path: "/incentives", element: <IncentivesPanel />},
+      { path: "/incentives", element: <AddIncentivePanel />},
     ],
   },
 ]);
