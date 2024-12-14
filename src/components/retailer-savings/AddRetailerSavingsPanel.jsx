@@ -7,6 +7,9 @@ import { RETAILER_OPTIONS } from "../../utils/retailer-savings/storeOptions"
 import { MEASUREMENT_OPTIONS } from "../../utils/retailer-savings/measurementOptions";
 import { calculateRetailItemSavings } from "../../utils/general/utils";
 import { useEffect, useState } from "react";
+import RetailerSavingsListItem from "./RetailerSavingsListItem";
+import { filterOutAndReturnById } from "../../utils/general/utils";
+
 
 function AddRetailerSavingsPanel() {
 
@@ -25,6 +28,8 @@ function AddRetailerSavingsPanel() {
 
     }, []);
     
+    
+
     const handleItemNameChange = (e) => {
         setItemName(e.target.value);
     }
@@ -66,6 +71,7 @@ function AddRetailerSavingsPanel() {
     const handleAddItem = () => {
         setAmountSaved(prevSaved => prevSaved + calculateRetailItemSavings(quantity , retailerPricePer , competitorPricePer))
         const newItem = {
+            id: uuidv4(),
             itemName,
             quantity,
             measurementType,
@@ -77,6 +83,30 @@ function AddRetailerSavingsPanel() {
         setItemList(prevItemList => [...prevItemList , newItem]);
         clearRetailSavingsForm();
     }
+
+    const handleDeleteItem = (id) => {
+        let updatedItemList = itemList.filter((item) => item.id !== id);
+        setItemList(updatedItemList)
+
+    }
+
+    const handleEditItem = (id) => {
+        let itemAndUpdatedList = filterOutAndReturnById(id , itemList);
+        setItemList(itemAndUpdatedList.newArray);
+
+        setItemName(itemAndUpdatedList.filteredItem.itemName);
+        setQuantity(itemAndUpdatedList.filteredItem.quantity);
+        setMeasurementType(itemAndUpdatedList.filteredItem.measurementType);
+        setRetailerName(itemAndUpdatedList.filteredItem.retailerName);
+        setRetailerPricePer(itemAndUpdatedList.filteredItem.retailerPricePer);
+        setCompetitorName(itemAndUpdatedList.filteredItem.competitorName);
+        setCompetitorPricePer(itemAndUpdatedList.filteredItem.competitorPricePer);
+        
+    }
+
+    const retailListItems = itemList.map(item =>
+        <RetailerSavingsListItem key={item.id} data={item} deleteItem={handleDeleteItem} editItem={handleEditItem} />
+    )
 
     return (
         <form action="">
@@ -90,6 +120,11 @@ function AddRetailerSavingsPanel() {
                 <SelectField options={RETAILER_OPTIONS} onChange={handleCompetitorNameChange} value={competitorName} />
                 <NumberField fieldName="Competitor Price Per" onChange={handleCompetitorPricePerChange} value={competitorPricePer} />
                 <button type="button" onClick={handleAddItem}>Add Item</button>
+            </fieldset>
+            <fieldset>
+                <legend>Items In Transaction</legend>
+                <ul>{retailListItems}</ul>
+                
             </fieldset>
             <SubmitFormButton buttonText="Submit Transaction" />
         </form>
