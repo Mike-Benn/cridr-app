@@ -10,12 +10,12 @@ function CreditCardCouponPanel() {
     const [couponList, setCouponList] = useState([]);
 
     const deleteCoupon = async (id) => {
-        const couponListCopy = couponList;
+        const couponListCopy = [...couponList];
         const updatedCouponList = couponList.filter((coupon) => coupon.id !== id);
         setCouponList(updatedCouponList);
 
         try {
-            const response = axios.delete(`${apiUrl}/coupon/${id}`);
+            const response = await axios.delete(`${apiUrl}/coupon/${id}`);
             console.log("Coupon deleted successfully!", response.data);
         } catch (error) {
             console.error('Error deleting coupon:', error.response ? error.response.data : error.message);
