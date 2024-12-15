@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       { path: "/retailer-savings", element: <RetailerSavingsPanel />},
       { path: "/retailer-savings/new", element: <AddRetailerSavingsPanel />},
       { path: "/incentives", element: <IncentivesPanel />},
-      { path: "/incentives", element: <AddIncentivePanel />},
+      { path: "/incentives/new", element: <AddIncentivePanel />},
     ],
   },
 ]);
