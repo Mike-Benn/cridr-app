@@ -13,8 +13,6 @@ function AddIncentivePanel() {
     const [transactionDate , setTransactionDate] = useState(null);
     const [businessOptions , setBusinessOptions] = useState([]);
 
-    console.log(businessOptions);
-
     useEffect(() => {
         document.title = "Add Incentive | Cridr";
         const fetchBusinesses = async () => {
