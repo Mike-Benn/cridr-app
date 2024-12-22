@@ -5,14 +5,18 @@ import NumberField from "../general/form-fields/NumberField";
 import DateField from "../general/form-fields/DateField";
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 import { addDefaultOptionToSelect } from "../../utils/general/utils";
+
+
 
 function AddIncentivePanel() {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const navigate = useNavigate();
     const [businessId , setBusinessId] = useState(-1);
-    const [incentiveName , setIncentiveName] = useState("");
-    const [amount , setAmount] = useState("");
-    const [transactionDate , setTransactionDate] = useState(null);
+    const [incentiveDescription , setIncentiveDescription] = useState("");
+    const [incentiveAmount , setIncentiveAmount] = useState("");
+    const [transactionDate , setTransactionDate] = useState("");
     const [businessOptions , setBusinessOptions] = useState([]);
 
     useEffect(() => {
@@ -38,21 +42,43 @@ function AddIncentivePanel() {
         setBusinessId(e.target.value);
     }
 
-    const handleIncentiveNameChange = (e) => {
-        setIncentiveName(e.target.value);
+    const handleIncentiveDescriptionChange = (e) => {
+        setIncentiveDescription(e.target.value);
     }
     
-    const handleAmountChange = (e) => {
-        setAmount(e.target.value);
+    const handleIncentiveAmountChange = (e) => {
+        setIncentiveAmount(e.target.value);
     }
 
     const handleTransactionDateChange = (e) => {
         setTransactionDate(e.target.value);
     }
 
-    const handleIncentiveFormSubmit = (e) => {
+    const handleIncentiveFormSubmit = async (e) => {
         e.preventDefault();
-        console.log(businessId);
+        const newIncentive = {
+            business_id: businessId,
+            incentive_description: incentiveDescription,
+            incentive_amount: Number(incentiveAmount),
+            incentive_transaction_date: transactionDate,
+        }
+
+        try {
+            const response = await axios.post(`${apiUrl}/incentives/submit-incentive`, newIncentive);
+            if (response.status === 200) {
+                clearIncentiveForm();
+                navigate('/incentives');
+            }
+        } catch (error) {
+            console.error("Error while adding incentive", error);
+        }
+    }
+
+    const clearIncentiveForm = () => {
+        setBusinessId(-1);
+        setIncentiveDescription("");
+        setIncentiveAmount("");
+
     }
 
     return (
@@ -60,8 +86,8 @@ function AddIncentivePanel() {
             <fieldset>
                 <legend>Add Incentive Transaction</legend>
                 <VariableSelectField fieldId="incentive-select-business" labelText="Select Business Name" optionList={businessOptions} onChange={handleBusinessIdChange} value={businessId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
-                <TextField fieldName="Incentive Description" onChange={handleIncentiveNameChange} value={incentiveName} />
-                <NumberField fieldName="Amount" onChange={handleAmountChange} value={amount} />
+                <TextField fieldName="Incentive Description" onChange={handleIncentiveDescriptionChange} value={incentiveDescription} />
+                <NumberField fieldName="Amount" onChange={handleIncentiveAmountChange} value={incentiveAmount} />
                 <DateField fieldName="Transaction Date" onChange={handleTransactionDateChange} value={transactionDate} />
                 <SubmitFormButton buttonText="Submit Incentive Transaction" />
             </fieldset>
