@@ -16,7 +16,7 @@ import AddCardPointsPanel from './components/card-points/AddCardPointsPanel.jsx'
 import RetailerSavingsPanel from './components/retailer-savings/RetailerSavingsPanel.jsx'
 import AddRetailerSavingsPanel from './components/retailer-savings/AddRetailerSavingsPanel.jsx'
 import IncentivesPanel from './components/incentives/IncentivesPanel.jsx'
-import AddIncentivePanel from './components/incentives/AddIncentivesPanel.jsx'
+import AddIncentivePanel from './components/incentives/AddIncentivePanel.jsx'
 
 const router = createBrowserRouter([
   {
