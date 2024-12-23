@@ -9,12 +9,12 @@ function IncentivesPanel() {
 
     const navigate = useNavigate();
 
-    const handleAddIncentive = () => {
+    const handleAddIncentiveTransaction = () => {
         navigate("new")
     }
 
     return (
-        <button type="button" onClick={handleAddIncentive}>Add New Incentive!</button>
+        <button type="button" onClick={handleAddIncentiveTransaction}>Add New Incentive!</button>
     )
 }
 
