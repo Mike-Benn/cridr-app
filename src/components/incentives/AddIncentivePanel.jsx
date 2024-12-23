@@ -13,6 +13,7 @@ import { addDefaultOptionToSelect } from "../../utils/general/utils";
 function AddIncentivePanel() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
+    const [userId , setUserId] = useState("1");
     const [businessId , setBusinessId] = useState(-1);
     const [incentiveDescription , setIncentiveDescription] = useState("");
     const [incentiveAmount , setIncentiveAmount] = useState("");
@@ -38,6 +39,8 @@ function AddIncentivePanel() {
 
     }, [apiUrl])
 
+    
+
     const handleBusinessIdChange = (e) => {
         setBusinessId(e.target.value);
     }
@@ -57,6 +60,7 @@ function AddIncentivePanel() {
     const handleIncentiveFormSubmit = async (e) => {
         e.preventDefault();
         const newIncentive = {
+            user_id: userId,
             business_id: businessId,
             incentive_description: incentiveDescription,
             incentive_amount: Number(incentiveAmount),
