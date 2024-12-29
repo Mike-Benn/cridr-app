@@ -13,7 +13,7 @@ function AddCardPointsPanel() {
     const [userId , setUserId] = useState(1);
     const [cardId , setCardId] = useState("-1");
     const [pointsEarned , setPointsEarned] = useState("");
-    const [dateEarned , setDateEarned] = useState("");
+    const [transactionDate , setTransactionDate] = useState("");
     const [cardOptions , setCardOptions] = useState([]);
 
     useEffect(() => {
@@ -44,14 +44,14 @@ function AddCardPointsPanel() {
         setPointsEarned(e.target.value);
     }
 
-    const handleDateEarnedChange = (e) => {
-        setDateEarned(e.target.value);
+    const handleTransactionDateChange = (e) => {
+        setTransactionDate(e.target.value);
     }
 
     const handleClearForm = () => {
         setCardId("-1");
         setPointsEarned("");
-        setDateEarned("");
+        setTransactionDate("");
         setCardOptions([]);
 
     }
@@ -62,7 +62,7 @@ function AddCardPointsPanel() {
             user_id: userId,
             credit_card_id: cardId,
             card_points_amount: pointsEarned,
-            card_points_transaction_date: dateEarned,
+            card_points_transaction_date: transactionDate,
         }
 
         try {
@@ -81,7 +81,7 @@ function AddCardPointsPanel() {
                 <legend>Add Card Points</legend>
                 <VariableSelectField fieldId="card-points-select-card" labelText="Select Credit Card" optionList={cardOptions} onChange={handleCardIdChange} value={cardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" />
                 <NumberField fieldName="Points Earned" onChange={handlePointsEarnedChange} value={pointsEarned} />
-                <DateField fieldName="Date Earned" onChange={handleDateEarnedChange} value={dateEarned} />
+                <DateField fieldName="Date Earned" onChange={handleTransactionDateChange} value={transactionDate} />
                 <SubmitFormButton buttonText="Submit Card Points" />
             </fieldset>
         </form>
