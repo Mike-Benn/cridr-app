@@ -126,7 +126,6 @@ function AddRetailerSavingsPanel() {
         setItemName("");
         setItemQuantity("");
         setMeasurementType("default");
-        setRetailerId("-1");
         setRetailerPricePer("");
         setCompetitorId("-1");
         setCompetitorPricePer("");
@@ -188,12 +187,12 @@ function AddRetailerSavingsPanel() {
         e.preventDefault();
 
         const newSavingsTransaction = {
-            user_id: userId,
-            business_id: retailerId,
+            user_id: Number(userId),
+            business_id: Number(retailerId),
             retailer_savings_amount: amountSaved,
             retailer_savings_transaction_date: transactionDate,
         }
-        
+        console.log(newSavingsTransaction)
         try {
             const response = await axios.post(`${apiUrl}/retailer-savings/submit-retailer-savings` , newSavingsTransaction);
             if (response.status === 200) {
@@ -215,10 +214,10 @@ function AddRetailerSavingsPanel() {
             <fieldset>
                 <legend>Add Retailer Savings Transaction</legend>
                 <DateField fieldName="Transaction Date" onChange={handleTransactionDateChange} value={transactionDate}/>
+                <VariableSelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailerOptions} onChange={handleRetailerIdChange} value={retailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
                 <TextField fieldName="Item Name" onChange={handleItemNameChange} value={itemName}/>
                 <SelectField options={MEASUREMENT_OPTIONS} onChange={handleMeasurementTypeChange} value={measurementType}/>
                 <NumberField fieldName="Quantity" onChange={handleItemQuantityChange} value={itemQuantity} />
-                <VariableSelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailerOptions} onChange={handleRetailerIdChange} value={retailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
                 <NumberField fieldName="Retailer Price Per" onChange={handleRetailerPricePerChange} value={retailerPricePer} />
                 <VariableSelectField fieldId="retail-save-select-competitor" labelText="Select Competitor" optionList={competitorOptions} onChange={handleCompetitorIdChange} value={competitorId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
                 <NumberField fieldName="Competitor Price Per" onChange={handleCompetitorPricePerChange} value={competitorPricePer} />
