@@ -23,7 +23,7 @@ function FuelPointsPanel() {
                 console.error("Failed to get fuel points", error);
             }
         }
-        fetchFuelPoints();
+        
     }, [apiUrl]);
 
     const navigate = useNavigate();
