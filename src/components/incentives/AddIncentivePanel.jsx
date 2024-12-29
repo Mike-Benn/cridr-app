@@ -26,7 +26,7 @@ function AddIncentivePanel() {
             try {
                 const response = await axios.get(`${apiUrl}/utils/get-businesses/Incentives`);
                 if (response.data) {
-                    let businessOptionList = response.data.data;
+                    let businessOptionList = [...response.data.data];
                     addDefaultOptionToSelect(businessOptionList , "business_name" , "business_id" , "Select Incentive Provider")
                     setBusinessOptions(businessOptionList);
                 }
