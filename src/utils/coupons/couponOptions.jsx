@@ -1,66 +1,22 @@
-import { v4 as uuidv4 } from '../../../node_modules/uuid'
-
-const COUPON_TYPES = [
-    {
-        id: uuidv4(),
-        text: "Select coupon type",
-        value: "default",
-    },
-
-    {
-        id: uuidv4(),
-        text: "Restaurants",
-        value: "restaurants",
-    },
-
-    {
-        id: uuidv4(),
-        text: "Hotels",
-        value: "hotels",
-    },
-
-    {
-        id: uuidv4(),
-        text: "Shopping",
-        value: "shopping",
-    },
-
-    {
-        id: uuidv4(),
-        text: "Service",
-        value: "service",
-    },
-
-    {
-        id: uuidv4(),
-        text: "Miscellaneous",
-        value: "misc",
-    }
-];
-
 const CASHBACK_TYPE = [
     {
-        id: uuidv4(),
-        text: "Select cashback type",
-        value: "default"
+        cashback_text: "Select Cashback Type",
+        cashback_id: "-1"
     },
 
     {
-        id: uuidv4(),
-        text: "Percent cash back",
-        value: "percent",
+        cashback_text: "Percent cash back",
+        cashback_id: "percent",
     },
 
     {
-        id: uuidv4(),
-        text: "Raw cash back",
-        value: "cash",
+        cashback_text: "Raw cash back",
+        cashback_id: "raw",
     }
 ]
 
 
 
 export { 
-    COUPON_TYPES,
     CASHBACK_TYPE,
 }
