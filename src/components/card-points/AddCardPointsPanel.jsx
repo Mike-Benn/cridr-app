@@ -18,9 +18,7 @@ function AddCardPointsPanel() {
 
     useEffect(() => {
         document.title = "Add Card Points | Cridr";
-
         const fetchCreditCards = async () => {
-            
             try {
                 const response = await axios.get(`${apiUrl}/utils/get-credit-cards-by-id/${userId}`) 
                 if (response.data) {
