@@ -9,44 +9,42 @@ import axios from "axios";
 function AddFuelPointsPanel() {
     const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
-    const [pointsRedeemed, setPointsRedeemed] = useState("");
+    const [userId , setUserId] = useState(1);
+    const [fuelPointsRedeemed, setFuelPointsRedeemed] = useState("");
     const [gallons, setGallons] = useState("");
-    const [dateRedeemed, setDateRedeemed] = useState("");
+    const [transactionDate, setTransactionDate] = useState("");
     
-
-    
-
     useEffect(() => {
         document.title = "Add Fuel Points | Cridr";
         
     }, []);
     
     const clearForm = () => {
-        setPointsRedeemed("");
+        setFuelPointsRedeemed("");
         setGallons("");
-        setDateRedeemed("");
+        setTransactionDate("");
     }
 
-    const handlePointsRedeemedChange = (e) => {
-        setPointsRedeemed(e.target.value);
+    const handleFuelPointsRedeemedChange = (e) => {
+        setFuelPointsRedeemed(e.target.value);
     }
 
     const handleGallonsChange = (e) => {
         setGallons(Number(e.target.value));
     }
 
-    const handleDateRedeemedChange = (e) => {
-        setDateRedeemed(e.target.value);
+    const handleTransactionDateChange = (e) => {
+        setTransactionDate(e.target.value);
     }
 
     const handleFuelPointsSubmit = async (e) => {
         e.preventDefault();
-        setGallons(Number(gallons.toFixed(3)));
+        const roundedGallons = Number(gallons.toFixed(3));
         const newFuelPoints = {
-            points_redeemed: Number(pointsRedeemed),
-            gallons,
-            date_redeemed: dateRedeemed,
-            username: "Mike",
+            user_id: userId,
+            fuel_points_amount: Number(fuelPointsRedeemed),
+            gallons_filled: roundedGallons,
+            fuel_points_transaction_date: transactionDate,
         }
 
         try {
@@ -61,23 +59,17 @@ function AddFuelPointsPanel() {
         }
     }
 
-    
-
-
-
     return (
         <form action='' onSubmit={handleFuelPointsSubmit}>
             <fieldset>
                 <legend>Add Fuel Points</legend>
-                <NumberField fieldName='Points Redeemed' value={pointsRedeemed} onChange={handlePointsRedeemedChange} name='points_redeemed' />
+                <NumberField fieldName='Points Redeemed' value={fuelPointsRedeemed} onChange={handleFuelPointsRedeemedChange} name='points_redeemed' />
                 <NumberField fieldName='Gallons' value={gallons} onChange={handleGallonsChange} name='gallons' />
-                <DateField fieldName='Date Redeemed' value={dateRedeemed} onChange={handleDateRedeemedChange} name='date_redeemed' />
+                <DateField fieldName='Date Redeemed' value={transactionDate} onChange={handleTransactionDateChange} name='date_redeemed' />
                 <SubmitFormButton buttonText='Submit Fuel Points' />
             </fieldset>
         </form>
     )
-
-
 }
 
 export default AddFuelPointsPanel
