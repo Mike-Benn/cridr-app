@@ -46,7 +46,7 @@ function CreditCardCouponPanel() {
             }
         };
 
-        fetchCoupons();
+        
     }, [apiUrl]);
 
     const navigate = useNavigate();
