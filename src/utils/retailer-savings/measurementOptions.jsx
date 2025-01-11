@@ -3,46 +3,46 @@ import { v4 as uuidv4 } from "../../../node_modules/uuid"
 
 
 const MEASUREMENT_OPTIONS = [
+    
     {
         id: uuidv4(),
         text: "Select measurement",
-        value: "default",
+        value: "-1"
     },
     {
         id: uuidv4(),
         text: "Fluid Ounces",
-        value: "floz"
+        value: "1",
     },
     {
         id: uuidv4(),
         text: "Quarts",
-        value: "quarts"
+        value: "2",
     },
     {
         id: uuidv4(),
         text: "Gallons",
-        value: "gals"
+        value: "3",
     },
     {
         id: uuidv4(),
         text: "Liters",
-        value: "liters"
+        value: "4",
     },
     {
         id: uuidv4(),
         text: "Ounces",
-        value: "oz"
+        value: "5",
     },
     {
         id: uuidv4(),
         text: "Pounds",
-        value: "lbs"
+        value: "6",
     },
     {
         id: uuidv4(),
         text: "Units",
-        value: "units"
-        
+        value: "7",
     }
     
 ];
