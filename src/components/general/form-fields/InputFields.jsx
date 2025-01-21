@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from "../../../../node_modules/uuid"
 
+
 function DateField({ fieldClass , fieldId , labelText , onChange , value , name}) {
     return (
         <div className={fieldClass}>
@@ -24,7 +25,6 @@ function SelectField({ fieldClass , fieldId , labelText , optionList , onChange 
     let options = optionList.map(option =>
         <option key={uuidv4()} value={option[optionIdAccessor]}>{option[optionTextAccessor]}</option>
     )
-
     return (
         <div className={fieldClass}>
             <label htmlFor={fieldId}>{labelText}</label>
@@ -41,6 +41,41 @@ function TextField({ fieldClass , fieldId , labelText , onChange , value , name 
             <input type="text" id={fieldId} value={value} onChange={onChange} name={name}></input>
         </div>
     )       
+}
+
+function PasswordField({ fieldClass , fieldId , labelText , onChange , value }) {
+
+    return (
+        <div className={fieldClass}>
+            <label htmlFor={fieldId}>{labelText}</label>
+            <input type="password" id={fieldId} value={value} onChange={onChange}></input>
+        </div>
+    )       
+}
+
+
+
+function CategorySelect({ fieldClass , fieldId , labelText , optionList = [] , onChange , value , optionTextAccessor , optionIdAccessor , name , defaultOptions = [] }) {
+    let options = [
+        ...defaultOptions,
+        ...optionList.map(option =>
+            <option key={option[optionIdAccessor]} value={option[optionIdAccessor]}>{option[optionTextAccessor]}</option>
+        )
+    ]
+    return (
+        <div className={fieldClass}>
+            <label htmlFor={fieldId}>{labelText}</label>
+            <select id={fieldId} value={value} onChange={onChange} name={name}>{options}</select>
+        </div>
+    )
+}
+
+PasswordField.propTypes = {
+   fieldClass: PropTypes.string,
+   fieldId: PropTypes.string,
+   labelText: PropTypes.string,
+   onChange: PropTypes.func,
+   value: PropTypes.string,
 }
 
 TextField.propTypes = {
@@ -63,6 +98,20 @@ SelectField.propTypes = {
     name: PropTypes.string,
     
 }
+
+CategorySelect.propTypes = {
+    fieldClass: PropTypes.string,
+    fieldId: PropTypes.string,
+    labelText: PropTypes.string,
+    optionList: PropTypes.array,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
+    optionTextAccessor: PropTypes.string,
+    optionIdAccessor: PropTypes.string,
+    name: PropTypes.string,
+    defaultOptions: PropTypes.array,
+}
+
 DateField.propTypes = {
     fieldClass: PropTypes.string,
     fieldId: PropTypes.string,
@@ -81,9 +130,13 @@ NumberField.propTypes = {
     name: PropTypes.string,
 }
 
+
+
 export { 
     TextField, 
     SelectField, 
     DateField, 
     NumberField,
+    PasswordField,
+    CategorySelect,
 }
