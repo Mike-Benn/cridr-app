@@ -1,72 +1,64 @@
-import NumberField from "../general/form-fields/NumberField";
-import DateField from "../general/form-fields/DateField";
-import axios from "axios";
+import { NumberField , DateField , SelectField } from "../general/form-fields/InputFields"
 import { useNavigate } from "react-router-dom";
 import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { useEffect, useState } from "react"
 import { addDefaultOptionToSelect } from "../../utils/general/utils";
-import VariableSelectField from "../general/form-fields/VariableSelectField";
+import apiClient from "../../api/apiClient";
 
 function AddCardPointsPanel() {
-    const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
-    const [userId , setUserId] = useState(1);
-    const [cardId , setCardId] = useState("-1");
-    const [pointsEarned , setPointsEarned] = useState("");
-    const [transactionDate , setTransactionDate] = useState("");
-    const [cardOptions , setCardOptions] = useState([]);
+    const [cardPointTransaction , setCardPointTransaction] = useState({
+        creditCardId: "-1",
+        creditCardPointsEarned: "",
+        pointsTransactionDate: "",
+        creditCardOptions: [],
 
+    })
+    const handleCardPointTransactionChange = (e) => {
+        const { name , value } = e.target;
+        setCardPointTransaction((prev) => ({ ...prev , [name]: value }));
+
+    }
     useEffect(() => {
         document.title = "Add Card Points | Cridr";
-        const fetchCreditCards = async () => {
+        const getCreditCards = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/utils/get-credit-cards-by-id/${userId}`) 
+                const response = await apiClient.get("/credit-cards/") 
                 if (response.data) {
                     let optionList = [...response.data.data];
                     addDefaultOptionToSelect(optionList , "credit_card_name" , "credit_card_id" , "Select Credit Card");
-                    setCardOptions(optionList);
+                    setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: optionList }));
                 }
             } catch (error) {
                 console.error(error , "Failed to fetch card options.");
             }
         }
-        fetchCreditCards();
+        getCreditCards();
 
-    }, [apiUrl , userId]);
+    }, []);
 
-    const handleCardIdChange = (e) => {
-        setCardId(e.target.value);
-    }
-
-    const handlePointsEarnedChange = (e) => {
-        setPointsEarned(e.target.value);
-    }
-
-    const handleTransactionDateChange = (e) => {
-        setTransactionDate(e.target.value);
-    }
-
-    const handleClearForm = () => {
-        setCardId("-1");
-        setPointsEarned("");
-        setTransactionDate("");
-        setCardOptions([]);
+    const resetPointsForm = () => {
+        setCardPointTransaction({
+            creditCardId: "-1",
+            creditCardPointsEarned: "",
+            pointsTransactionDate: "",
+            creditCardOptions: [],
+        })
 
     }
 
-    const handleCardPointsFormSubmit = async (e) => {
+    const handleCardPointsSubmit = async (e) => {
         e.preventDefault();
-        const cardPointTransaction = {
-            user_id: userId,
-            credit_card_id: cardId,
-            card_points_amount: pointsEarned,
-            card_points_transaction_date: transactionDate,
+        const pointTransaction = {
+            credit_card_id: cardPointTransaction.creditCardId,
+            card_points_amount: cardPointTransaction.creditCardPointsEarned,
+            card_points_transaction_date: cardPointTransaction.pointsTransactionDate,
         }
 
         try {
-            const response = await axios.post(`${apiUrl}/card-points/submit-card-points` , cardPointTransaction);
-            if (response.status === 200) {
-                handleClearForm();
+            const response = await apiClient.post("/card-points/" , pointTransaction);
+            if (response.data.success) {
+                resetPointsForm();
                 navigate("/card-points");
             }
         } catch (error) {
@@ -74,12 +66,12 @@ function AddCardPointsPanel() {
         }
     }
     return (
-        <form action="" onSubmit={handleCardPointsFormSubmit}>
+        <form action="" onSubmit={handleCardPointsSubmit}>
             <fieldset>
                 <legend>Add Card Points</legend>
-                <VariableSelectField fieldId="card-points-select-card" labelText="Select Credit Card" optionList={cardOptions} onChange={handleCardIdChange} value={cardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" />
-                <NumberField fieldName="Points Earned" onChange={handlePointsEarnedChange} value={pointsEarned} />
-                <DateField fieldName="Date Earned" onChange={handleTransactionDateChange} value={transactionDate} />
+                <SelectField fieldId="card-points-select-card" labelText="Select Credit Card" optionList={cardPointTransaction.creditCardOptions} onChange={handleCardPointTransactionChange} value={cardPointTransaction.creditCardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" name="creditCardId" />
+                <NumberField labelText="Points Earned" onChange={handleCardPointTransactionChange} value={cardPointTransaction.creditCardPointsEarned} name="creditCardPointsEarned" />
+                <DateField  labelText="Date Earned" onChange={handleCardPointTransactionChange} value={cardPointTransaction.pointsTransactionDate} name="pointsTransactionDate" />
                 <SubmitFormButton buttonText="Submit Card Points" />
             </fieldset>
         </form>

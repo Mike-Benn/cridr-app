@@ -23,7 +23,6 @@ function CardPointsPanel() {
                 console.error("Failed to get credit card points!", error);
             }
         }
-        fetchCardPoints();
     }, [apiUrl]);
 
     const navigate = useNavigate();
