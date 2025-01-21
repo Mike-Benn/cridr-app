@@ -1,21 +1,27 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
-function RootPanel() {
-  
-  useEffect(() => {
-    document.title = "Home | Cridr";
-  }, []);
+import GeneralButton from "../general/buttons/GeneralButton";
 
-  return (
-    <ul>
-        <li><Link to='/coupon'><button type='button'>Coupons</button></Link></li>
-        <li><Link to='/calculator'><button type='button'>Calculator</button></Link></li>
-        <li><Link to='/fuel-points'><button type='button'>Fuel Points</button></Link></li>
-        <li><Link to='/card-points'><button type='button'>Card Points</button></Link></li>
-        <li><Link to='/retailer-savings'><button type='button'>Retail Savings</button></Link></li>
-        <li><Link to='/incentives'><button type='button'>Incentives</button></Link></li>
-    </ul>
-  )
+
+
+function RootPanel() {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    useEffect(() => {
+      document.title = "Home | Cridr";
+    }, [apiUrl]);
+
+    return (
+      <>
+        <ul>
+            <li><Link to='/credit-card-offers'><button type='button'>Offers</button></Link></li>
+            <li><Link to='/fuel-points'><button type='button'>Fuel Points</button></Link></li>
+            <li><Link to='/card-points'><button type='button'>Card Points</button></Link></li>
+            <li><Link to='/retailer-savings'><button type='button'>Retail Savings</button></Link></li>
+            <li><Link to='/incentives'><button type='button'>Incentives</button></Link></li>
+            <li><Link to='/collectibles'><GeneralButton buttonType="button" buttonText="Collectibles" /></Link></li>
+        </ul>
+      </>
+    )
 }
 
 export default RootPanel
