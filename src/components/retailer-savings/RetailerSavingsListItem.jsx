@@ -5,7 +5,7 @@ import DeleteListItemButton from "../general/buttons/DeleteListItemButton"
 
 function RetailerSavingsListItem({ data , deleteItem , editItem }) {
     return (
-        <li>{data.itemName} <DeleteListItemButton id={data.id} onClick={deleteItem}/> <EditListItemButton id={data.id} onEdit={editItem} /></li>
+        <li>{data.itemName} <DeleteListItemButton id={data.id} onClick={deleteItem}/> <EditListItemButton id={data.id} onClick={editItem} /></li>
     )
 
 

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import edit from '../../../images/edit.png';
 
-function EditListItemButton({ id , onEdit }) {
+function EditListItemButton({ id , onClick }) {
     const handleEdit = () => {
-        onEdit(id);
+        onClick(id);
     }
 
     return (
@@ -13,7 +13,7 @@ function EditListItemButton({ id , onEdit }) {
 
 EditListItemButton.propTypes = {
     id: PropTypes.string,
-    onEdit: PropTypes.func,
+    onClick: PropTypes.func,
 
 }
 
