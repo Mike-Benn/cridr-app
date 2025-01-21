@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById , addDefaultOptionToSelect};
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById , addDefaultOptionToSelect , addOptionToList};
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -77,4 +77,8 @@ function filterOutAndReturnById(id , arr) {
 
 function addDefaultOptionToSelect(arr , optionTextAccessor , optionIdAccessor , defaultText) {
     arr.push({ [optionIdAccessor]: -1 , [optionTextAccessor]: defaultText});
+}
+
+function addOptionToList(arr , optionText , key , value) {
+    arr.push(<option key={key} value={value}>{optionText}</option>)
 }
