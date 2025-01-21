@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 function SubmitFormButton({ buttonText = "Submit" , onClick }) {
     return (
-        <button type='Submit' onClick={onClick}>{buttonText}</button>
+        <button type='submit' onClick={onClick}>{buttonText}</button>
     )
 }
 
