@@ -1,76 +1,57 @@
 import { useState , useEffect} from "react"
-import TextField from "../general/form-fields/TextField"
-import VariableSelectField from "../general/form-fields/VariableSelectField";
-import NumberField from "../general/form-fields/NumberField";
-import DateField from "../general/form-fields/DateField";
+import { SelectField , DateField , NumberField , TextField } from "../general/form-fields/InputFields"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
-import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { addDefaultOptionToSelect } from "../../utils/general/utils";
-
-
+import apiClient from "../../api/apiClient";
 
 function AddIncentivePanel() {
-    const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
-    const [userId , setUserId] = useState("1");
-    const [businessId , setBusinessId] = useState(-1);
-    const [incentiveDescription , setIncentiveDescription] = useState("");
-    const [incentiveAmount , setIncentiveAmount] = useState("");
-    const [transactionDate , setTransactionDate] = useState("");
-    const [businessOptions , setBusinessOptions] = useState([]);
+    const [incentiveTransaction , setIncentiveTransaction] = useState({
+        businessId: "-1",
+        incentiveDescription: "",
+        incentiveAmount: "",
+        incentiveTransactionDate: "",
+        businessOptions: [],
+    })
 
+    const handleIncentiveTransactionChange = (e) => {
+        const { name , value} = e.target;
+        setIncentiveTransaction((prev) => ({ ...prev , [name]: value }))
+    }
     useEffect(() => {
         document.title = "Add Incentive | Cridr";
-        const fetchBusinesses = async () => {
+        const getBusinessesByFeature = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/utils/get-businesses/Incentives`);
+                const response = await apiClient.get("/businesses/feature?feature_id=5");
                 if (response.data) {
                     let businessOptionList = [...response.data.data];
                     addDefaultOptionToSelect(businessOptionList , "business_name" , "business_id" , "Select Incentive Provider")
-                    setBusinessOptions(businessOptionList);
+                    setIncentiveTransaction((prev) => ({ ...prev , businessOptions: businessOptionList}));
                 }
             } catch (error) {
                 console.error(error , "Error fetching business names");
             }
         }
+        
 
-        fetchBusinesses();
+        getBusinessesByFeature();
 
-    }, [apiUrl])
+    }, [])
 
-    
-
-    const handleBusinessIdChange = (e) => {
-        setBusinessId(e.target.value);
-    }
-
-    const handleIncentiveDescriptionChange = (e) => {
-        setIncentiveDescription(e.target.value);
-    }
-    
-    const handleIncentiveAmountChange = (e) => {
-        setIncentiveAmount(e.target.value);
-    }
-
-    const handleTransactionDateChange = (e) => {
-        setTransactionDate(e.target.value);
-    }
-
-    const handleIncentiveFormSubmit = async (e) => {
+    const handleIncentiveSubmit = async (e) => {
         e.preventDefault();
         const newIncentive = {
-            user_id: userId,
-            business_id: businessId,
-            incentive_description: incentiveDescription,
-            incentive_amount: Number(incentiveAmount),
-            incentive_transaction_date: transactionDate,
+            business_id: incentiveTransaction.businessId,
+            incentive_description: incentiveTransaction.incentiveDescription,
+            incentive_amount: incentiveTransaction.incentiveAmount,
+            incentive_transaction_date: incentiveTransaction.incentiveTransactionDate,
         }
 
         try {
-            const response = await axios.post(`${apiUrl}/incentives/submit-incentive`, newIncentive);
-            if (response.status === 200) {
-                clearIncentiveForm();
+            const response = await apiClient.post("/incentive-transaction", newIncentive);
+            if (response.data.success) {
+                resetIncentiveForm();
                 navigate('/incentives');
             }
         } catch (error) {
@@ -78,21 +59,25 @@ function AddIncentivePanel() {
         }
     }
 
-    const clearIncentiveForm = () => {
-        setBusinessId(-1);
-        setIncentiveDescription("");
-        setIncentiveAmount("");
+    const resetIncentiveForm = () => {
+        setIncentiveTransaction({
+            businessId: "-1",
+            incentiveDescription: "",
+            incentiveAmount: "",
+            incentiveTransactionDate: "",
+            businessOptions: [],
+        })
 
     }
 
     return (
-        <form action="" onSubmit={handleIncentiveFormSubmit}>
+        <form action="" onSubmit={handleIncentiveSubmit}>
             <fieldset>
                 <legend>Add Incentive Transaction</legend>
-                <VariableSelectField fieldId="incentive-select-business" labelText="Select Business Name" optionList={businessOptions} onChange={handleBusinessIdChange} value={businessId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
-                <TextField fieldName="Incentive Description" onChange={handleIncentiveDescriptionChange} value={incentiveDescription} />
-                <NumberField fieldName="Amount" onChange={handleIncentiveAmountChange} value={incentiveAmount} />
-                <DateField fieldName="Transaction Date" onChange={handleTransactionDateChange} value={transactionDate} />
+                <SelectField fieldId="incentive-select-business" labelText="Select Business Name" optionList={incentiveTransaction.businessOptions} onChange={handleIncentiveTransactionChange} value={incentiveTransaction.businessId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="businessId" />
+                <TextField labelText="Description" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveDescription} name="incentiveDescription" />
+                <NumberField labelText="Amount" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveAmount} name="incentiveAmount" />
+                <DateField labelText="Transaction Date" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveTransactionDate} name="incentiveTransactionDate"/>
                 <SubmitFormButton buttonText="Submit Incentive Transaction" />
             </fieldset>
         </form>

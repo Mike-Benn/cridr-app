@@ -1,7 +1,3 @@
-import SelectField from "../general/form-fields/SelectField"
-import TextField from "../general/form-fields/TextField";
-import NumberField from "../general/form-fields/NumberField";
-import DateField from "../general/form-fields/DateField";
 import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { v4 as uuidv4 } from "../../../node_modules/uuid";
 import { MEASUREMENT_OPTIONS } from "../../utils/retailer-savings/measurementOptions";
@@ -9,219 +5,210 @@ import { calculateRetailItemSavings } from "../../utils/general/utils";
 import { useEffect, useState } from "react";
 import RetailerSavingsListItem from "./RetailerSavingsListItem";
 import { filterOutAndReturnById } from "../../utils/general/utils";
-import axios from "axios"
 import { addDefaultOptionToSelect } from "../../utils/general/utils";
-import VariableSelectField from "../general/form-fields/VariableSelectField";
 import { useNavigate } from "react-router-dom";
-
+import { SelectField , DateField , NumberField , TextField } from "../general/form-fields/InputFields"
+import apiClient from "../../api/apiClient";
 
 function AddRetailerSavingsPanel() {
-    const apiUrl = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
-    const [itemName , setItemName] = useState("");
-    const [userId , setUserId] = useState("1")
-    const [itemQuantity , setItemQuantity] = useState("");
-    const [measurementType, setMeasurementType] = useState("default");
-    const [retailerId , setRetailerId] = useState("-1")
-    const [competitorId , setCompetitorId] = useState("-1")
-    const [retailerPricePer, setRetailerPricePer] = useState("");
-    const [competitorPricePer , setCompetitorPricePer] = useState("");
-    const [itemList , setItemList] = useState([]);
-    const [amountSaved , setAmountSaved] = useState(0);
-    const [retailerOptions , setRetailerOptions] = useState([]);
-    const [competitorOptions , setCompetitorOptions] = useState([]);
-    const [transactionDate , setTransactionDate] = useState("");
+    const [retailSavingsTransaction , setRetailSavingsTransaction] = useState({
+        primaryRetailerId: "-1",
+        competitorRetailerId: "-1",
+        primaryRetailerOptions: [],
+        competitorRetailerOptions: [],
+        primaryPricePerQuantity: "",
+        competitorPricePerQuantity: "",
+        measurementTypeId: "-1",
+        itemName: "",
+        itemQuantity: "",
+        itemList: [],
+        retailSavingsTransactionDate: "",
+        totalMoneySaved: 0,
+    })
+    const handleSavingsTransactionChange = (e) => {
+        const { name , value } = e.target;
+        setRetailSavingsTransaction((prev) => ({ ...prev , [name]: value }))
+    }
+    const fullResetSavingsTransactionForm = () => {
+        setRetailSavingsTransaction({
+            primaryRetailerId: "-1",
+            competitorRetailerId: "-1",
+            primaryRetailerOptions: [],
+            competitorRetailerOptions: [],
+            primaryPricePerQuantity: "",
+            competitorPricePerQuantity: "",
+            measurementTypeId: "-1",
+            itemName: "",
+            itemQuantity: "",
+            itemList: [],
+            retailSavingsTransactionDate: "",
+            totalMoneySaved: 0,
+        })
+    }
 
+    // Used after adding item to transaction
+    const partialResetRetailSavingsTransactionForm = () => {
+        setRetailSavingsTransaction((prev) => ({
+            ...prev,
+            primaryPricePerQuantity: "",
+            competitorRetailerId: "-1",
+            competitorPricePerQuantity: "",
+            measurementTypeId: "-1",
+            itemName: "",
+            itemQuantity: "",
+
+        }))
+    }
     useEffect(() => {
-        document.title = " Add Retailer Savings | Cridr";
-        const fetchRetailers = async () => {
+        document.title = "Add Retailer Savings | Cridr";
+        const getRetailers = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/utils/get-businesses/Retail%20Savings`);
+                const response = await apiClient.get("/businesses/feature?feature_id=4");
                 if (response.data) {
                     let retailerOptionList = [...response.data.data];
                     let competitorOptionList = [...response.data.data];
                     addDefaultOptionToSelect(retailerOptionList, "business_name" , "business_id" , "Select Retailer");
                     addDefaultOptionToSelect(competitorOptionList, "business_name" , "business_id" , "Select Competitor");
-                    setRetailerOptions(retailerOptionList);
-                    setCompetitorOptions(competitorOptionList);
+                    setRetailSavingsTransaction((prev) => ({ ...prev ,
+                        primaryRetailerOptions: retailerOptionList,
+                        competitorRetailerOptions: competitorOptionList,
+                    }))
                 }
             } catch (error) {
                 console.error(error, "Failed to fetch retailers.");
             }
         }
-        fetchRetailers();
-
-    }, [apiUrl]);    
-    
-
-    const handleItemNameChange = (e) => {
-        setItemName(e.target.value);
-    }
-
-    const handleItemQuantityChange = (e) => {
-        setItemQuantity(e.target.value);
-    }
+        getRetailers();
+    }, []);    
 
     const handleRetailerIdChange = (e) => {
-        if (itemList.length < 1) {
-            setRetailerId(e.target.value);
+        if (retailSavingsTransaction.itemList.length < 1) {
+            setRetailSavingsTransaction((prev) => ({ ...prev , primaryRetailerId: e.target.value }));
         } else {
             const isConfirmed = window.confirm("Current transaction data will be lost if primary retailer is changed without submitting, are you sure you want to change primary retailers?");
             if (isConfirmed) {
-                setItemName("");
-                setItemQuantity("");
-                setMeasurementType("default");
-                setRetailerId(e.target.value);
-                setRetailerPricePer("");
-                setCompetitorId("-1");
-                setCompetitorPricePer("");
-                setItemList([]);
-                setAmountSaved(0)
-                setTransactionDate("");
+                setRetailSavingsTransaction((prev) => ({ ...prev, 
+                    primaryRetailerId: e.target.value,
+                    primaryPricePerQuantity: "",
+                    competitorRetailerId: "-1",
+                    competitorPricePerQuantity: "",
+                    measurementTypeId: "-1",
+                    itemName: "",
+                    itemQuantity: "",
+                    itemList: [],
+                    retailSavingsTransactionDate: "",
+                    totalMoneySaved: 0,
+                }))
             }
-
         }
-        
-    }
-
-    const handleCompetitorIdChange = (e) => {
-        setCompetitorId(e.target.value);
-    }
-
-    
-
-    const handleRetailerPricePerChange = (e) => {
-        setRetailerPricePer(e.target.value);
     }
 
     const handleTransactionDateChange = (e) => {
-        if (itemList.length < 1) {
-            setTransactionDate(e.target.value);
+        if (retailSavingsTransaction.itemList.length < 1) {
+            setRetailSavingsTransaction((prev) => ({ ...prev , retailSavingsTransactionDate: e.target.value }));
         } else {
             const isConfirmed = window.confirm("Current transaction data will be lost if date is changed without submitting, are you sure you want to change the date?");
             if (isConfirmed) {
-                setItemName("");
-                setItemQuantity("");
-                setMeasurementType("default");
-                setRetailerId("-1");
-                setRetailerPricePer("");
-                setCompetitorId("-1");
-                setCompetitorPricePer("");
-                setItemList([]);
-                setAmountSaved(0);
-                setTransactionDate(e.target.value);
+                setRetailSavingsTransaction((prev) => ({ ...prev,
+                    primaryRetailerId: "-1",
+                    primaryPricePerQuantity: "",
+                    competitorRetailerId: "-1",
+                    competitorPricePerQuantity: "",
+                    measurementTypeId: "-1",
+                    itemName: "",
+                    itemQuantity: "",
+                    itemList: [],
+                    retailSavingsTransactionDate: e.target.value,
+                    totalMoneySaved: 0,
+                }))
             }
         }
     }
 
-    const handleCompetitorPricePerChange = (e) => {
-        setCompetitorPricePer(e.target.value);
-    }
-
-    const handleMeasurementTypeChange = (e) => {
-        setMeasurementType(e.target.value);
-    }
-
-    const partialResetRetailSavingsForm = () => {
-        setItemName("");
-        setItemQuantity("");
-        setMeasurementType("default");
-        setRetailerPricePer("");
-        setCompetitorId("-1");
-        setCompetitorPricePer("");
-    }
-
-    const fullResetRetailSavingsForm = () => {
-        setItemName("");
-        setItemQuantity("");
-        setMeasurementType("default");
-        setRetailerId("-1");
-        setRetailerPricePer("");
-        setCompetitorId("-1");
-        setCompetitorPricePer("");
-        setItemList([]);
-        setAmountSaved(0);
-        setTransactionDate("");
-    }
-
-    const handleAddItem = () => {
-        let savings = calculateRetailItemSavings(itemQuantity , retailerPricePer , competitorPricePer);
-        setAmountSaved(prevSaved => prevSaved + savings);
+    const handleAddItemToList = () => {
+        const itemSavings = calculateRetailItemSavings(retailSavingsTransaction.itemQuantity , retailSavingsTransaction.primaryPricePerQuantity , retailSavingsTransaction.competitorPricePerQuantity);
+        const cumulativeSavings = retailSavingsTransaction.totalMoneySaved + itemSavings;
         const newItem = {
             id: uuidv4(),
-            itemName,
-            itemQuantity,
-            measurementType,
-            retailerId,
-            retailerPricePer,
-            competitorId,
-            competitorPricePer,
-            savings,
+            primaryRetailerId: retailSavingsTransaction.primaryRetailerId,
+            primaryPricePerQuantity: retailSavingsTransaction.primaryPricePerQuantity,
+            competitorRetailerId: retailSavingsTransaction.competitorRetailerId,
+            competitorPricePerQuantity: retailSavingsTransaction.competitorPricePerQuantity,
+            itemName: retailSavingsTransaction.itemName,
+            itemQuantity: retailSavingsTransaction.itemQuantity,
+            measurementTypeId: retailSavingsTransaction.measurementTypeId,
+            itemSavings,
         }
-        setItemList(prevItemList => [...prevItemList , newItem]);
-        partialResetRetailSavingsForm();
+        setRetailSavingsTransaction((prev) => ({
+            ...prev, 
+            totalMoneySaved: cumulativeSavings,
+            itemList: [...prev.itemList, newItem],
+            
+        }));
+        partialResetRetailSavingsTransactionForm();
     }
 
-    const handleDeleteItem = (id) => {
-        let itemAndUpdatedList = filterOutAndReturnById(id , itemList);
-        setAmountSaved(prevSaved => prevSaved - itemAndUpdatedList.filteredItem.savings);
-        setItemList(itemAndUpdatedList.newArray);
-
+    const handleDeleteItemFromList = (id) => {
+        let itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList);
+        setRetailSavingsTransaction((prev) => ({
+            ...prev,
+            totalMoneySaved: prev.totalMoneySaved - itemAndUpdatedList.filteredItem.itemSavings,
+            itemList: itemAndUpdatedList.newArray,
+        }))
     }
 
-    const handleEditItem = (id) => {
-        let itemAndUpdatedList = filterOutAndReturnById(id , itemList);
-        setItemList(itemAndUpdatedList.newArray);
-        setItemName(itemAndUpdatedList.filteredItem.itemName);
-        setItemQuantity(itemAndUpdatedList.filteredItem.itemQuantity);
-        setMeasurementType(itemAndUpdatedList.filteredItem.measurementType);
-        setRetailerId(itemAndUpdatedList.filteredItem.retailerId);
-        setRetailerPricePer(itemAndUpdatedList.filteredItem.retailerPricePer);
-        setCompetitorId(itemAndUpdatedList.filteredItem.competitorId);
-        setCompetitorPricePer(itemAndUpdatedList.filteredItem.competitorPricePer);
-        setAmountSaved(prevSaved => prevSaved - itemAndUpdatedList.filteredItem.savings)
-        
+    const handleEditItemFromList = (id) => {
+        const itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList);
+        setRetailSavingsTransaction((prev) => ({
+            ...prev,
+            primaryRetailerId: itemAndUpdatedList.filteredItem.primaryRetailerId,
+            primaryPricePerQuantity: itemAndUpdatedList.filteredItem.primaryPricePerQuantity,
+            competitorRetailerId: itemAndUpdatedList.filteredItem.competitorRetailerId,
+            competitorPricePerQuantity: itemAndUpdatedList.filteredItem.competitorPricePerQuantity,
+            measurementTypeId: itemAndUpdatedList.filteredItem.measurementTypeId,
+            itemName: itemAndUpdatedList.filteredItem.itemName,
+            itemQuantity: itemAndUpdatedList.filteredItem.itemQuantity,
+            itemList: itemAndUpdatedList.newArray,
+            totalMoneySaved: prev.totalMoneySaved - itemAndUpdatedList.filteredItem.itemSavings,
+
+        }))
     }
 
-    const handleRetailerSavingsFormSubmit = async (e) => {
+    const handleRetailerSavingsSubmit = async (e) => {
         e.preventDefault();
-
         const newSavingsTransaction = {
-            user_id: Number(userId),
-            business_id: Number(retailerId),
-            retailer_savings_amount: amountSaved,
-            retailer_savings_transaction_date: transactionDate,
+            business_id: retailSavingsTransaction.primaryRetailerId,
+            retailer_savings_amount: retailSavingsTransaction.totalMoneySaved,
+            retailer_savings_transaction_date: retailSavingsTransaction.retailSavingsTransactionDate,
         }
-        console.log(newSavingsTransaction)
         try {
-            const response = await axios.post(`${apiUrl}/retailer-savings/submit-retailer-savings` , newSavingsTransaction);
-            if (response.status === 200) {
-                fullResetRetailSavingsForm();
+            const response = await apiClient.post("/retail-savings-transaction" , newSavingsTransaction);
+            if (response.status === 201) {
+                fullResetSavingsTransactionForm();
                 navigate("/retailer-savings")
             }
-
         } catch (error) {
             console.error(error , "Failed to add new savings transaction");
         }
     }
-
-    const retailListItems = itemList.map(item =>
-        <RetailerSavingsListItem key={item.id} data={item} deleteItem={handleDeleteItem} editItem={handleEditItem} />
+    const retailListItems = retailSavingsTransaction.itemList.map(item =>
+        <RetailerSavingsListItem key={item.id} data={item} deleteItem={handleDeleteItemFromList} editItem={handleEditItemFromList} />
     )
 
     return (
-        <form action="" onSubmit={handleRetailerSavingsFormSubmit}>
+        <form action="" onSubmit={handleRetailerSavingsSubmit}>
             <fieldset>
                 <legend>Add Retailer Savings Transaction</legend>
-                <DateField fieldName="Transaction Date" onChange={handleTransactionDateChange} value={transactionDate}/>
-                <VariableSelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailerOptions} onChange={handleRetailerIdChange} value={retailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
-                <TextField fieldName="Item Name" onChange={handleItemNameChange} value={itemName}/>
-                <SelectField options={MEASUREMENT_OPTIONS} onChange={handleMeasurementTypeChange} value={measurementType}/>
-                <NumberField fieldName="Quantity" onChange={handleItemQuantityChange} value={itemQuantity} />
-                <NumberField fieldName="Retailer Price Per" onChange={handleRetailerPricePerChange} value={retailerPricePer} />
-                <VariableSelectField fieldId="retail-save-select-competitor" labelText="Select Competitor" optionList={competitorOptions} onChange={handleCompetitorIdChange} value={competitorId} optionIdAccessor="business_id" optionTextAccessor="business_name" />
-                <NumberField fieldName="Competitor Price Per" onChange={handleCompetitorPricePerChange} value={competitorPricePer} />
-                <button type="button" onClick={handleAddItem}>Add Item</button>
+                <DateField labelText="Transaction Date" onChange={handleTransactionDateChange} value={retailSavingsTransaction.retailSavingsTransactionDate} name="retailSavingsTransactionDate" />
+                <SelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailSavingsTransaction.primaryRetailerOptions} onChange={handleRetailerIdChange} value={retailSavingsTransaction.primaryRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="primaryRetailerId" />
+                <TextField labelText="Item Name" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemName} name="itemName" />
+                <SelectField fieldId="retail-save-select-measurement" labelText="Select Measurement" optionList={MEASUREMENT_OPTIONS} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.measurementTypeId} optionIdAccessor="value" optionTextAccessor="text" name="measurementTypeId" />
+                <NumberField labelText="Quantity" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemQuantity} name="itemQuantity" />
+                <NumberField labelText="Retailer Price Per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.primaryPricePerQuantity} name="primaryPricePerQuantity" />
+                <SelectField fieldId="retail-save-select-competitor" labelText="Select Competitor" optionList={retailSavingsTransaction.competitorRetailerOptions} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.competitorRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="competitorRetailerId" />
+                <NumberField labelText="Competitor Price per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.competitorPricePerQuantity} name="competitorPricePerQuantity" />
+                <button type="button" onClick={handleAddItemToList}>Add Item</button>
             </fieldset>
             <fieldset>
                 <legend>Items In Transaction</legend>
@@ -229,7 +216,7 @@ function AddRetailerSavingsPanel() {
                 
             </fieldset>
             <SubmitFormButton buttonText="Submit Transaction" />
-            <p>{amountSaved}</p>
+            <p>{retailSavingsTransaction.totalMoneySaved}</p>
         </form>
     )
 
