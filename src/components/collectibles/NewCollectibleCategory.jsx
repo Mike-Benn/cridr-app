@@ -22,7 +22,7 @@ function NewCollectibleCategory() {
     }
 
     useEffect(() => {
-        document.title = "New Collectible Category";
+        document.title = "New Collectible Category | Cridr";
     })
 
     const handleNewCategorySubmit = async (e) => {

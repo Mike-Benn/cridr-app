@@ -7,8 +7,8 @@ import apiClient from "../../api/apiClient"
 
 function CollectiblesDashboard() {
 
-    const [selectedCategory, setSelectedCategory] = useState([]);
-    const defaultCategoryOption = <option key="all" value="all">All</option>
+    const [selectedCategoryId, setSelectedCategoryId] = useState("all");
+    const defaultCategoryOption = [<option key="all" value="all">All Collectibles</option>]
     const [categoryList, setCategoryList] = useState([]);
 
     useEffect(() => {
@@ -28,11 +28,16 @@ function CollectiblesDashboard() {
         }
         getCategoriesById();
     }, [])
+    
+    const handleSelectedCategoryChange = (e) => {
+        setSelectedCategoryId(e.target.value);
+    }
 
     return (
         <>
             <Link to="new-category"><GeneralButton buttonType="button" buttonText="Add Collectible Category" /></Link>
-
+            <Link to="new-subcategory"><GeneralButton buttonType="button" buttonText="Add Collectible Subcategory" /></Link>
+            <CategorySelect fieldId="collectibles-select-category" labelText="Select Category" optionList={categoryList} onChange={handleSelectedCategoryChange} value={selectedCategoryId} optionTextAccessor="collectibles_main_categories_name" optionIdAccessor="collectibles_main_categories_id" defaultOptions={defaultCategoryOption} />
         </>
     )
 }
