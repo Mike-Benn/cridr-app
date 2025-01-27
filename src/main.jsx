@@ -7,8 +7,7 @@ import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
 import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
-import FuelPointsPanel from './components/fuel-points/FuelPointsPanel.jsx'
-import AddFuelPointsPanel from './components/fuel-points/AddFuelPointsPanel.jsx'
+import FuelTransactionDashboard from './components/fuel/FuelTransactionDashboard.jsx'
 import CardPointsPanel from './components/card-points/CardPointsPanel.jsx'
 import AddCardPointsPanel from './components/card-points/AddCardPointsPanel.jsx'
 import RetailerSavingsPanel from './components/retailer-savings/RetailerSavingsPanel.jsx'
@@ -21,6 +20,9 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
 import CollectiblesDashboard from './components/collectibles/CollectiblesDashboard.jsx'
 import NewCollectibleCategory from './components/collectibles/NewCollectibleCategory.jsx'
+import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
+import NewFuelTransactionPanel from './components/fuel/NewFuelTransactionPanel.jsx'
+import NewVehiclePanel from "./components/vehicles/NewVehiclePanel.jsx"
 
 const router = createBrowserRouter([
   
@@ -42,8 +44,9 @@ const router = createBrowserRouter([
           { path: "/profile", element: <ProtectedRoute><ProfilePanel /></ProtectedRoute> },
           { path: "/profile/personal", element: <ProtectedRoute><ProfilePersonalInfoPanel /></ProtectedRoute> },
           { path: "/profile/my-cards", element: <ProtectedRoute><ManageCardsPanel /></ProtectedRoute> },
-          { path: "/fuel-points", element: <ProtectedRoute><FuelPointsPanel /></ProtectedRoute> },
-          { path: "/fuel-points/new", element: <ProtectedRoute><AddFuelPointsPanel /></ProtectedRoute> },
+          { path: "/fuel-transaction", element: <ProtectedRoute><FuelTransactionDashboard /></ProtectedRoute> },
+          { path: "/fuel-transaction/new", element: <ProtectedRoute><NewFuelTransactionPanel /></ProtectedRoute>},
+          { path: "/fuel-transaction/new-vehicle", element: <ProtectedRoute><NewVehiclePanel /></ProtectedRoute>},
           { path: "/card-points", element: <ProtectedRoute><CardPointsPanel /></ProtectedRoute> },
           { path: "/card-points/new", element: <ProtectedRoute><AddCardPointsPanel /></ProtectedRoute> },
           { path: "/retailer-savings", element: <ProtectedRoute><RetailerSavingsPanel /></ProtectedRoute> },
@@ -52,6 +55,7 @@ const router = createBrowserRouter([
           { path: "/incentives/new", element: <ProtectedRoute><AddIncentivePanel /></ProtectedRoute> },
           { path: "/collectibles", element: <ProtectedRoute><CollectiblesDashboard /></ProtectedRoute>},
           { path: "/collectibles/new-category", element: <ProtectedRoute><NewCollectibleCategory /></ProtectedRoute> },
+          { path: "/collectibles/new-subcategory", element: <ProtectedRoute><NewCollectibleSubcategory /></ProtectedRoute> },
         ]
       }
     ]
