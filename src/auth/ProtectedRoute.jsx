@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
-    console.log("test")
     useEffect(() => {
         if (!isAuthenticated) {
             navigate("/log-in");
