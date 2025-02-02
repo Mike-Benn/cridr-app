@@ -1,7 +1,8 @@
 import { useEffect , useState } from "react";
-import apiClient from "../../api/apiClient"
-import GeneralButton from "../general/buttons/GeneralButton"
+import apiClient from "../../../api/apiClient"
+import GeneralButton from "../../general/buttons/GeneralButton"
 import { Link } from "react-router-dom";
+import UserFuelTransactionSummary from "./UserFuelTransactionSummary";
 
 
 
@@ -32,6 +33,7 @@ function FuelTransactionDashboard() {
         <section>
             <Link to="new-vehicle"><GeneralButton buttonType="button" buttonText="Add Vehicle" /></Link>
             <Link to="new"><GeneralButton buttonType="button" buttonText="Add Fuel Transaction" /></Link>
+            <div><UserFuelTransactionSummary /></div>
         </section>
     )
 

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import apiClient from "../../api/apiClient";
-import { CategorySelect, NumberField, DateField } from "../general/form-fields/InputFields";
-import SubmitFormButton from "../general/buttons/SubmitFormButton";
+import apiClient from "../../../api/apiClient";
+import { CategorySelect, NumberField, DateField } from "../../general/form-fields/InputFields";
+import SubmitFormButton from "../../general/buttons/SubmitFormButton";
 
 
 function NewFuelTransactionPanel() {
@@ -79,7 +79,7 @@ function NewFuelTransactionPanel() {
                 <NumberField labelText="Gallons o' Gas" value={fuelTransaction.gallonsOfGas} onChange={handleFuelTransactionChange} name="gallonsOfGas" />
                 <NumberField labelText="Fuel Points Used" value={fuelTransaction.fuelPointsRedeemed} onChange={handleFuelTransactionChange} name="fuelPointsRedeemed" />
                 <DateField labelText="Date Of Transaction" value={fuelTransaction.fuelPointTransactionDate} onChange={handleFuelTransactionChange} name="fuelTransactionDate" />
-                <SubmitFormButton buttonText='Submit Fuel Points' />
+                <SubmitFormButton buttonText='Submit Fuel Transaction' />
             </fieldset>
         </form>
     )
