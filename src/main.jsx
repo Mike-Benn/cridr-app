@@ -7,7 +7,7 @@ import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
 import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
-import FuelTransactionDashboard from './components/fuel/FuelTransactionDashboard.jsx'
+import FuelTransactionDashboard from './components/fuel/components/FuelTransactionDashboard.jsx'
 import CardPointsPanel from './components/card-points/CardPointsPanel.jsx'
 import AddCardPointsPanel from './components/card-points/AddCardPointsPanel.jsx'
 import RetailerSavingsPanel from './components/retailer-savings/RetailerSavingsPanel.jsx'
@@ -21,7 +21,7 @@ import App from "./App.jsx"
 import CollectiblesDashboard from './components/collectibles/CollectiblesDashboard.jsx'
 import NewCollectibleCategory from './components/collectibles/NewCollectibleCategory.jsx'
 import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
-import NewFuelTransactionPanel from './components/fuel/NewFuelTransactionPanel.jsx'
+import NewFuelTransactionPanel from './components/fuel/components/NewFuelTransactionPanel.jsx'
 import NewVehiclePanel from "./components/vehicles/NewVehiclePanel.jsx"
 
 const router = createBrowserRouter([
