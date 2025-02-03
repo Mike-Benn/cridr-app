@@ -1,6 +1,5 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
-import GeneralButton from "../general/buttons/GeneralButton";
 
 
 
@@ -18,7 +17,6 @@ function RootPanel() {
             <li><Link to='/card-points'><button type='button'>Card Points</button></Link></li>
             <li><Link to='/retailer-savings'><button type='button'>Retail Savings</button></Link></li>
             <li><Link to='/incentives'><button type='button'>Incentives</button></Link></li>
-            <li><Link to='/collectibles'><GeneralButton buttonType="button" buttonText="Collectibles" /></Link></li>
         </ul>
       </>
     )
