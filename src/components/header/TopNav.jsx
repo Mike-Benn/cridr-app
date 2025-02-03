@@ -3,6 +3,7 @@ import { getPathName } from "../../utils/general/utils"
 import GeneralButton from "../general/buttons/GeneralButton"
 import { useContext } from "react";
 import AuthContext from "../../auth/AuthContext";
+import { Link } from "react-router-dom";
 
 
 function TopNav() {
@@ -21,7 +22,14 @@ function TopNav() {
     return (
         <header>
             <h2>{path}</h2>
-            <p>Top Navbar</p>
+            <ul>
+                <Link to="/"><li>Home</li></Link>
+                <Link to="/credit-card-offers"><li>Offers</li></Link>
+                <Link to="/fuel-transaction"><li>Fuel Transaction</li></Link>
+                <Link to="/card-points"><li>Card Points</li></Link>
+                <Link to="/incentives"><li>Incentives</li></Link>
+                <Link to="/retailer-savings"><li>Retailer Savings</li></Link>
+            </ul>
             <GeneralButton buttonType="button" buttonText="Log Out" onClick={handleUserLogOut} />
         </header>
     )
