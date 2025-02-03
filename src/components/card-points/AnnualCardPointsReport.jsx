@@ -11,11 +11,9 @@ function AnnualCardPointsReport({ yearSelected }) {
             if (yearSelected === "all") {
                 const response = await apiClient.get("/card-points-transaction");
                 setProcessedData(processCardPointTransactions(response.data.data))
-                console.log(response.data.data)
             } else {
                 const response = await apiClient.get(`/card-points-transaction/?year=${yearSelected}`);
                 setProcessedData(processCardPointTransactions(response.data.data))
-                console.log(response.data.data)
             }
         }
         getTransactionsByUserId();
