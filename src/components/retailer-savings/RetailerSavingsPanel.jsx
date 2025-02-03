@@ -1,20 +1,23 @@
 
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom";
+import GeneralButton from "../general/buttons/GeneralButton";
+import UserRetailerSavingsSummary from "./UserRetailerSavingsSummary";
+
 
 function RetailerSavingsPanel() {
-    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Retailer Savings | Cridr";
     }, []);
 
-    const handleAddSavingsTransaction = () => {
-        navigate("new");
-    }
+    
 
     return (
-        <button type='button' onClick={handleAddSavingsTransaction}>Add Savings Transaction!</button>
+        <>
+            <Link to="new"><GeneralButton buttonType="button" buttonText="Add Savings Transaction" /></Link>
+            <UserRetailerSavingsSummary />
+        </>
     )
 }
 
