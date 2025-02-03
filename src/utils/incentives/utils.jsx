@@ -15,10 +15,14 @@ function prepareIncentiveTransactionData(transactionList) {
 }
 
 function createIncentiveListItems(preparedData) {
-    const listItems = Object.entries(preparedData).map(([businessName, transactionData]) => 
-        <li key={transactionData.businessId}>{businessName}: {transactionData.incentiveAmount}</li>
-    )
-    return listItems;
+    if (preparedData) {
+        const listItems = Object.entries(preparedData).map(([businessName, transactionData]) => 
+            <li key={transactionData.businessId}>{businessName}: {transactionData.incentiveAmount}</li>
+        )
+        return listItems;
+    }
+    return;
+    
 }
 
 export {
