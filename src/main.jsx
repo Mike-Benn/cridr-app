@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import RootPanel from './components/root/RootPanel.jsx'
-import CreditCardCouponPanel from './components/credit-card-offers/CreditCardCouponPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
@@ -23,6 +22,7 @@ import NewCollectibleCategory from './components/collectibles/NewCollectibleCate
 import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
 import NewFuelTransactionPanel from './components/fuel/components/NewFuelTransactionPanel.jsx'
 import NewVehiclePanel from "./components/vehicles/NewVehiclePanel.jsx"
+import CreditCardOffersDashboard from './components/credit-card-offers/CreditCardOffersDashboard.jsx'
 
 const router = createBrowserRouter([
   
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           { path: "/", element: <ProtectedRoute><RootPanel /></ProtectedRoute>},
-          { path: "/credit-card-offers", element: <ProtectedRoute><CreditCardCouponPanel /></ProtectedRoute> },
+          { path: "/credit-card-offers", element: <ProtectedRoute><CreditCardOffersDashboard /></ProtectedRoute> },
           { path: "/credit-card-offers/new", element: <ProtectedRoute><AddCreditCardOfferPanel/></ProtectedRoute> },
           { path: "/profile", element: <ProtectedRoute><ProfilePanel /></ProtectedRoute> },
           { path: "/profile/personal", element: <ProtectedRoute><ProfilePersonalInfoPanel /></ProtectedRoute> },
