@@ -5,7 +5,7 @@ import apiClient from "../../api/apiClient";
 import { useNavigate } from "react-router-dom";
 
 
-function NewVehiclePanel() {
+function NewVehicle() {
     const navigate = useNavigate();
     const [newVehicle , setNewVehicle] = useState({
         vehicleMake: "",
@@ -45,4 +45,4 @@ function NewVehiclePanel() {
     )
 }
 
-export default NewVehiclePanel
+export default NewVehicle

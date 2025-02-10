@@ -4,7 +4,7 @@ import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { useEffect, useState } from "react"
 import apiClient from "../../api/apiClient";
 
-function AddCardPointsPanel() {
+function NewCardPointsTransaction() {
     const defaultCreditCardOption = [<option key="default" value="default">Select Credit Card</option>]
     const navigate = useNavigate();
     const [cardPointTransaction , setCardPointTransaction] = useState({
@@ -65,4 +65,4 @@ function AddCardPointsPanel() {
     )
 }
 
-export default AddCardPointsPanel
+export default NewCardPointsTransaction

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { DateField , NumberField , TextField, SelectField } from "../general/form-fields/InputFields"
 import apiClient from "../../api/apiClient";
 
-function AddRetailerSavingsPanel() {
+function NewRetailerSavingsTransaction() {
     const defaultRetailerOption = [<option key="default" value="default">Select Retailer</option>]
 
     const navigate = useNavigate();
@@ -190,4 +190,4 @@ function AddRetailerSavingsPanel() {
 
 }
 
-export default AddRetailerSavingsPanel
+export default NewRetailerSavingsTransaction

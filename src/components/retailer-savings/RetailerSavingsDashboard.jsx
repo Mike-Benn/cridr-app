@@ -5,7 +5,7 @@ import GeneralButton from "../general/buttons/GeneralButton";
 import UserRetailerSavingsSummary from "./UserRetailerSavingsSummary";
 
 
-function RetailerSavingsPanel() {
+function RetailerSavingsDashboard() {
 
     useEffect(() => {
         document.title = "Retailer Savings | Cridr";
@@ -21,4 +21,4 @@ function RetailerSavingsPanel() {
     )
 }
 
-export default RetailerSavingsPanel
+export default RetailerSavingsDashboard

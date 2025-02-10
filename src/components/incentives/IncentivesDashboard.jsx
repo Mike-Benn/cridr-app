@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import GeneralButton from "../general/buttons/GeneralButton"
 import UserIncentiveTransactionSummary from "./UserIncentiveTransactionSummary";
 
-function IncentivesPanel() {
+function IncentivesDashboard() {
 
     useEffect(() => {
         document.title = "Incentives | Cridr";
@@ -16,4 +16,4 @@ function IncentivesPanel() {
     )
 }
 
-export default IncentivesPanel
+export default IncentivesDashboard

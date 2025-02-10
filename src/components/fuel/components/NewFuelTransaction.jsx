@@ -5,7 +5,7 @@ import { SelectField, NumberField, DateField } from "../../general/form-fields/I
 import SubmitFormButton from "../../general/buttons/SubmitFormButton";
 
 
-function NewFuelTransactionPanel() {
+function NewFuelTransaction() {
     const navigate = useNavigate();
     const [vehicleOptions , setVehicleOptions] = useState([]);
 
@@ -74,4 +74,4 @@ function NewFuelTransactionPanel() {
 
 }
 
-export default NewFuelTransactionPanel
+export default NewFuelTransaction

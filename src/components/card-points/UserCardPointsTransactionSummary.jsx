@@ -3,7 +3,7 @@ import { SelectField } from "../general/form-fields/InputFields";
 import apiClient from "../../api/apiClient";
 import AnnualCardPointsReport from "./AnnualCardPointsReport";
 
-function UserCardPointTransactionSummary() {
+function UserCardPointsTransactionSummary() {
     const defaultYearOption = [<option key="all" value="all">All</option>];
     const [selectedYearId, setSelectedYearId] = useState("all");
     const [uniqueYearsList, setUniqueYearsList] = useState([]);
@@ -36,4 +36,4 @@ function UserCardPointTransactionSummary() {
     )
 }
 
-export default UserCardPointTransactionSummary
+export default UserCardPointsTransactionSummary

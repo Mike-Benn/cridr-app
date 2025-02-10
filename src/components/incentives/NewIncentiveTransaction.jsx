@@ -4,7 +4,7 @@ import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../api/apiClient";
 
-function AddIncentivePanel() {
+function NewIncentiveTransaction() {
     const defaultBusinessOption = [<option key="default" value="default">Select Incentive Provider</option>];
     const navigate = useNavigate();
     const [incentiveTransaction , setIncentiveTransaction] = useState({
@@ -70,4 +70,4 @@ function AddIncentivePanel() {
     )
 }
 
-export default AddIncentivePanel
+export default NewIncentiveTransaction

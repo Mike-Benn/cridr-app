@@ -5,7 +5,7 @@ import { NumberField, DateField, SelectField, TextField } from "../general/form-
 import apiClient from "../../api/apiClient"
 import { cashbackTypeOptions } from "../../utils/offers/staticData"
 
-function AddCreditCardOfferPanel() {
+function NewCreditCardOffer() {
     const navigate = useNavigate();
     const defaultCreditCardOption = [<option key="default" value="default">Select Credit Card</option>]
     const [newCardOffer, setNewCardOffer] = useState({
@@ -77,4 +77,4 @@ function AddCreditCardOfferPanel() {
     )
 }
 
-export default AddCreditCardOfferPanel
+export default NewCreditCardOffer

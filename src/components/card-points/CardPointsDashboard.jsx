@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import GeneralButton from "../general/buttons/GeneralButton"
-import UserCardPointTransactionSummary from "./UserCardPointTransactionSummary";
+import UserCardPointsTransactionSummary from "./UserCardPointsTransactionSummary";
 
 
 
-function CardPointsPanel() {
+function CardPointsDashboard() {
 
     useEffect(() => {
         document.title = "Credit Card Points | Cridr";
@@ -15,9 +15,9 @@ function CardPointsPanel() {
     return (
         <section>
             <Link to="new"><GeneralButton buttonType="button" buttonText="Add Card Points" /></Link>
-            <UserCardPointTransactionSummary />
+            <UserCardPointsTransactionSummary />
         </section>
     )
 }
 
-export default CardPointsPanel
+export default CardPointsDashboard

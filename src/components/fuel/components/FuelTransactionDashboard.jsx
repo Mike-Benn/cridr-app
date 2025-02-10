@@ -10,9 +10,6 @@ function FuelTransactionDashboard() {
     useEffect(() => {
         document.title = "Fuel Points | Cridr";
     }, []);
-
-
-    
     
     return (
         <section>
