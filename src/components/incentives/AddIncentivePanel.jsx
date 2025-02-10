@@ -23,7 +23,7 @@ function AddIncentivePanel() {
         document.title = "Add Incentive | Cridr";
         const getBusinessesByIncentiveFeature = async () => {
             try {
-                const response = await apiClient.get("/businesses/feature?feature_id=5");
+                const response = await apiClient.get("/businesses/?feature_id=5");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setIncentiveTransaction((prev) => ({ ...prev , businessOptions: response.data.data }));
                 }

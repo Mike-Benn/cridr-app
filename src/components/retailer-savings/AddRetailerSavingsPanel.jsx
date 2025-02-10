@@ -46,7 +46,7 @@ function AddRetailerSavingsPanel() {
         document.title = "Add Retailer Savings | Cridr";
         const getBusinessesByRetailFeature = async () => {
             try {
-                const response = await apiClient.get("/businesses/feature?feature_id=4");
+                const response = await apiClient.get("/businesses/?feature_id=4");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setRetailSavingsTransaction((prev) => ({ ...prev , primaryRetailerOptions: response.data.data }))
                 }
