@@ -15,12 +15,6 @@ function NewCollectibleCategory() {
         setNewCategory((prev) => ({ ...prev, [name]: value }))
     }
 
-    const resetCategoryForm = () => {
-        setNewCategory((prev) => ({ ...prev, 
-            categoryName: "",
-        }))
-    }
-
     useEffect(() => {
         document.title = "New Collectible Category | Cridr";
     })
@@ -33,7 +27,6 @@ function NewCollectibleCategory() {
         try {
             const response = await apiClient.post("/collectibles/new-category", category);
             if (response.status === 201) {
-                resetCategoryForm();
                 navigate("..");
             }
         } catch (error) {

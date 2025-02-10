@@ -35,16 +35,6 @@ function AddCardPointsPanel() {
 
     }, []);
 
-    const resetPointsForm = () => {
-        setCardPointTransaction({
-            creditCardId: "default",
-            creditCardPointsEarned: "",
-            pointsTransactionDate: "",
-            creditCardOptions: [],
-        })
-
-    }
-
     const handleCardPointsSubmit = async (e) => {
         e.preventDefault();
         const pointTransaction = {
@@ -56,7 +46,6 @@ function AddCardPointsPanel() {
         try {
             const response = await apiClient.post("/card-points/" , pointTransaction);
             if (response.data.success) {
-                resetPointsForm();
                 navigate("/card-points");
             }
         } catch (error) {

@@ -39,19 +39,6 @@ function AddCreditCardOfferPanel() {
         setNewCardOffer((prev) => ({ ...prev , [name]: value }));
     }
 
-    const resetCardOfferForm = () => {
-        setNewCardOffer({
-            creditCardId: "default",
-            cashbackTypeId: "default",
-            creditCardOptions: [],
-            cashbackTypeOptions: [],
-            participatingBusiness: "",
-            cashbackRate: "",
-            cashbackLimit: "",
-            offerExpirationDate: "",
-        })
-    }
-
     const handleCardOfferSubmit = async (e) => {
         e.preventDefault();
         const newOffer = {
@@ -66,7 +53,6 @@ function AddCreditCardOfferPanel() {
         try {
             const response = await apiClient.post("/credit-card-offers/available" , newOffer);
             if (response.status === 201) {
-                resetCardOfferForm();
                 navigate("/credit-card-offers");
             }
 

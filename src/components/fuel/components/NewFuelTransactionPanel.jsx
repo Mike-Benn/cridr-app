@@ -38,16 +38,6 @@ function NewFuelTransactionPanel() {
         setFuelTransaction((prev) => ({ ...prev, [name]: value }));
     };
 
-    const resetFuelTransactionForm = () => {
-        setFuelTransaction({ 
-            selectedVehicleId: "",
-            pricePerGallon: "",
-            gallonsOfGas: "",
-            fuelPointsRedeemed: "",
-            fuelTransactionDate: "",
-        })
-    }
-
     const handleFuelTransactionSubmit = async (e) => {
         e.preventDefault();
         console.log(fuelTransaction.selectedVehicleId)
@@ -62,7 +52,6 @@ function NewFuelTransactionPanel() {
         try {
             const response = await apiClient.post("/fuel-transaction", newFuelTransaction)
             if (response.data.success) {
-                resetFuelTransactionForm();
                 navigate('/fuel-transaction');
             }
         } catch (error) {

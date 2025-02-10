@@ -49,22 +49,11 @@ function AddIncentivePanel() {
         try {
             const response = await apiClient.post("/incentive-transaction", newIncentive);
             if (response.status === 201) {
-                resetIncentiveForm();
                 navigate('/incentives');
             }
         } catch (error) {
             console.error("Error while adding incentive", error);
         }
-    }
-
-    const resetIncentiveForm = () => {
-        setIncentiveTransaction({
-            businessId: "default",
-            incentiveDescription: "",
-            incentiveAmount: "",
-            incentiveTransactionDate: "",
-            businessOptions: [],
-        })
     }
 
     return (

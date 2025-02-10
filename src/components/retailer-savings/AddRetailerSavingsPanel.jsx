@@ -29,21 +29,7 @@ function AddRetailerSavingsPanel() {
         const { name , value } = e.target;
         setRetailSavingsTransaction((prev) => ({ ...prev , [name]: value }))
     }
-    const fullResetSavingsTransactionForm = () => {
-        setRetailSavingsTransaction({
-            primaryRetailerId: "default",
-            primaryRetailerOptions: [],
-            primaryPricePerQuantity: "",
-            competitorPricePerQuantity: "",
-            measurementTypeId: "default",
-            itemName: "",
-            itemQuantity: "",
-            itemList: [],
-            retailSavingsTransactionDate: "",
-            totalMoneySaved: 0,
-        })
-    }
-
+    
     // Used after adding item to transaction
     const partialResetRetailSavingsTransactionForm = () => {
         setRetailSavingsTransaction((prev) => ({
@@ -170,7 +156,6 @@ function AddRetailerSavingsPanel() {
         try {
             const response = await apiClient.post("/retail-savings-transaction" , newSavingsTransaction);
             if (response.status === 201) {
-                fullResetSavingsTransactionForm();
                 navigate("/retailer-savings")
             }
         } catch (error) {

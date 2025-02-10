@@ -17,13 +17,6 @@ function NewVehiclePanel() {
         setNewVehicle((prev) => ({...prev, [name]: value }));
     }
 
-    const resetNewVehicleForm = () => {
-        setNewVehicle({
-            vehicleMake: "",
-            vehicleModel: "",
-        })
-    }
-
     const handleNewVehicleSubmit = async (e) => {
         e.preventDefault();
         const vehicle = {
@@ -33,7 +26,6 @@ function NewVehiclePanel() {
         try {
             const response = await apiClient.post("/vehicles", vehicle);
             if (response.data.success) {
-                resetNewVehicleForm();
                 navigate("..");
             }
         } catch (error) {

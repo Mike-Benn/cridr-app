@@ -32,13 +32,7 @@ function SignInUpPanel() {
         setSignUpPassword(e.target.value);
     }
 
-    const resetSignInUpForm = () => {
-        setSignInUsername("");
-        setSignInPassword("");
-        setSignUpUsername("");
-        setSignUpPassword("");
-
-    }
+    
 
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();

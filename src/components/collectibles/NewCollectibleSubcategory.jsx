@@ -40,13 +40,6 @@ function NewCollectibleSubcategory() {
         setSelectedCategoryId(e.target.value);
     }
 
-    const resetSubcategoryForm = () => {
-        setNewSubcategory((prev) => ({ ...prev, 
-            categoryName: "",
-        }))
-        setSelectedCategoryId("");
-    }
-
     const handleNewSubcategorySubmit = async (e) => {
         e.preventDefault();
         const subcategory = {
@@ -56,7 +49,6 @@ function NewCollectibleSubcategory() {
         try {
             const response = await apiClient.post("/collectibles/new-subcategory", subcategory);
             if (response.status === 201) {
-                resetSubcategoryForm();
                 navigate("..");
             }
         } catch (error) {
