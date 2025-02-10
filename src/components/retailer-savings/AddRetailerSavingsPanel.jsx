@@ -5,21 +5,20 @@ import { calculateRetailItemSavings } from "../../utils/general/utils";
 import { useEffect, useState } from "react";
 import RetailerSavingsListItem from "./RetailerSavingsListItem";
 import { filterOutAndReturnById } from "../../utils/general/utils";
-import { addDefaultOptionToSelect } from "../../utils/general/utils";
 import { useNavigate } from "react-router-dom";
-import { SelectField , DateField , NumberField , TextField } from "../general/form-fields/InputFields"
+import { DateField , NumberField , TextField, CategorySelect } from "../general/form-fields/InputFields"
 import apiClient from "../../api/apiClient";
 
 function AddRetailerSavingsPanel() {
+    const defaultRetailerOption = [<option key="default" value="default">Select Retailer</option>]
+
     const navigate = useNavigate();
     const [retailSavingsTransaction , setRetailSavingsTransaction] = useState({
-        primaryRetailerId: "-1",
-        competitorRetailerId: "-1",
+        primaryRetailerId: "default",
         primaryRetailerOptions: [],
-        competitorRetailerOptions: [],
         primaryPricePerQuantity: "",
         competitorPricePerQuantity: "",
-        measurementTypeId: "-1",
+        measurementTypeId: "default",
         itemName: "",
         itemQuantity: "",
         itemList: [],
@@ -32,13 +31,11 @@ function AddRetailerSavingsPanel() {
     }
     const fullResetSavingsTransactionForm = () => {
         setRetailSavingsTransaction({
-            primaryRetailerId: "-1",
-            competitorRetailerId: "-1",
+            primaryRetailerId: "default",
             primaryRetailerOptions: [],
-            competitorRetailerOptions: [],
             primaryPricePerQuantity: "",
             competitorPricePerQuantity: "",
-            measurementTypeId: "-1",
+            measurementTypeId: "default",
             itemName: "",
             itemQuantity: "",
             itemList: [],
@@ -52,9 +49,8 @@ function AddRetailerSavingsPanel() {
         setRetailSavingsTransaction((prev) => ({
             ...prev,
             primaryPricePerQuantity: "",
-            competitorRetailerId: "-1",
             competitorPricePerQuantity: "",
-            measurementTypeId: "-1",
+            measurementTypeId: "default",
             itemName: "",
             itemQuantity: "",
 
@@ -67,12 +63,8 @@ function AddRetailerSavingsPanel() {
                 const response = await apiClient.get("/businesses/feature?feature_id=4");
                 if (response.data) {
                     let retailerOptionList = [...response.data.data];
-                    let competitorOptionList = [...response.data.data];
-                    addDefaultOptionToSelect(retailerOptionList, "business_name" , "business_id" , "Select Retailer");
-                    addDefaultOptionToSelect(competitorOptionList, "business_name" , "business_id" , "Select Competitor");
                     setRetailSavingsTransaction((prev) => ({ ...prev ,
                         primaryRetailerOptions: retailerOptionList,
-                        competitorRetailerOptions: competitorOptionList,
                     }))
                 }
             } catch (error) {
@@ -91,9 +83,8 @@ function AddRetailerSavingsPanel() {
                 setRetailSavingsTransaction((prev) => ({ ...prev, 
                     primaryRetailerId: e.target.value,
                     primaryPricePerQuantity: "",
-                    competitorRetailerId: "-1",
                     competitorPricePerQuantity: "",
-                    measurementTypeId: "-1",
+                    measurementTypeId: "default",
                     itemName: "",
                     itemQuantity: "",
                     itemList: [],
@@ -111,11 +102,10 @@ function AddRetailerSavingsPanel() {
             const isConfirmed = window.confirm("Current transaction data will be lost if date is changed without submitting, are you sure you want to change the date?");
             if (isConfirmed) {
                 setRetailSavingsTransaction((prev) => ({ ...prev,
-                    primaryRetailerId: "-1",
+                    primaryRetailerId: "default",
                     primaryPricePerQuantity: "",
-                    competitorRetailerId: "-1",
                     competitorPricePerQuantity: "",
-                    measurementTypeId: "-1",
+                    measurementTypeId: "default",
                     itemName: "",
                     itemQuantity: "",
                     itemList: [],
@@ -133,7 +123,6 @@ function AddRetailerSavingsPanel() {
             id: uuidv4(),
             primaryRetailerId: retailSavingsTransaction.primaryRetailerId,
             primaryPricePerQuantity: retailSavingsTransaction.primaryPricePerQuantity,
-            competitorRetailerId: retailSavingsTransaction.competitorRetailerId,
             competitorPricePerQuantity: retailSavingsTransaction.competitorPricePerQuantity,
             itemName: retailSavingsTransaction.itemName,
             itemQuantity: retailSavingsTransaction.itemQuantity,
@@ -164,7 +153,6 @@ function AddRetailerSavingsPanel() {
             ...prev,
             primaryRetailerId: itemAndUpdatedList.filteredItem.primaryRetailerId,
             primaryPricePerQuantity: itemAndUpdatedList.filteredItem.primaryPricePerQuantity,
-            competitorRetailerId: itemAndUpdatedList.filteredItem.competitorRetailerId,
             competitorPricePerQuantity: itemAndUpdatedList.filteredItem.competitorPricePerQuantity,
             measurementTypeId: itemAndUpdatedList.filteredItem.measurementTypeId,
             itemName: itemAndUpdatedList.filteredItem.itemName,
@@ -201,12 +189,11 @@ function AddRetailerSavingsPanel() {
             <fieldset>
                 <legend>Add Retailer Savings Transaction</legend>
                 <DateField labelText="Transaction Date" onChange={handleTransactionDateChange} value={retailSavingsTransaction.retailSavingsTransactionDate} name="retailSavingsTransactionDate" />
-                <SelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailSavingsTransaction.primaryRetailerOptions} onChange={handleRetailerIdChange} value={retailSavingsTransaction.primaryRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="primaryRetailerId" />
+                <CategorySelect fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailSavingsTransaction.primaryRetailerOptions} onChange={handleRetailerIdChange} value={retailSavingsTransaction.primaryRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="primaryRetailerId" defaultOptions={defaultRetailerOption}/>
                 <TextField labelText="Item Name" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemName} name="itemName" />
-                <SelectField fieldId="retail-save-select-measurement" labelText="Select Measurement" optionList={MEASUREMENT_OPTIONS} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.measurementTypeId} optionIdAccessor="value" optionTextAccessor="text" name="measurementTypeId" />
+                <CategorySelect fieldId="retail-save-select-measurement" labelText="Select Measurement" optionList={MEASUREMENT_OPTIONS} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.measurementTypeId} optionIdAccessor="value" optionTextAccessor="text" name="measurementTypeId" />
                 <NumberField labelText="Quantity" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemQuantity} name="itemQuantity" />
                 <NumberField labelText="Retailer Price Per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.primaryPricePerQuantity} name="primaryPricePerQuantity" />
-                <SelectField fieldId="retail-save-select-competitor" labelText="Select Competitor" optionList={retailSavingsTransaction.competitorRetailerOptions} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.competitorRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="competitorRetailerId" />
                 <NumberField labelText="Competitor Price per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.competitorPricePerQuantity} name="competitorPricePerQuantity" />
                 <button type="button" onClick={handleAddItemToList}>Add Item</button>
             </fieldset>
