@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import apiClient from "../../api/apiClient"
 import { OfferListItem } from "../../utils/offers/utils";
-import { modularFilterOutAndReturnById } from "../../utils/general/utils";
+import { filterOutAndReturnById } from "../../utils/general/utils";
 
 
 function AvailableOffersDisplay() {
@@ -23,7 +23,7 @@ function AvailableOffersDisplay() {
     }, []);
 
     const handleDeleteOffer = async (offerId) => {
-        const offerAndUpdatedList = modularFilterOutAndReturnById(offerId, offers, "available_offer_id");
+        const offerAndUpdatedList = filterOutAndReturnById(offerId, offers, "available_offer_id");
         const previousOffers = [...offers];
         setOffers(offerAndUpdatedList.newArray);
         try {

@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList, modularFilterOutAndReturnById};
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList };
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -62,24 +62,11 @@ function calculateRetailItemSavings(quantity , retailerPricePer , competitorPric
     return (competitorPricePer - retailerPricePer) * quantity
 }
 
-function filterOutAndReturnById(id , arr) {
-    let newArray = [];
-    let filteredItem = null;
-    for (let i = 0; i < arr.length; i++) {
-        if (id !== arr[i].id) {
-            newArray.push(arr[i]);
-        } else {
-            filteredItem = arr[i];
-        }
-    }
-    return { newArray , filteredItem }
-}
-
 function addOptionToList(arr , optionText , key , value) {
     arr.push(<option key={key} value={value}>{optionText}</option>)
 }
 
-function modularFilterOutAndReturnById(idValue, arr, idAccessor) {
+function filterOutAndReturnById(idValue, arr, idAccessor) {
     let newArray = [];
     let filteredItem = null;
     for (let i = 0; i < arr.length; i++) {

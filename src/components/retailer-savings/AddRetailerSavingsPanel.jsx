@@ -122,16 +122,15 @@ function AddRetailerSavingsPanel() {
     }
 
     const handleDeleteItemFromList = (id) => {
-        let itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList);
+        let itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList, "id");
         setRetailSavingsTransaction((prev) => ({
             ...prev,
             totalMoneySaved: prev.totalMoneySaved - itemAndUpdatedList.filteredItem.itemSavings,
             itemList: itemAndUpdatedList.newArray,
         }))
     }
-
     const handleEditItemFromList = (id) => {
-        const itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList);
+        const itemAndUpdatedList = filterOutAndReturnById(id , retailSavingsTransaction.itemList, "id");
         setRetailSavingsTransaction((prev) => ({
             ...prev,
             primaryRetailerId: itemAndUpdatedList.filteredItem.primaryRetailerId,
