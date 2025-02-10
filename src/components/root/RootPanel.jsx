@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
+import GeneralButton from "../general/buttons/GeneralButton"
 
 
 
@@ -11,11 +12,11 @@ function RootPanel() {
     return (
       <>
         <ul>
-            <li><Link to='/credit-card-offers'><button type='button'>Offers</button></Link></li>
-            <li><Link to='/fuel-transaction'><button type='button'>Fuel Transaction</button></Link></li>
-            <li><Link to='/card-points'><button type='button'>Card Points</button></Link></li>
-            <li><Link to='/retailer-savings'><button type='button'>Retail Savings</button></Link></li>
-            <li><Link to='/incentives'><button type='button'>Incentives</button></Link></li>
+            <li><Link to='/credit-card-offers'><GeneralButton buttonType="button" buttonText="Offers" /></Link></li>
+            <li><Link to='/fuel-transaction'><GeneralButton buttonType="button" buttonText="Fuel Transaction" /></Link></li>
+            <li><Link to='/card-points'><GeneralButton buttonType="button" buttonText="Card Points" /></Link></li>
+            <li><Link to='/retailer-savings'><GeneralButton buttonType="button" buttonText="Retail Savings" /></Link></li>
+            <li><Link to='/incentives'><GeneralButton buttonType="button" buttonText="Incentives" /></Link></li>
         </ul>
       </>
     )
