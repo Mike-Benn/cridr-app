@@ -1,5 +1,5 @@
 import apiClient from "../../api/apiClient"
-import { CategorySelect, TextField } from "../general/form-fields/InputFields"
+import { SelectField, TextField } from "../general/form-fields/InputFields"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
@@ -69,7 +69,7 @@ function NewCollectibleSubcategory() {
         <form action="" onSubmit={handleNewSubcategorySubmit}>
             <fieldset>
                 <legend>New Collectible Subcategory</legend>
-                <CategorySelect fieldId="collectibles-new-subcategory-select-category" labelText="Select Category" optionList={categoryList} onChange={handleSelectedCategoryChange} value={selectedCategoryId} optionTextAccessor="collectibles_main_categories_name" optionIdAccessor="collectibles_main_categories_id" />
+                <SelectField fieldId="collectibles-new-subcategory-select-category" labelText="Select Category" optionList={categoryList} onChange={handleSelectedCategoryChange} value={selectedCategoryId} optionTextAccessor="collectibles_main_categories_name" optionIdAccessor="collectibles_main_categories_id" />
                 <TextField labelText="Subcategory Name" value={newSubcategory.subcategoryName} onChange={handleNewSubcategoryChange} name="subcategoryName" />
                 <SubmitFormButton buttonText="Add New Subcategory" />
             </fieldset>

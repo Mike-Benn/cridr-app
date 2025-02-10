@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { CategorySelect } from "../general/form-fields/InputFields";
+import { SelectField } from "../general/form-fields/InputFields";
 import apiClient from "../../api/apiClient";
 import AnnualRetailerSavingsReport from "./AnnualRetailerSavingsReport";
 
@@ -30,7 +30,7 @@ function UserRetailerSavingsSummary() {
 
     return (
         <>
-            <CategorySelect fieldId="incentive-transaction-summary-year-select" labelText="Select Transaction Year" optionList={uniqueYearsList} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
+            <SelectField fieldId="incentive-transaction-summary-year-select" labelText="Select Transaction Year" optionList={uniqueYearsList} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
             <AnnualRetailerSavingsReport yearSelected={selectedYearId} />
         </>
     )

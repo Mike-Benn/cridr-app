@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import GeneralButton from "../general/buttons/GeneralButton"
 import { useEffect, useState } from "react"
-import { CategorySelect } from "../general/form-fields/InputFields"
+import { SelectField } from "../general/form-fields/InputFields"
 import apiClient from "../../api/apiClient"
 
 
@@ -37,7 +37,7 @@ function CollectiblesDashboard() {
         <>
             <Link to="new-category"><GeneralButton buttonType="button" buttonText="Add Collectible Category" /></Link>
             <Link to="new-subcategory"><GeneralButton buttonType="button" buttonText="Add Collectible Subcategory" /></Link>
-            <CategorySelect fieldId="collectibles-select-category" labelText="Select Category" optionList={categoryList} onChange={handleSelectedCategoryChange} value={selectedCategoryId} optionTextAccessor="collectibles_main_categories_name" optionIdAccessor="collectibles_main_categories_id" defaultOptions={defaultCategoryOption} />
+            <SelectField fieldId="collectibles-select-category" labelText="Select Category" optionList={categoryList} onChange={handleSelectedCategoryChange} value={selectedCategoryId} optionTextAccessor="collectibles_main_categories_name" optionIdAccessor="collectibles_main_categories_id" defaultOptions={defaultCategoryOption} />
         </>
     )
 }

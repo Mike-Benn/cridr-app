@@ -1,7 +1,7 @@
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { NumberField, DateField, CategorySelect, TextField } from "../general/form-fields/InputFields"
+import { NumberField, DateField, SelectField, TextField } from "../general/form-fields/InputFields"
 import apiClient from "../../api/apiClient"
 import { cashbackTypeOptions } from "../../utils/offers/staticData"
 
@@ -80,8 +80,8 @@ function AddCreditCardOfferPanel() {
         <form action='' onSubmit={handleCardOfferSubmit}>
             <fieldset>
                 <legend>Offer Info</legend>
-                <CategorySelect fieldId="card-coupons-card-select" labelText="Select Credit Card" optionList={newCardOffer.creditCardOptions} onChange={handleNewCardOfferChange} value={newCardOffer.creditCardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" name="creditCardId" defaultOptions={defaultCreditCardOption}/>
-                <CategorySelect fieldId="card-coupons-cashback-select" labelText="Select Cashback Type" optionList={cashbackTypeOptions} onChange={handleNewCardOfferChange} value={newCardOffer.cashbackTypeId} optionIdAccessor="cashback_type_id" optionTextAccessor="cashback_type_text" name="cashbackTypeId" />
+                <SelectField fieldId="card-coupons-card-select" labelText="Select Credit Card" optionList={newCardOffer.creditCardOptions} onChange={handleNewCardOfferChange} value={newCardOffer.creditCardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" name="creditCardId" defaultOptions={defaultCreditCardOption}/>
+                <SelectField fieldId="card-coupons-cashback-select" labelText="Select Cashback Type" optionList={cashbackTypeOptions} onChange={handleNewCardOfferChange} value={newCardOffer.cashbackTypeId} optionIdAccessor="cashback_type_id" optionTextAccessor="cashback_type_text" name="cashbackTypeId" />
                 <TextField labelText="Participating Business" onChange={handleNewCardOfferChange} value={newCardOffer.participatingBusiness} name="participatingBusiness" />
                 <NumberField labelText="Cashback Rate" onChange={handleNewCardOfferChange} value={newCardOffer.cashbackRate} name="cashbackRate" />
                 <NumberField labelText="Cashback Limit" onChange={handleNewCardOfferChange} value={newCardOffer.cashbackLimit} name="cashbackLimit" />

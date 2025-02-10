@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import RetailerSavingsListItem from "./RetailerSavingsListItem";
 import { filterOutAndReturnById } from "../../utils/general/utils";
 import { useNavigate } from "react-router-dom";
-import { DateField , NumberField , TextField, CategorySelect } from "../general/form-fields/InputFields"
+import { DateField , NumberField , TextField, SelectField } from "../general/form-fields/InputFields"
 import apiClient from "../../api/apiClient";
 
 function AddRetailerSavingsPanel() {
@@ -189,9 +189,9 @@ function AddRetailerSavingsPanel() {
             <fieldset>
                 <legend>Add Retailer Savings Transaction</legend>
                 <DateField labelText="Transaction Date" onChange={handleTransactionDateChange} value={retailSavingsTransaction.retailSavingsTransactionDate} name="retailSavingsTransactionDate" />
-                <CategorySelect fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailSavingsTransaction.primaryRetailerOptions} onChange={handleRetailerIdChange} value={retailSavingsTransaction.primaryRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="primaryRetailerId" defaultOptions={defaultRetailerOption}/>
+                <SelectField fieldId="retail-save-select-retailer" labelText="Select Retailer" optionList={retailSavingsTransaction.primaryRetailerOptions} onChange={handleRetailerIdChange} value={retailSavingsTransaction.primaryRetailerId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="primaryRetailerId" defaultOptions={defaultRetailerOption}/>
                 <TextField labelText="Item Name" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemName} name="itemName" />
-                <CategorySelect fieldId="retail-save-select-measurement" labelText="Select Measurement" optionList={MEASUREMENT_OPTIONS} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.measurementTypeId} optionIdAccessor="value" optionTextAccessor="text" name="measurementTypeId" />
+                <SelectField fieldId="retail-save-select-measurement" labelText="Select Measurement" optionList={MEASUREMENT_OPTIONS} onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.measurementTypeId} optionIdAccessor="value" optionTextAccessor="text" name="measurementTypeId" />
                 <NumberField labelText="Quantity" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.itemQuantity} name="itemQuantity" />
                 <NumberField labelText="Retailer Price Per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.primaryPricePerQuantity} name="primaryPricePerQuantity" />
                 <NumberField labelText="Competitor Price per" onChange={handleSavingsTransactionChange} value={retailSavingsTransaction.competitorPricePerQuantity} name="competitorPricePerQuantity" />

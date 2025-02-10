@@ -1,14 +1,14 @@
 import { useState , useEffect} from "react"
-import { SelectField , DateField , NumberField , TextField } from "../general/form-fields/InputFields"
+import { DateField , NumberField , TextField, SelectField} from "../general/form-fields/InputFields"
 import SubmitFormButton from "../general/buttons/SubmitFormButton"
 import { useNavigate } from "react-router-dom";
-import { addDefaultOptionToSelect } from "../../utils/general/utils";
 import apiClient from "../../api/apiClient";
 
 function AddIncentivePanel() {
+    const defaultBusinessOption = [<option key="default" value="default">Select Incentive Provider</option>];
     const navigate = useNavigate();
     const [incentiveTransaction , setIncentiveTransaction] = useState({
-        businessId: "-1",
+        businessId: "default",
         incentiveDescription: "",
         incentiveAmount: "",
         incentiveTransactionDate: "",
@@ -26,7 +26,6 @@ function AddIncentivePanel() {
                 const response = await apiClient.get("/businesses/feature?feature_id=5");
                 if (response.data) {
                     let businessOptionList = [...response.data.data];
-                    addDefaultOptionToSelect(businessOptionList , "business_name" , "business_id" , "Select Incentive Provider")
                     setIncentiveTransaction((prev) => ({ ...prev , businessOptions: businessOptionList}));
                 }
             } catch (error) {
@@ -61,20 +60,19 @@ function AddIncentivePanel() {
 
     const resetIncentiveForm = () => {
         setIncentiveTransaction({
-            businessId: "-1",
+            businessId: "default",
             incentiveDescription: "",
             incentiveAmount: "",
             incentiveTransactionDate: "",
             businessOptions: [],
         })
-
     }
 
     return (
         <form action="" onSubmit={handleIncentiveSubmit}>
             <fieldset>
                 <legend>Add Incentive Transaction</legend>
-                <SelectField fieldId="incentive-select-business" labelText="Select Business Name" optionList={incentiveTransaction.businessOptions} onChange={handleIncentiveTransactionChange} value={incentiveTransaction.businessId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="businessId" />
+                <SelectField fieldId="incentive-select-business" labelText="Select Business Name" optionList={incentiveTransaction.businessOptions} onChange={handleIncentiveTransactionChange} value={incentiveTransaction.businessId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="businessId" defaultOptions={defaultBusinessOption} />
                 <TextField labelText="Description" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveDescription} name="incentiveDescription" />
                 <NumberField labelText="Amount" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveAmount} name="incentiveAmount" />
                 <DateField labelText="Transaction Date" onChange={handleIncentiveTransactionChange} value={incentiveTransaction.incentiveTransactionDate} name="incentiveTransactionDate"/>

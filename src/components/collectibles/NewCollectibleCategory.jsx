@@ -27,7 +27,6 @@ function NewCollectibleCategory() {
 
     const handleNewCategorySubmit = async (e) => {
         e.preventDefault();
-        console.log("form-tests")
         const category = {
             collectibles_main_categories_name: newCategory.categoryName,
         }

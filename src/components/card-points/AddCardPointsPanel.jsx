@@ -2,13 +2,13 @@ import { NumberField , DateField , SelectField } from "../general/form-fields/In
 import { useNavigate } from "react-router-dom";
 import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { useEffect, useState } from "react"
-import { addDefaultOptionToSelect } from "../../utils/general/utils";
 import apiClient from "../../api/apiClient";
 
 function AddCardPointsPanel() {
+    const defaultCreditCardOption = [<option key="default" value="default">Select Credit Card</option>]
     const navigate = useNavigate();
     const [cardPointTransaction , setCardPointTransaction] = useState({
-        creditCardId: "-1",
+        creditCardId: "default",
         creditCardPointsEarned: "",
         pointsTransactionDate: "",
         creditCardOptions: [],
@@ -26,7 +26,6 @@ function AddCardPointsPanel() {
                 const response = await apiClient.get("/credit-cards/") 
                 if (response.data) {
                     let optionList = [...response.data.data];
-                    addDefaultOptionToSelect(optionList , "credit_card_name" , "credit_card_id" , "Select Credit Card");
                     setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: optionList }));
                 }
             } catch (error) {
@@ -39,7 +38,7 @@ function AddCardPointsPanel() {
 
     const resetPointsForm = () => {
         setCardPointTransaction({
-            creditCardId: "-1",
+            creditCardId: "default",
             creditCardPointsEarned: "",
             pointsTransactionDate: "",
             creditCardOptions: [],
@@ -69,7 +68,7 @@ function AddCardPointsPanel() {
         <form action="" onSubmit={handleCardPointsSubmit}>
             <fieldset>
                 <legend>Add Card Points</legend>
-                <SelectField fieldId="card-points-select-card" labelText="Select Credit Card" optionList={cardPointTransaction.creditCardOptions} onChange={handleCardPointTransactionChange} value={cardPointTransaction.creditCardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" name="creditCardId" />
+                <SelectField fieldId="card-points-select-card" labelText="Select Credit Card" optionList={cardPointTransaction.creditCardOptions} onChange={handleCardPointTransactionChange} value={cardPointTransaction.creditCardId} optionIdAccessor="credit_card_id" optionTextAccessor="credit_card_name" name="creditCardId" defaultOptions={defaultCreditCardOption} />
                 <NumberField labelText="Points Earned" onChange={handleCardPointTransactionChange} value={cardPointTransaction.creditCardPointsEarned} name="creditCardPointsEarned" />
                 <DateField  labelText="Date Earned" onChange={handleCardPointTransactionChange} value={cardPointTransaction.pointsTransactionDate} name="pointsTransactionDate" />
                 <SubmitFormButton buttonText="Submit Card Points" />

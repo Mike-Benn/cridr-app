@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import apiClient from "../../../api/apiClient";
-import { CategorySelect, NumberField, DateField } from "../../general/form-fields/InputFields";
+import { SelectField, NumberField, DateField } from "../../general/form-fields/InputFields";
 import SubmitFormButton from "../../general/buttons/SubmitFormButton";
 
 
@@ -74,7 +74,7 @@ function NewFuelTransactionPanel() {
         <form action='' onSubmit={handleFuelTransactionSubmit}>
             <fieldset>
                 <legend>Add Fuel Transaction</legend>
-                <CategorySelect fieldId="fuel-transaction-select-vehicle" labelText="Select Vehicle" optionList={vehicleOptions} onChange={handleFuelTransactionChange} value={fuelTransaction.selectedVehicleId} optionTextAccessor="vehicle_model" optionIdAccessor="vehicle_id" name="selectedVehicleId" />
+                <SelectField fieldId="fuel-transaction-select-vehicle" labelText="Select Vehicle" optionList={vehicleOptions} onChange={handleFuelTransactionChange} value={fuelTransaction.selectedVehicleId} optionTextAccessor="vehicle_model" optionIdAccessor="vehicle_id" name="selectedVehicleId" />
                 <NumberField labelText="Price Per Gallon" value={fuelTransaction.pricePerGallon} onChange={handleFuelTransactionChange} name="pricePerGallon" />
                 <NumberField labelText="Gallons o' Gas" value={fuelTransaction.gallonsOfGas} onChange={handleFuelTransactionChange} name="gallonsOfGas" />
                 <NumberField labelText="Fuel Points Used" value={fuelTransaction.fuelPointsRedeemed} onChange={handleFuelTransactionChange} name="fuelPointsRedeemed" />

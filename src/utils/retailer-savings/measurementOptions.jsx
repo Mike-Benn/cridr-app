@@ -7,7 +7,7 @@ const MEASUREMENT_OPTIONS = [
     {
         id: uuidv4(),
         text: "Select measurement",
-        value: "-1"
+        value: "default"
     },
     {
         id: uuidv4(),
