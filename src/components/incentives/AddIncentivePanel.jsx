@@ -21,12 +21,11 @@ function AddIncentivePanel() {
     }
     useEffect(() => {
         document.title = "Add Incentive | Cridr";
-        const getBusinessesByFeature = async () => {
+        const getBusinessesByIncentiveFeature = async () => {
             try {
                 const response = await apiClient.get("/businesses/feature?feature_id=5");
-                if (response.data) {
-                    let businessOptionList = [...response.data.data];
-                    setIncentiveTransaction((prev) => ({ ...prev , businessOptions: businessOptionList}));
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setIncentiveTransaction((prev) => ({ ...prev , businessOptions: response.data.data }));
                 }
             } catch (error) {
                 console.error(error , "Error fetching business names");
@@ -34,7 +33,7 @@ function AddIncentivePanel() {
         }
         
 
-        getBusinessesByFeature();
+        getBusinessesByIncentiveFeature();
 
     }, [])
 
@@ -49,7 +48,7 @@ function AddIncentivePanel() {
 
         try {
             const response = await apiClient.post("/incentive-transaction", newIncentive);
-            if (response.data.success) {
+            if (response.status === 201) {
                 resetIncentiveForm();
                 navigate('/incentives');
             }

@@ -17,7 +17,7 @@ function NewCollectibleSubcategory() {
         const getCategoriesById = async () => {
             try {
                 const response = await apiClient.get("/categories");
-                if (response.data) {
+                if (response.status === 200 && Array.isArray(response.data.data)) {
                     let categories = [...response.data.data];
                     setCategoryList(categories);
                     setSelectedCategoryId(categories[0].collectibles_main_categories_id)

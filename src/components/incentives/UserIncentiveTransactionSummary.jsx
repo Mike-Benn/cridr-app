@@ -9,21 +9,18 @@ function UserIncentiveTransactionSummary() {
     const [uniqueYearsList, setUniqueYearsList] = useState([]);
     
     useEffect(() => {
-        const getUniqueTransactionYears = async () => {
+        const getUniqueYearsByUserId = async () => {
             try {
                 const response = await apiClient.get("/incentive-transaction/unique-years");
-                if (response.data) {
-                    const uniqueYearsList = [...response.data.data];
-                    setUniqueYearsList(uniqueYearsList)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setUniqueYearsList(response.data.data)
                 }
             } catch (error) {
                 console.error("Unable to retrieve unique transaction years for user.", error)
             }
         }
-        getUniqueTransactionYears();
+        getUniqueYearsByUserId();
     }, [])
-
-
     const handleYearIdChange = (e) => {
         setSelectedYearId(e.target.value)
     }

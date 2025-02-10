@@ -9,18 +9,17 @@ function UserCardPointTransactionSummary() {
     const [uniqueYearsList, setUniqueYearsList] = useState([]);
     
     useEffect(() => {
-        const getUniqueTransactionYears = async () => {
+        const getUniqueTransactionYearsById = async () => {
             try {
                 const response = await apiClient.get("/card-points-transaction/unique-years");
-                if (response.status === 200) {
-                    const uniqueYearsList = [...response.data.data];
-                    setUniqueYearsList(uniqueYearsList)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setUniqueYearsList(response.data.data)
                 }
             } catch (error) {
                 console.error("Unable to retrieve unique transaction years for user.", error)
             }
         }
-        getUniqueTransactionYears();
+        getUniqueTransactionYearsById();
     }, [])
 
 

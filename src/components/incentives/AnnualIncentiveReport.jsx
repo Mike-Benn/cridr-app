@@ -10,12 +10,14 @@ function AnnualIncentiveReport({ yearSelected }) {
         const getTransactionsByUserId = async () => {
             if (yearSelected === "all") {
                 const response = await apiClient.get("/incentive-transaction");
-                setFormattedData(prepareIncentiveTransactionData(response.data.data));
-                console.log(response.data.data)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setFormattedData(prepareIncentiveTransactionData(response.data.data));
+                }
             } else {
                 const response = await apiClient.get(`/incentive-transaction/?year=${yearSelected}`);
-                setFormattedData(prepareIncentiveTransactionData(response.data.data));
-                console.log(response.data.data)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setFormattedData(prepareIncentiveTransactionData(response.data.data));
+                }
             }
         }
         getTransactionsByUserId();

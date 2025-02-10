@@ -21,18 +21,17 @@ function AddCreditCardOfferPanel() {
 
     useEffect(() => {
         document.title = "Add Offer | Cridr";
-        const getData = async () => {
+        const getCreditCreditCardsById = async () => {
             try {
                 const response = await apiClient.get("/credit-cards");
-                if (response.status === 200) {
-                    let optionList = [...response.data.data];
-                    setNewCardOffer((prev) => ({ ...prev, creditCardOptions: optionList }));
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setNewCardOffer((prev) => ({ ...prev, creditCardOptions: response.data.data }));
                 }
             } catch (error) {
                 console.error("Failed to fetch data", error);
             }
         };
-        getData();
+        getCreditCreditCardsById();
     }, []);
     
     const handleNewCardOfferChange = (e) => {

@@ -21,18 +21,17 @@ function AddCardPointsPanel() {
     }
     useEffect(() => {
         document.title = "Add Card Points | Cridr";
-        const getCreditCards = async () => {
+        const getCreditCardsById = async () => {
             try {
                 const response = await apiClient.get("/credit-cards/") 
-                if (response.data) {
-                    let optionList = [...response.data.data];
-                    setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: optionList }));
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: response.data.data }));
                 }
             } catch (error) {
                 console.error(error , "Failed to fetch card options.");
             }
         }
-        getCreditCards();
+        getCreditCardsById();
 
     }, []);
 

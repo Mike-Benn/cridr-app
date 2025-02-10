@@ -58,20 +58,17 @@ function AddRetailerSavingsPanel() {
     }
     useEffect(() => {
         document.title = "Add Retailer Savings | Cridr";
-        const getRetailers = async () => {
+        const getBusinessesByRetailFeature = async () => {
             try {
                 const response = await apiClient.get("/businesses/feature?feature_id=4");
-                if (response.data) {
-                    let retailerOptionList = [...response.data.data];
-                    setRetailSavingsTransaction((prev) => ({ ...prev ,
-                        primaryRetailerOptions: retailerOptionList,
-                    }))
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setRetailSavingsTransaction((prev) => ({ ...prev , primaryRetailerOptions: response.data.data }))
                 }
             } catch (error) {
                 console.error(error, "Failed to fetch retailers.");
             }
         }
-        getRetailers();
+        getBusinessesByRetailFeature();
     }, []);    
 
     const handleRetailerIdChange = (e) => {

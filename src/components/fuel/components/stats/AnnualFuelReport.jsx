@@ -10,10 +10,14 @@ function AnnualFuelReport({ yearSelected }) {
         const getTransactionsByUserId = async () => {
             if (yearSelected === "all") {
                 const response = await apiClient.get("/fuel-transaction");
-                setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                }
             } else {
                 const response = await apiClient.get(`/fuel-transaction/?year=${yearSelected}`);
-                setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                }
             }
         }
         getTransactionsByUserId();

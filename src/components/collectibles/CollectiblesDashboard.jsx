@@ -16,15 +16,12 @@ function CollectiblesDashboard() {
         const getCategoriesById = async () => {
             try {
                 const response = await apiClient.get("/categories");
-                if (response.data) {
-                    let categories = [...response.data.data];
-                    setCategoryList(categories);
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setCategoryList(response.data.data);
                 }
-
             } catch (error) {
                 console.error("Unable to get collectible categoriess for user.")
             }
-
         }
         getCategoriesById();
     }, [])

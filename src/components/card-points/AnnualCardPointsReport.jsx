@@ -10,10 +10,14 @@ function AnnualCardPointsReport({ yearSelected }) {
         const getTransactionsByUserId = async () => {
             if (yearSelected === "all") {
                 const response = await apiClient.get("/card-points-transaction");
-                setProcessedData(processCardPointTransactions(response.data.data))
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setProcessedData(processCardPointTransactions(response.data.data))
+                }
             } else {
                 const response = await apiClient.get(`/card-points-transaction/?year=${yearSelected}`);
-                setProcessedData(processCardPointTransactions(response.data.data))
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setProcessedData(processCardPointTransactions(response.data.data))
+                }
             }
         }
         getTransactionsByUserId();

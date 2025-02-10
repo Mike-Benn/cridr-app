@@ -4,10 +4,9 @@ import { Link } from "react-router-dom"
 
 
 function RootPanel() {
-    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
       document.title = "Home | Cridr";
-    }, [apiUrl]);
+    }, []);
 
     return (
       <>

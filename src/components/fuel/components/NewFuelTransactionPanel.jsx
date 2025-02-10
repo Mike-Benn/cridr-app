@@ -18,10 +18,10 @@ function NewFuelTransactionPanel() {
     })
     useEffect(() => {
         document.title = "Add Fuel Transaction | Cridr";
-        const getVehicles = async () => {
+        const getVehiclesByUserId = async () => {
             try {
                 const response = await apiClient.get("/vehicles");
-                if (response.data) {
+                if (response.status === 200 && Array.isArray(response.data.data)) {
                     const vehicleList = [...response.data.data];
                     setVehicleOptions(vehicleList);
                     setFuelTransaction((prev) => ({ ...prev, selectedVehicleId: vehicleList[0].vehicle_id }))
@@ -30,7 +30,7 @@ function NewFuelTransactionPanel() {
                 console.error("Unable to get vehicles.", error);
             }
         }
-        getVehicles();
+        getVehiclesByUserId();
     }, []);
     
     const handleFuelTransactionChange = (e) => {

@@ -9,18 +9,17 @@ function AvailableOffersDisplay() {
     const [offers, setOffers] = useState([])
 
     useEffect(() => {
-        const fetchOffers = async () => {
+        const getOffersByUserId = async () => {
             try {
                 const response = await apiClient.get("/credit-card-offers/available");
-                console.log(response.data.data)
-                if (response.status === 200) {
+                if (response.status === 200 && Array.isArray(response.data.data)) {
                     setOffers([...response.data.data])
                 }
             } catch (error) {
                 console.error("Unable to retrieve credit card offers.", error)
             }
         }
-        fetchOffers();
+        getOffersByUserId();
     }, []);
 
     const handleDeleteOffer = async (offerId) => {

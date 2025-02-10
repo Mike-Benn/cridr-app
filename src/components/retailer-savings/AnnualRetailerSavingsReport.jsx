@@ -10,12 +10,14 @@ function AnnualRetailerSavingsReport({ yearSelected }) {
         const getTransactionsByUserId = async () => {
             if (yearSelected === "all") {
                 const response = await apiClient.get("/retail-savings-transaction");
-                setFormattedData(processRetailerSavingsData(response.data.data));
-                console.log(response.data.data)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setFormattedData(processRetailerSavingsData(response.data.data));
+                }
             } else {
                 const response = await apiClient.get(`/retail-savings-transaction/?year=${yearSelected}`);
-                setFormattedData(processRetailerSavingsData(response.data.data));
-                console.log(response.data.data)
+                if (response.status === 200 && Array.isArray(response.data.data)) {
+                    setFormattedData(processRetailerSavingsData(response.data.data));
+                }
             }
         }
         getTransactionsByUserId();
