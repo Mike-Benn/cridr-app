@@ -40,7 +40,6 @@ function NewFuelTransactionPanel() {
 
     const handleFuelTransactionSubmit = async (e) => {
         e.preventDefault();
-        console.log(fuelTransaction.selectedVehicleId)
         const newFuelTransaction = {
             vehicle_id: fuelTransaction.selectedVehicleId,
             price_per_gallon: fuelTransaction.pricePerGallon,
@@ -51,7 +50,7 @@ function NewFuelTransactionPanel() {
         }
         try {
             const response = await apiClient.post("/fuel-transaction", newFuelTransaction)
-            if (response.data.success) {
+            if (response.status === 201) {
                 navigate('/fuel-transaction');
             }
         } catch (error) {

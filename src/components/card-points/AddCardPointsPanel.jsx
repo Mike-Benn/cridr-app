@@ -44,8 +44,8 @@ function AddCardPointsPanel() {
         }
 
         try {
-            const response = await apiClient.post("/card-points/" , pointTransaction);
-            if (response.data.success) {
+            const response = await apiClient.post("/card-points-transaction/" , pointTransaction);
+            if (response.status === 201) {
                 navigate("/card-points");
             }
         } catch (error) {

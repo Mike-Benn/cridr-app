@@ -25,7 +25,7 @@ function NewVehiclePanel() {
         }
         try {
             const response = await apiClient.post("/vehicles", vehicle);
-            if (response.data.success) {
+            if (response.status === 201) {
                 navigate("..");
             }
         } catch (error) {
