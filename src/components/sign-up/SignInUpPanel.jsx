@@ -2,10 +2,12 @@ import { PasswordField , TextField } from "../general/form-fields/InputFields"
 import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../auth/AuthContext";
+//import apiClient from "../../api/apiClient";
 
 
 function SignInUpPanel() {
     const { login } = useContext(AuthContext);
+
     const [signInUsername , setSignInUsername] = useState("");
     const [signInPassword , setSignInPassword] = useState("");
 
@@ -36,20 +38,21 @@ function SignInUpPanel() {
 
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();
-        /*const newUser = {
+        /*
+        const newUser = {
             username: signUpUsername,
             password: signUpPassword,
         }
         try {
-            const response = await axios.post(`${apiUrl}/users` , newUser);
-
+            const response = await apiClient.post("/users", newUser);
             if (response.status === 201) {
-                resetSignInUpForm();
-                navigate("/");
+                setSignUpUsername("");
+                setSignUpPassword("");
             }
         } catch (error) {
             console.error(error , "Unable to add new user.");
-        }*/
+        }
+        */
         
     }
 
