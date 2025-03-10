@@ -1,41 +1,73 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { SelectField } from "../../general/form-fields/InputFields"
 import apiClient from "../../../api/apiClient"
-import AnnualFuelReport from "./stats/AnnualFuelReport";
+import { useNavigate } from "react-router-dom"
+import { prepareFuelTransactionData } from "../../../utils/fuel/utils"
+import PropTypes from "prop-types"
+import AuthContext from "../../../auth/AuthContext"
 
-function UserFuelTransactionSummary() {
+function UserFuelTransactionSummary({ transactionYears }) {
     const defaultYearOption = [<option key="all" value="all">All</option>];
-    const [selectedYearId, setSelectedYearId] = useState("all");
-    const [uniqueYearsList, setUniqueYearsList] = useState([]);
-    
-    
-    
+    const [selectedYear, setSelectedYear] = useState("all");
+    const [preparedTransactionData, setPreparedTransactionData] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+    const { setIsAuthenticated } = useContext(AuthContext);
+
     useEffect(() => {
-        const getUniqueYearsByUserId = async () => {
+        setIsLoading(true);
+        const getTransactionDataByYear = async () => {
             try {
-                const response = await apiClient.get("/fuel-transaction/unique-years");
-                if (response.status === 200 && Array.isArray(response.data.data)) {
-                    setUniqueYearsList(response.data.data)
+                if (selectedYear === "all") {
+                    const response = await apiClient.get("/fuel-transaction");
+                    if (response.status === 200 && Array.isArray(response.data.data)) {
+                        setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                        setIsLoading(false);
+                    }
+                } else {
+                    const response = await apiClient.get(`/fuel-transaction/?year=${selectedYear}`);
+                    if (response.status === 200 && Array.isArray(response.data.data)) {
+                        setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
+                        setIsLoading(false);
+                    }
                 }
             } catch (error) {
-                console.error("Unable to retrieve unique transaction years for user.", error)
+                if (error.response.status === 401) {
+                    console.error("Unauthorized", error);
+                    localStorage.removeItem("accessToken");
+                    setIsAuthenticated(false);
+                    navigate("/log-in")
+                } else {
+                    console.error("Unable to get user data.", error);
+                    setIsLoading(false);
+                }
             }
         }
-        getUniqueYearsByUserId();
-    }, [])
+        getTransactionDataByYear();
 
+    }, [transactionYears, selectedYear, navigate, setIsAuthenticated])
 
     const handleYearIdChange = (e) => {
-        setSelectedYearId(e.target.value)
+        setSelectedYear(e.target.value)
     }
+
+    if (isLoading) return <div>Loading...</div>;
 
     return (
         <>
-            <SelectField fieldId="fuel-transaction-summary-year-select" labelText="Select Transaction Year" optionList={uniqueYearsList} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
-            <h1></h1>
-            <AnnualFuelReport yearSelected={selectedYearId} />
+            <SelectField fieldId="fuel-transaction-summary-year-select" labelText="Select Transaction Year" optionList={transactionYears} onChange={handleYearIdChange} value={selectedYear} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
+            <ul>
+                <li>Gross Gas Expenditure: {preparedTransactionData.grossSpentOnGas}</li>
+                <li>Fuel Points Redeemed: {preparedTransactionData.fuelPointsRedeemed}</li>
+                <li>Amount Saved From Fuel Points: {preparedTransactionData.savedOnFuelPoints}</li>
+                <li>Net Gas Expenditure: {preparedTransactionData.netSpentOnGas}</li>
+            </ul>
         </>
     )
+}
+
+UserFuelTransactionSummary.propTypes = {
+    transactionYears: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default UserFuelTransactionSummary
