@@ -1,12 +1,14 @@
 import SubmitFormButton from "../general/buttons/SubmitFormButton";
 import { TextField } from "../general/form-fields/InputFields";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import apiClient from "../../api/apiClient";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../auth/AuthContext";
 
 
 function NewVehicle() {
     const navigate = useNavigate();
+    const { setIsAuthenticated } = useContext(AuthContext);
     const [newVehicle , setNewVehicle] = useState({
         vehicleMake: "",
         vehicleModel: "",
@@ -29,7 +31,14 @@ function NewVehicle() {
                 navigate("..");
             }
         } catch (error) {
-            console.error("Unable to add new vehicle, try again.", error);
+            if (error.response.status === 401) {
+                console.error("Unauthorized", error);
+                localStorage.removeItem("accessToken");
+                setIsAuthenticated(false);
+                navigate("/log-in");
+            } else {
+                console.error("Unable to add new vehicle, try again.", error);
+            }
         }
     }
 

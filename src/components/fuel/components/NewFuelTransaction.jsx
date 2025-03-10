@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import apiClient from "../../../api/apiClient";
 import { SelectField, NumberField, DateField } from "../../general/form-fields/InputFields";
 import SubmitFormButton from "../../general/buttons/SubmitFormButton";
+import AuthContext from "../../../auth/AuthContext";
 
 
 function NewFuelTransaction() {
     const navigate = useNavigate();
+    const { setIsAuthenticated } = useContext(AuthContext);
     const [vehicleOptions , setVehicleOptions] = useState([]);
-
     const [fuelTransaction, setFuelTransaction] = useState({
         selectedVehicleId: "",
         pricePerGallon: "",
@@ -16,6 +17,7 @@ function NewFuelTransaction() {
         fuelPointsRedeemed: "",
         fuelTransactionDate: "",
     })
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         document.title = "Add Fuel Transaction | Cridr";
         const getVehiclesByUserId = async () => {
@@ -25,13 +27,21 @@ function NewFuelTransaction() {
                     const vehicleList = [...response.data.data];
                     setVehicleOptions(vehicleList);
                     setFuelTransaction((prev) => ({ ...prev, selectedVehicleId: vehicleList[0].vehicle_id }))
+                    setIsLoading(false);
                 }
             } catch (error) {
-                console.error("Unable to get vehicles.", error);
+                if (error.response?.status === 401) {
+                    console.error("Unauthorized", error);
+                    localStorage.removeItem("accessToken");
+                    setIsAuthenticated(false);
+                    navigate("/log-in");
+                } else {
+                    console.error("Unable to get vehicles.", error);
+                }
             }
         }
         getVehiclesByUserId();
-    }, []);
+    }, [navigate, setIsAuthenticated]);
     
     const handleFuelTransactionChange = (e) => {
         const { name, value } = e.target;
@@ -54,9 +64,18 @@ function NewFuelTransaction() {
                 navigate('/fuel-transaction');
             }
         } catch (error) {
-            console.error("Error while adding fuel points", error);
+            if (error.response?.status === 401) {
+                console.error("Unauthorized", error);
+                localStorage.removeItem("accessToken");
+                setIsAuthenticated(false);
+                navigate("/log-in")
+            } else {
+                console.error("Error while adding fuel points", error);
+            }
         }
     }
+
+    if (isLoading) return <div>Loading...</div>
 
     return (
         <form action='' onSubmit={handleFuelTransactionSubmit}>
