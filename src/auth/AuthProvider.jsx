@@ -23,7 +23,6 @@ const AuthProvider = ({ children }) => {
                 localStorage.setItem("accessToken", response.data.data);
                 setIsAuthenticated(true);
                 navigate("/")
-                
             }
 
         } catch (error) {
@@ -46,7 +45,7 @@ const AuthProvider = ({ children }) => {
     
 
     return (
-        <AuthContext.Provider value={ { login , logout , isAuthenticated, isLoading }}>
+        <AuthContext.Provider value={ { login , logout , isAuthenticated, isLoading, setIsAuthenticated }}>
             {isLoading ? null : children}
         </AuthContext.Provider>
     )
