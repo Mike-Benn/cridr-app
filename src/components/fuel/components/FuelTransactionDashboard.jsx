@@ -24,15 +24,7 @@ function FuelTransactionDashboard() {
                     setIsLoading(false)
                 }
             } catch (error) {
-                if (error.response.status === 401) {
-                    console.error("Unauthorized", error);
-                    localStorage.removeItem("accessToken");
-                    setIsAuthenticated(false);
-                    navigate("/log-in")
-                } else {
-                    console.error("Unable to get user data.", error);
-                    setIsLoading(false);
-                }
+                console.log(error.response?.data?.message);
             }
         }
         getUniqueYearsByUserId();
