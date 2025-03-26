@@ -32,15 +32,8 @@ function UserFuelTransactionSummary({ transactionYears }) {
                     }
                 }
             } catch (error) {
-                if (error.response.status === 401) {
-                    console.error("Unauthorized", error);
-                    localStorage.removeItem("accessToken");
-                    setIsAuthenticated(false);
-                    navigate("/log-in")
-                } else {
-                    console.error("Unable to get user data.", error);
-                    setIsLoading(false);
-                }
+                console.error("Unable to get user data.", error);
+                setIsLoading(false);
             }
         }
         getTransactionDataByYear();
