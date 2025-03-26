@@ -1,0 +1,14 @@
+const ERROR_CODES = {
+    REFRESH_TOKEN_INVALID: "REFRESH_TOKEN_INVALID",
+    ACCESS_TOKEN_INVALID: "ACCESS_TOKEN_INVALID",
+}
+
+const JWT_ERROR_CODES = {
+    JWT_EXPIRED_ERROR: "TokenExpiredError",
+    JWT_INVALID_ERROR: "JsonWebTokenError",
+}
+
+export {
+    ERROR_CODES,
+    JWT_ERROR_CODES,
+}
