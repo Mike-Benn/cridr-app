@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList };
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList, getAccessToken };
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -79,3 +79,6 @@ function filterOutAndReturnById(idValue, arr, idAccessor) {
     return { newArray, filteredItem}
 }
 
+function getAccessToken() {
+    return localStorage.getItem("accessToken");
+}

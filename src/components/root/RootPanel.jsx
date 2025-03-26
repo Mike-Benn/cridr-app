@@ -8,7 +8,7 @@ function RootPanel() {
     useEffect(() => {
       document.title = "Home | Cridr";
     }, []);
-
+    
     return (
       <>
         <ul>
