@@ -35,13 +35,13 @@ const AuthProvider = ({ children }) => {
         try {
             await apiClient.post("/auth/logout");
             localStorage.removeItem("accessToken");
-            setIsAuthenticated(false);
-            navigate("/log-in")
+            window.location.href = "/log-in";
         } catch (error) {
-            console.error(error , "There was an error logging you out.");
+            alert("There was an error logging you out, please try again.")
         }
     }
 
+    
     
 
     return (
