@@ -25,6 +25,7 @@ function FuelTransactionDashboard() {
                 }
             } catch (error) {
                 console.log(error.response?.data?.message);
+                setIsLoading(false);
             }
         }
         getUniqueYearsByUserId();

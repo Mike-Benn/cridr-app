@@ -32,7 +32,7 @@ function UserFuelTransactionSummary({ transactionYears }) {
                     }
                 }
             } catch (error) {
-                console.error("Unable to get user data.", error);
+                console.log(error.response?.data?.message);
                 setIsLoading(false);
             }
         }

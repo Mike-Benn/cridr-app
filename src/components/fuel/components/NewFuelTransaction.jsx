@@ -30,14 +30,8 @@ function NewFuelTransaction() {
                     setIsLoading(false);
                 }
             } catch (error) {
-                if (error.response?.status === 401) {
-                    console.error("Unauthorized", error);
-                    localStorage.removeItem("accessToken");
-                    setIsAuthenticated(false);
-                    navigate("/log-in");
-                } else {
-                    console.error("Unable to get vehicles.", error);
-                }
+                console.log(error.response?.data?.message);
+                setIsLoading(false);
             }
         }
         getVehiclesByUserId();
@@ -64,14 +58,7 @@ function NewFuelTransaction() {
                 navigate('/fuel-transaction');
             }
         } catch (error) {
-            if (error.response?.status === 401) {
-                console.error("Unauthorized", error);
-                localStorage.removeItem("accessToken");
-                setIsAuthenticated(false);
-                navigate("/log-in")
-            } else {
-                console.error("Error while adding fuel points", error);
-            }
+            console.log(error.response?.data?.message);
         }
     }
 
