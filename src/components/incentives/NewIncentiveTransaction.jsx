@@ -14,6 +14,7 @@ function NewIncentiveTransaction() {
         incentiveTransactionDate: "",
         businessOptions: [],
     })
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleIncentiveTransactionChange = (e) => {
         const { name , value} = e.target;
@@ -26,9 +27,11 @@ function NewIncentiveTransaction() {
                 const response = await apiClient.get("/businesses/?feature_id=5");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setIncentiveTransaction((prev) => ({ ...prev , businessOptions: response.data.data }));
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error(error , "Error fetching business names");
+                setIsLoading(false);
             }
         }
         
@@ -55,6 +58,8 @@ function NewIncentiveTransaction() {
             console.error("Error while adding incentive", error);
         }
     }
+
+    if (isLoading) return <p>Loading...</p>
 
     return (
         <form action="" onSubmit={handleIncentiveSubmit}>
