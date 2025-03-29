@@ -18,6 +18,7 @@ function NewCreditCardOffer() {
         cashbackLimit: "",
         offerExpirationDate: "",
     })
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         document.title = "Add Offer | Cridr";
@@ -26,9 +27,11 @@ function NewCreditCardOffer() {
                 const response = await apiClient.get("/credit-cards");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setNewCardOffer((prev) => ({ ...prev, creditCardOptions: response.data.data }));
+                    setIsLoading(false);
                 }
             } catch (error) {
-                console.error("Failed to fetch data", error);
+                console.log(error.response?.data?.message);
+                setIsLoading(false);
             }
         };
         getCreditCreditCardsById();
@@ -53,13 +56,15 @@ function NewCreditCardOffer() {
         try {
             const response = await apiClient.post("/credit-card-offers/available" , newOffer);
             if (response.status === 201) {
-                navigate("/credit-card-offers");
+                navigate("/credit-card-offers/available");
             }
 
         } catch (error) {
             console.error(error , "Failed to post offer.")
         }
     }
+
+    if (isLoading) return <p>Loading...</p>
 
     return (
         <form action='' onSubmit={handleCardOfferSubmit}>
