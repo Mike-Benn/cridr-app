@@ -22,7 +22,8 @@ import NewCollectibleCategory from './components/collectibles/NewCollectibleCate
 import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
 import NewFuelTransaction from './components/fuel/components/NewFuelTransaction.jsx'
 import NewVehicle from "./components/vehicles/NewVehicle.jsx"
-import CreditCardOffersDashboard from './components/credit-card-offers/CreditCardOffersDashboard.jsx'
+import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
+import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
 
 const router = createBrowserRouter([
   
@@ -39,8 +40,9 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><MainLayout /></ProtectedRoute>,
         children: [
           { path: "/", element: <RootPanel />},
-          { path: "/credit-card-offers", element: <CreditCardOffersDashboard /> },
-          { path: "/credit-card-offers/new", element: <NewCreditCardOffer/> },
+          { path: "/credit-card-offers", element: <OffersDashboard /> },
+          { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
+          { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
           { path: "/profile", element: <ProfilePanel /> },
           { path: "/profile/personal", element: <ProfilePersonalInfoPanel /> },
           { path: "/profile/my-cards", element: <ManageCardsPanel /> },

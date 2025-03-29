@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import GeneralButton from "../general/buttons/GeneralButton"
 import AvailableOffersDisplay from "./AvailableOffersDisplay";
 
-function CreditCardOffersDashboard() {    
+function AvailableOffersDashboard() {    
     useEffect(() => {
         document.title = "Coupons | Cridr";
 
@@ -18,4 +18,4 @@ function CreditCardOffersDashboard() {
     )
 }
 
-export default CreditCardOffersDashboard
+export default AvailableOffersDashboard
