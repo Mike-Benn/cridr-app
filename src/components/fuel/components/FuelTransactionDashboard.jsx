@@ -7,13 +7,15 @@ import UserFuelTransactionSummary from "./UserFuelTransactionSummary";
 import { SelectField } from "../../general/form-fields/InputFields";
 import { prepareFuelTransactionData } from "../../../utils/fuel/utils";
 
-
 function FuelTransactionDashboard() {
     const defaultYearOption = [<option key="all" value="all">All</option>];
     const [transactionYears, setTransactionYears] = useState([]);
     const [selectedYearId, setSelectedYearId] = useState("all");
-    const [isLoading, setIsLoading] = useState(true);
     const [preparedTransactionData, setPreparedTransactionData] = useState({});
+    const [loadingStates, setLoadingStates] = useState({
+        mountLoading: true,
+        dependencyLoading: true,
+    })
 
     const navigate = useNavigate();
 
@@ -24,11 +26,11 @@ function FuelTransactionDashboard() {
                 const response = await apiClient.get("/fuel-transaction/unique-years");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setTransactionYears(response.data.data);
-                    setIsLoading(false)
+                    setLoadingStates((prev) => ({ ...prev, mountLoading: false }))
                 }
             } catch (error) {
                 console.log(error.response?.data?.message);
-                setIsLoading(false);
+                setLoadingStates((prev) => ({ ...prev, mountLoading: false }))
             }
         }
         
@@ -36,20 +38,20 @@ function FuelTransactionDashboard() {
     }, [navigate]);
 
     useEffect(() => {
-        setIsLoading(true);
+        setLoadingStates((prev) => ({ ...prev, dependencyLoading: true }));
         const getFuelTransactionData = async () => {
             try {
                 if (selectedYearId === "all") {
                     const response = await apiClient.get("/fuel-transaction");
                     if (response.status === 200 && Array.isArray(response.data.data)) {
                         setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
-                        setIsLoading(false);
+                        setLoadingStates((prev) => ({ ...prev, dependencyLoading: false }))
                     }
                 } else {
                     const response = await apiClient.get(`/fuel-transaction/?year=${selectedYearId}`);
                     if (response.status === 200 && Array.isArray(response.data.data)) {
                         setPreparedTransactionData(prepareFuelTransactionData(response.data.data));
-                        setIsLoading(false);
+                        setLoadingStates((prev) => ({ ...prev, dependencyLoading: false }))
                     }
                 }
             } catch (error) {
@@ -64,7 +66,7 @@ function FuelTransactionDashboard() {
         setSelectedYearId(e.target.value)
     }
     
-    if (isLoading) return <div>Loading...</div>;
+    if (loadingStates.onMountLoading || loadingStates.dependencyLoading) return <div>Loading...</div>;
     
     return (
         <section>

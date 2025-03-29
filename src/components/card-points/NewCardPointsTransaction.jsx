@@ -26,7 +26,7 @@ function NewCardPointsTransaction() {
             try {
                 const response = await apiClient.get("/credit-cards/") 
                 if (response.status === 200 && Array.isArray(response.data.data)) {
-                    setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: response.data.data }));
+                    setCardPointTransaction((prev) => ({ ...prev, creditCardOptions: response.data.data }));
                     setIsLoading(false);
                 }
             } catch (error) {
