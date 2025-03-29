@@ -14,6 +14,7 @@ function NewCardPointsTransaction() {
         creditCardOptions: [],
 
     })
+    const [isLoading, setIsLoading] = useState(true);
     const handleCardPointTransactionChange = (e) => {
         const { name , value } = e.target;
         setCardPointTransaction((prev) => ({ ...prev , [name]: value }));
@@ -26,9 +27,11 @@ function NewCardPointsTransaction() {
                 const response = await apiClient.get("/credit-cards/") 
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setCardPointTransaction((prev) => ({ ...prev , creditCardOptions: response.data.data }));
+                    setIsLoading(false);
                 }
             } catch (error) {
-                console.error(error , "Failed to fetch card options.");
+                console.log(error.response?.data?.message);
+                setIsLoading(false);
             }
         }
         getCreditCardsById();
@@ -52,6 +55,9 @@ function NewCardPointsTransaction() {
             console.error("Error while submitting card points", error);
         }
     }
+
+    if (isLoading) return <p>Loading...</p>
+
     return (
         <form action="" onSubmit={handleCardPointsSubmit}>
             <fieldset>
