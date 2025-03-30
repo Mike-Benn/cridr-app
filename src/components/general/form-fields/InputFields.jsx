@@ -18,6 +18,15 @@ function NumberField({ fieldClass , fieldId , labelText , onChange , value , nam
     )
 }
 
+function GeneralInputField({ inputType, fieldClass, fieldId, labelText, onChange, value, name }) {
+    return (
+        <div className={fieldClass}>
+            <label htmlFor={fieldId}>{labelText}</label>
+            <input type={inputType} id={fieldId} value={value} onChange={onChange} name={name} />
+        </div>
+    )
+}
+
 function TextField({ fieldClass , fieldId , labelText , onChange , value , name }) {
 
     return (
@@ -53,6 +62,16 @@ function SelectField({ fieldClass , fieldId , labelText , optionList = [] , onCh
             <select id={fieldId} value={value} onChange={onChange} name={name}>{options}</select>
         </div>
     )
+}
+
+GeneralInputField.propTypes = {
+    inputType: PropTypes.string,
+    fieldClass: PropTypes.string,
+    fieldId: PropTypes.string,
+    labelText: PropTypes.string,
+    onChange: PropTypes.func,
+    value: PropTypes.string,
+    name: PropTypes.string,
 }
 
 PasswordField.propTypes = {
@@ -111,4 +130,5 @@ export {
     NumberField,
     PasswordField,
     SelectField,
+    GeneralInputField,
 }
