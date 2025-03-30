@@ -1,38 +1,20 @@
-import { useEffect, useState } from "react"
-import { SelectField } from "../general/form-fields/InputFields";
-import apiClient from "../../api/apiClient";
-import AnnualRetailerSavingsReport from "./AnnualRetailerSavingsReport";
+import PropTypes from "prop-types";
+import { createRetailerSavingsListItems } from "../../utils/retailer-savings/utils";
 
-function UserRetailerSavingsSummary() {
-    const defaultYearOption = [<option key="all" value="all">All</option>];
-    const [selectedYearId, setSelectedYearId] = useState("all");
-    const [uniqueYearsList, setUniqueYearsList] = useState([]);
-    
-    useEffect(() => {
-        const getUniqueYearsById = async () => {
-            try {
-                const response = await apiClient.get("/retail-savings-transaction/unique-years");
-                if (response.status === 200 && Array.isArray(response.data.data)) {
-                    setUniqueYearsList(response.data.data)
-                }
-            } catch (error) {
-                console.error("Unable to retrieve unique transaction years for user.", error)
-            }
-        }
-        getUniqueYearsById();
-    }, [])
-
-
-    const handleYearIdChange = (e) => {
-        setSelectedYearId(e.target.value)
-    }
-
+function UserRetailerSavingsSummary({ preparedTransactionData }) {
+    const retaileSavingsListItems = createRetailerSavingsListItems(preparedTransactionData.processedData);
     return (
         <>
-            <SelectField fieldId="incentive-transaction-summary-year-select" labelText="Select Transaction Year" optionList={uniqueYearsList} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
-            <AnnualRetailerSavingsReport yearSelected={selectedYearId} />
+            <h1>Total Retail Savings Earned: {preparedTransactionData.totalRetailSavings}</h1>
+            <ul>
+                {retaileSavingsListItems}
+            </ul>
         </>
     )
+}
+
+UserRetailerSavingsSummary.propTypes = {
+    preparedTransactionData: PropTypes.object,
 }
 
 export default UserRetailerSavingsSummary
