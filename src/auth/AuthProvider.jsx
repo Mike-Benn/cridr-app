@@ -17,18 +17,12 @@ const AuthProvider = ({ children }) => {
     }, [])
     
     const login = async (credentials) => {
-        try {
-            const response = await apiClient.post("/auth/login", credentials);
-            if (response.data?.data) {
-                localStorage.setItem("accessToken", response.data.data);
-                setIsAuthenticated(true);
-                navigate("/")
-            }
-
-        } catch (error) {
-            console.error("Unable to login", error);
-            setIsAuthenticated(false);
-        }
+        const response = await apiClient.post("/auth/login", credentials);
+        if (response.data?.data) {
+            localStorage.setItem("accessToken", response.data.data);
+            setIsAuthenticated(true);
+            navigate("/")
+        } 
     }
 
     const logout = async () => {
@@ -40,9 +34,6 @@ const AuthProvider = ({ children }) => {
             alert("There was an error logging you out, please try again.")
         }
     }
-
-    
-    
 
     return (
         <AuthContext.Provider value={ { login , logout , isAuthenticated, isLoading, setIsAuthenticated }}>
