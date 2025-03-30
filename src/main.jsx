@@ -2,10 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
-import ProfilePanel from './components/profile/ProfilePanel.jsx'
 import MainLayout from './components/layouts/MainLayout.jsx'
-import ProfilePersonalInfoPanel from './components/profile/ProfilePersonalInfoPanel.jsx'
-import ManageCardsPanel from './components/profile/ManageCardsPanel.jsx'
 import FuelTransactionDashboard from './components/fuel/components/FuelTransactionDashboard.jsx'
 import CardPointsDashboard from './components/card-points/CardPointsDashboard.jsx'
 import NewCardPointsTransaction from './components/card-points/NewCardPointsTransaction.jsx'
@@ -13,7 +10,6 @@ import RetailerSavingsDashboard from './components/retailer-savings/RetailerSavi
 import NewRetailerSavingsTransaction from './components/retailer-savings/NewRetailerSavingsTransaction.jsx'
 import IncentivesDashboard from './components/incentives/IncentivesDashboard.jsx'
 import NewIncentiveTransaction from './components/incentives/NewIncentiveTransaction.jsx'
-import SignInUpPanel from './components/sign-up/SignInUpPanel.jsx'
 import NewCreditCardOffer from "./components/credit-card-offers/NewCreditCardOffer.jsx"
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
@@ -24,6 +20,8 @@ import NewFuelTransaction from './components/fuel/components/NewFuelTransaction.
 import NewVehicle from "./components/vehicles/NewVehicle.jsx"
 import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
 import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
+import SignInPage from "./components/sign-in/SignInPage.jsx"
+import SignUpPage from './components/sign-up/SignUpPage.jsx'
 
 const router = createBrowserRouter([
   
@@ -33,7 +31,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/log-in",
-        element: <SignInUpPanel />
+        element: <SignInPage />
+      },
+      {
+        path: "/signup",
+        element: <SignUpPage />
       },
       {
         path: "/",
@@ -43,9 +45,6 @@ const router = createBrowserRouter([
           { path: "/credit-card-offers", element: <OffersDashboard /> },
           { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
           { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
-          { path: "/profile", element: <ProfilePanel /> },
-          { path: "/profile/personal", element: <ProfilePersonalInfoPanel /> },
-          { path: "/profile/my-cards", element: <ManageCardsPanel /> },
           { path: "/fuel-transaction", element: <FuelTransactionDashboard /> },
           { path: "/fuel-transaction/new", element: <NewFuelTransaction />},
           { path: "/fuel-transaction/new-vehicle", element: <NewVehicle />},
