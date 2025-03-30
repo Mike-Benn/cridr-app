@@ -11,7 +11,7 @@ import apiClient from "../../api/apiClient";
 
 function NewRetailerSavingsTransaction() {
     const defaultRetailerOption = [<option key="default" value="default">Select Retailer</option>]
-
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const [retailSavingsTransaction , setRetailSavingsTransaction] = useState({
         primaryRetailerId: "default",
@@ -49,9 +49,11 @@ function NewRetailerSavingsTransaction() {
                 const response = await apiClient.get("/businesses/?feature_id=4");
                 if (response.status === 200 && Array.isArray(response.data.data)) {
                     setRetailSavingsTransaction((prev) => ({ ...prev , primaryRetailerOptions: response.data.data }))
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error(error, "Failed to fetch retailers.");
+                setIsLoading(false);
             }
         }
         getBusinessesByRetailFeature();
@@ -164,6 +166,8 @@ function NewRetailerSavingsTransaction() {
     const retailListItems = retailSavingsTransaction.itemList.map(item =>
         <RetailerSavingsListItem key={item.id} data={item} deleteItem={handleDeleteItemFromList} editItem={handleEditItemFromList} />
     )
+
+    if (isLoading) return <p>Loading...</p>
 
     return (
         <form action="" onSubmit={handleRetailerSavingsSubmit}>
