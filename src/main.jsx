@@ -22,6 +22,9 @@ import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx
 import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
 import SignInPage from "./components/sign-in/SignInPage.jsx"
 import SignUpPage from './components/sign-up/SignUpPage.jsx'
+import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.js"
+import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
+import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 
 const router = createBrowserRouter([
   
@@ -57,6 +60,9 @@ const router = createBrowserRouter([
           { path: "/collectibles", element: <CollectiblesDashboard />},
           { path: "/collectibles/new-category", element: <NewCollectibleCategory /> },
           { path: "/collectibles/new-subcategory", element: <NewCollectibleSubcategory /> },
+          { path: "/profile", element: <UserProfileDashboard /> },
+          { path: "/profile/manager", element: <AssetManagerDashboard /> },
+          { path: "/profile/manager/credit-cards", element: <CreditCardManagerDashboard /> },
         ]
       }
     ]
