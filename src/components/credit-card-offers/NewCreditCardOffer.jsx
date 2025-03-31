@@ -25,7 +25,7 @@ function NewCreditCardOffer() {
         const getCreditCreditCardsById = async () => {
             try {
                 const response = await apiClient.get("/credit-cards");
-                if (response.status === 200 && Array.isArray(response.data.data)) {
+                if (response.status === 200 && Array.isArray(response.data?.data)) {
                     setNewCardOffer((prev) => ({ ...prev, creditCardOptions: response.data.data }));
                     setIsLoading(false);
                 }
