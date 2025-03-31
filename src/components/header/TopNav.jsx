@@ -31,6 +31,7 @@ function TopNav() {
                 <Link to="/retailer-savings"><li>Retailer Savings</li></Link>
             </ul>
             <GeneralButton buttonType="button" buttonText="Log Out" onClick={handleUserLogOut} />
+            <Link to="/profile"><GeneralButton buttonType="button" buttonText="Edit Profile" /></Link>
         </header>
     )
 }
