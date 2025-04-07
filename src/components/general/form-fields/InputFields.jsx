@@ -64,6 +64,25 @@ function SelectField({ fieldClass , fieldId , labelText , optionList = [] , onCh
     )
 }
 
+function CheckboxField({ fieldClass, fieldId, labelText, onChange, checked, name }) {
+    return (
+        <div className={fieldClass}>
+            <label htmlFor={fieldId}>{labelText}</label>
+            <input type="checkbox" id={fieldId} checked={checked} onChange={onChange} name={name} />
+        </div>
+    )
+}
+
+CheckboxField.propTypes = {
+    fieldClass: PropTypes.string,
+    fieldId: PropTypes.string,
+    labelText: PropTypes.string,
+    onChange: PropTypes.func,
+    checked: PropTypes.bool,
+    name: PropTypes.string,
+
+}
+
 GeneralInputField.propTypes = {
     inputType: PropTypes.string,
     fieldClass: PropTypes.string,
@@ -131,4 +150,5 @@ export {
     PasswordField,
     SelectField,
     GeneralInputField,
+    CheckboxField,
 }
