@@ -17,12 +17,12 @@ import CollectiblesDashboard from './components/collectibles/CollectiblesDashboa
 import NewCollectibleCategory from './components/collectibles/NewCollectibleCategory.jsx'
 import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
 import NewFuelTransaction from './components/fuel/components/NewFuelTransaction.jsx'
-import NewVehicle from "./components/vehicles/NewVehicle.jsx"
+import NewVehicleForm from "./components/user-profile/asset-manager/vehicles/NewVehicleForm.jsx"
 import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
 import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
 import SignInPage from "./components/sign-in/SignInPage.jsx"
 import SignUpPage from './components/sign-up/SignUpPage.jsx'
-import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.js"
+import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.jsx"
 import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
           { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
           { path: "/fuel-transaction", element: <FuelTransactionDashboard /> },
           { path: "/fuel-transaction/new", element: <NewFuelTransaction />},
-          { path: "/fuel-transaction/new-vehicle", element: <NewVehicle />},
+          { path: "/fuel-transaction/new-vehicle", element: <NewVehicleForm />},
           { path: "/card-points", element: <CardPointsDashboard /> },
           { path: "/card-points/new", element: <NewCardPointsTransaction /> },
           { path: "/retailer-savings", element: <RetailerSavingsDashboard /> },
