@@ -14,7 +14,6 @@ function AssetManagerDashboard() {
         const { name, value } = e.target;
         setAssetTabs((prev) => ({ ...prev, [name]: Number(value) }))
     }
-    console.log(assetTabs.tabIndex);
     return (
         <div>
             <header>

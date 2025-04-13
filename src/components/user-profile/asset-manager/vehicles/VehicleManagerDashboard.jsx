@@ -13,8 +13,6 @@ function VehicleManagerDashboard() {
     const toggleAddVehicle = () => {
         setUiState((prev) => ({ ...prev, isAddingVehicle: !prev.isAddingVehicle }))
     }
-
-    console.log(vehicles)
     
     useEffect(() => {
         const getVehicles = async () => {

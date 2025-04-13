@@ -40,16 +40,17 @@ function NewBusinessForm() {
         setNewBusiness((prev) => ({ ...prev, businessFeatures: { ...prev.businessFeatures, [name]: !prev.businessFeatures[name] }})) 
     }
 
-    const handleNewBusinessSubmit = async () => {
+    const handleNewBusinessSubmit = async (e) => {
+        e.preventDefault();
         const params = new URLSearchParams();
         for (const [key, value] of Object.entries(newBusiness.businessTypes)) {
             if (value) {
-                params.append("business_type_name", key);
+                params.append("businessTypeNames", key);
             }
         }
         for (const [key, value] of Object.entries(newBusiness.businessFeatures)) {
             if (value) {
-                params.append("feature_name", key);
+                params.append("featureNames", key);
             }
         }
         const business = {
