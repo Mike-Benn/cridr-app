@@ -28,13 +28,12 @@ function CreditCardManagerDashboard() {
         }
         getCreditCards();
     }, [])
-
     if (uiState.isLoading) return <p>Loading...</p>
     const creditCardList = <ul>{creditCards.map(card =>  <li key={card.credit_card_id}>{card.credit_card_name}</li>)}</ul>
     return (
         <>
             {!uiState.isAddingCard && creditCardList}
-            {uiState.isAddingCard && <NewCreditCardForm />}
+            {uiState.isAddingCard && <NewCreditCardForm setParentUiState={setUiState} setCreditCards={setCreditCards}/>}
             {uiState.isAddingCard && <GeneralButton buttonType="button" buttonText="Cancel" onClick={toggleAddCard} />}
             {!uiState.isAddingCard && <GeneralButton buttonType="button" buttonText="Add New Card" onClick={toggleAddCard} />}
         </>

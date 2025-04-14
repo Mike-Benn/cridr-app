@@ -2,18 +2,17 @@ import { GeneralInputField, SelectField } from "../../../general/form-fields/Inp
 import GeneralButton from "../../../general/buttons/GeneralButton"
 import { useEffect, useState } from "react"
 import apiClient from "../../../../api/apiClient"
+import PropTypes from "prop-types"
 
-function NewCreditCardForm() {
+function NewCreditCardForm({ setCreditCards, setParentUiState }) {
     const defaultBankOption = [<option key="default" value="default">Select Bank</option>]
     const [formData, setFormData] = useState({
         cardName: "",
-        newBank: "",
         existingBankId: "default",
     })
 
     const [uiState, setUiState] = useState({
         bankList: [],
-        addingNewBank: false,
         isLoading: true,
     })
 
@@ -42,65 +41,58 @@ function NewCreditCardForm() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const toggleAddNewBank = () => {
-        if (!uiState.addingNewBank) {
-            setFormData((prev) => ({ ...prev, existingBankId: "default" }));
-        } else {
-            setFormData((prev) => ({ ...prev, newBank: "" }));
-        }
-        setUiState((prev) => ({ ...prev, addingNewBank: !prev.addingNewBank }))
-    }
+    
 
     const resetForm = () => {
-        setUiState((prev) => ({ ...prev, addingNewBank: false, }))
         setFormData((prev) => ({
             ...prev,
             cardName: "",
-            newBank: "",
             existingBankId: "default",
         }))
     }
 
     const handleNewCardSubmit = async (e) => {
         e.preventDefault();
+        const submitAction = e.nativeEvent.submitter.value;
         try {
-            if (uiState.addingNewBank) {
-                const newBankResponse = await apiClient.post("/businesses", { business_name: formData.newBank });
-                uiState.bankList.push({ business_id: newBankResponse.data.data.business_id, business_name:  formData.newBank })
-                await apiClient.post("/credit-cards", { credit_card_name: formData.cardName, business_id: newBankResponse.data.data.business_id });
-            } else {
-                await apiClient.post("/credit-cards", { credit_card_name: formData.cardName, business_id: formData.existingBankId })
+            if (submitAction === "submit") {
+                const response = await apiClient.post("/credit-cards", { credit_card_name: formData.cardName, business_id: formData.existingBankId });
+                if (Array.isArray(response.data?.data)) {
+                    setCreditCards((prev) => [...prev, response.data.data[0]])
+                }
+                setParentUiState((prev) => ({ ...prev, isAddingCard: false }))
+                
+            } else if (submitAction === "submitAnother") {
+                const response = await apiClient.post("/credit-cards", { credit_card_name: formData.cardName, business_id: formData.existingBankId });
+                if (Array.isArray(response.data?.data)) {
+                    setCreditCards((prev) => [...prev, response.data.data[0]])
+                }
+                resetForm();
             }
-            resetForm();
+            
         } catch (error) {
             console.log(error.response?.data?.message);
         }
     }
     if (uiState.isLoading) return <p>Loading...</p>
-    let bankContent;
-
-    if (!uiState.addingNewBank) {
-        bankContent = <>
-            <SelectField fieldId="new-credit-card-select-bank" labelText="Select Bank" optionList={uiState.bankList} onChange={handleNewCardChange} value={formData.existingBankId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="existingBankId" defaultOptions={defaultBankOption}/>
-            <GeneralButton buttonType="button" buttonText="Add new bank" onClick={toggleAddNewBank} />
-        </>
-    } else {
-        bankContent = <>
-            <GeneralInputField inputType="text" labelText="Enter New Bank" onChange={handleNewCardChange} value={formData.newBank} name="newBank" />
-            <GeneralButton buttonType="button" buttonText="Choose existing bank" onClick={toggleAddNewBank} />
-        </>
-    }
 
     return (
         <form action="" onSubmit={handleNewCardSubmit}>
             <fieldset>
                 <legend>New Credit Card</legend>
-                {bankContent}
+                <SelectField fieldId="new-credit-card-select-bank" labelText="Select Bank" optionList={uiState.bankList} onChange={handleNewCardChange} value={formData.existingBankId} optionIdAccessor="business_id" optionTextAccessor="business_name" name="existingBankId" defaultOptions={defaultBankOption}/>
                 <GeneralInputField inputType="text" labelText="Card Name" onChange={handleNewCardChange} value={formData.cardName} name="cardName" />
-                <GeneralButton buttonType="submit" buttonText="Add card" />
+                <GeneralButton buttonType="submit" buttonText="Add Card" value="submit"/>
+                <GeneralButton buttonType="submit" buttonText="Add Another" value="submitAnother"/>
             </fieldset>
         </form>
     )
+}
+
+NewCreditCardForm.propTypes = {
+    setCreditCards: PropTypes.func,
+    setParentUiState: PropTypes.func,
+
 }
 
 export default NewCreditCardForm
