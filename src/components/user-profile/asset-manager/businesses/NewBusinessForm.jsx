@@ -1,9 +1,10 @@
-import SubmitFormButton from "../../../general/buttons/SubmitFormButton";
+import GeneralButton from "../../../general/buttons/GeneralButton";
 import { TextField, CheckboxField } from "../../../general/form-fields/InputFields";
 import { useState } from "react";
 import apiClient from "../../../../api/apiClient";
+import PropTypes from "prop-types";
 
-function NewBusinessForm() {
+function NewBusinessForm({ setBusinesses, setParentUiState }) {
     const [newBusiness , setNewBusiness] = useState({
         businessName: "",
         businessTypes: {
@@ -17,13 +18,14 @@ function NewBusinessForm() {
             bank: false,
         },
         businessFeatures: {
-            Coupons: false,
-            Fuel: false,
-            Retail: false,
-            Incentives: false,
-            Card: false,
+            "Coupons": false,
+            "Fuel Points": false,
+            "Retail Savings": false,
+            "Incentives": false,
+            "Credit Card": false,
         },
     })
+    
 
     const handleNewBusinessChange = (e) => {
         const { name, value } = e.target; 
@@ -40,8 +42,36 @@ function NewBusinessForm() {
         setNewBusiness((prev) => ({ ...prev, businessFeatures: { ...prev.businessFeatures, [name]: !prev.businessFeatures[name] }})) 
     }
 
+    const resetForm = () => {
+        setNewBusiness((prev) => ({ 
+            ...prev,
+            businessName: "",
+            businessTypes: {
+                restaurant: false,
+                hotel: false,
+                retail: false,
+                grocery: false,
+                service: false,
+                airline: false,
+                misc: false,
+                bank: false,
+            },
+            businessFeatures: {
+                "Coupons": false,
+                "Fuel Points": false,
+                "Retail Savings": false,
+                "Incentives": false,
+                "Credit Card": false,
+                "Expenses": false,
+            },
+        }))
+    }
+
+
+    
     const handleNewBusinessSubmit = async (e) => {
         e.preventDefault();
+        const submitAction = e.nativeEvent.submitter.value;
         const params = new URLSearchParams();
         for (const [key, value] of Object.entries(newBusiness.businessTypes)) {
             if (value) {
@@ -57,8 +87,19 @@ function NewBusinessForm() {
             business_name: newBusiness.businessName,
         }
         try {
-            const response = apiClient.post("/businesses", business, { params: params });
-            console.log(response.data?.messsage);
+            if (submitAction === "submit") {
+                const response = await apiClient.post("/businesses", business, { params: params });
+                if (Array.isArray(response.data?.data)) {
+                    setBusinesses((prev) => [...prev, response.data.data[0]])
+                }
+                setParentUiState((prev) => ({ ...prev, isAddingBusiness: false }))
+            } else if (submitAction === "submitAnother") {
+                const response = await apiClient.post("/businesses", business, { params: params });
+                if (Array.isArray(response.data?.data)) {
+                    setBusinesses((prev) => [...prev, response.data.data[0]])
+                }
+                resetForm();
+            }
         } catch (error) {
             console.log(error.response?.data?.message);
         }
@@ -84,16 +125,23 @@ function NewBusinessForm() {
                 </fieldset>
                 <fieldset>
                     <legend>Select Business Feature(s)</legend>
-                    <CheckboxField labelText="Coupons" checked={newBusiness.businessFeatures.Coupons} onChange={handleBusinessFeaturesChange} name="Coupons" />
-                    <CheckboxField labelText="Fuel Points" checked={newBusiness.businessFeatures.Fuel} onChange={handleBusinessFeaturesChange} name="Fuel" />
-                    <CheckboxField labelText="Retail Savings" checked={newBusiness.businessFeatures.Retail} onChange={handleBusinessFeaturesChange} name="Retail" />
-                    <CheckboxField labelText="Incentives" checked={newBusiness.businessFeatures.Incentives} onChange={handleBusinessFeaturesChange} name="Incentives" />
-                    <CheckboxField labelText="Credit Card Offers" checked={newBusiness.businessFeatures.Card} onChange={handleBusinessFeaturesChange} name="Card" />
+                    <CheckboxField labelText="Coupons" checked={newBusiness.businessFeatures["Coupons"]} onChange={handleBusinessFeaturesChange} name="Coupons" />
+                    <CheckboxField labelText="Fuel Points" checked={newBusiness.businessFeatures["Fuel Points"]} onChange={handleBusinessFeaturesChange} name="Fuel Points" />
+                    <CheckboxField labelText="Retail Savings" checked={newBusiness.businessFeatures["Retail Savings"]} onChange={handleBusinessFeaturesChange} name="Retail Savings" />
+                    <CheckboxField labelText="Incentives" checked={newBusiness.businessFeatures["Incentives"]} onChange={handleBusinessFeaturesChange} name="Incentives" />
+                    <CheckboxField labelText="Credit Card Offers" checked={newBusiness.businessFeatures["Credit Card"]} onChange={handleBusinessFeaturesChange} name="Credit Card" />
+                    <CheckboxField labelText="Expenses" checked={newBusiness.businessFeatures["Expenses"]} onChange={handleBusinessFeaturesChange} name="Expenses" />
                 </fieldset>
-                <SubmitFormButton buttonText="Add Business" />
+                <GeneralButton buttonType="submit" buttonText="Add Business" value="submit" />
+                <GeneralButton buttonType="submit" buttonText="Add Another" value="submitAnother" />
             </fieldset>
         </form>
     )
+}
+
+NewBusinessForm.propTypes = {
+    setBusinesses: PropTypes.func,
+    setParentUiState: PropTypes.func,
 }
 
 export default NewBusinessForm
