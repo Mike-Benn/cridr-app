@@ -70,7 +70,6 @@ function FuelTransactionDashboard() {
     
     return (
         <section>
-            <Link to="new-vehicle"><GeneralButton buttonType="button" buttonText="Add Vehicle" /></Link>
             <Link to="new"><GeneralButton buttonType="button" buttonText="Add Fuel Transaction" /></Link>
             <SelectField fieldId="fuel-transaction-summary-year-select" labelText="Select Transaction Year" optionList={transactionYears} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
             <UserFuelTransactionSummary preparedTransactionData={preparedTransactionData} />
