@@ -1,5 +1,4 @@
 function BottomNav() {
-    // Home Coupons Budget
     return (
         <footer>
             <p>Bottom Navbar</p>

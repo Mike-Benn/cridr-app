@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import MainLayout from './components/layouts/MainLayout.jsx'
-import FuelTransactionDashboard from './components/fuel/components/FuelTransactionDashboard.jsx'
 import CardPointsDashboard from './components/card-points/CardPointsDashboard.jsx'
 import NewCardPointsTransaction from './components/card-points/NewCardPointsTransaction.jsx'
 import RetailerSavingsDashboard from './components/retailer-savings/RetailerSavingsDashboard.jsx'
@@ -13,8 +12,6 @@ import NewIncentiveTransaction from './components/incentives/NewIncentiveTransac
 import NewCreditCardOffer from "./components/credit-card-offers/NewCreditCardOffer.jsx"
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
-import CollectiblesDashboard from './components/collectibles/CollectiblesDashboard.jsx'
-import NewCollectibleCategory from './components/collectibles/NewCollectibleCategory.jsx'
 import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
 import NewFuelTransaction from './components/fuel/components/NewFuelTransaction.jsx'
 import NewVehicleForm from "./components/user-profile/asset-manager/vehicles/NewVehicleForm.jsx"
@@ -25,6 +22,7 @@ import SignUpPage from './components/sign-up/SignUpPage.jsx'
 import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.jsx"
 import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
+import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
 
 const router = createBrowserRouter([
   
@@ -48,7 +46,6 @@ const router = createBrowserRouter([
           { path: "/credit-card-offers", element: <OffersDashboard /> },
           { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
           { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
-          { path: "/fuel-transaction", element: <FuelTransactionDashboard /> },
           { path: "/fuel-transaction/new", element: <NewFuelTransaction />},
           { path: "/fuel-transaction/new-vehicle", element: <NewVehicleForm />},
           { path: "/card-points", element: <CardPointsDashboard /> },
@@ -57,12 +54,12 @@ const router = createBrowserRouter([
           { path: "/retailer-savings/new", element: <NewRetailerSavingsTransaction /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/incentives/new", element: <NewIncentiveTransaction /> },
-          { path: "/collectibles", element: <CollectiblesDashboard />},
-          { path: "/collectibles/new-category", element: <NewCollectibleCategory /> },
+          { path: "/expenses", element: <ExpensesDashboard /> },
           { path: "/collectibles/new-subcategory", element: <NewCollectibleSubcategory /> },
           { path: "/profile", element: <UserProfileDashboard /> },
           { path: "/profile/manager", element: <AssetManagerDashboard /> },
           { path: "/profile/manager/credit-cards", element: <CreditCardManagerDashboard /> },
+          
         ]
       }
     ]
