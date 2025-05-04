@@ -34,7 +34,7 @@ function BusinessManagerDashboard() {
     return (
         <>
             {!uiState.isAddingBusiness && businessList}
-            {uiState.isAddingBusiness && <NewBusinessForm />}
+            {uiState.isAddingBusiness && <NewBusinessForm setBusinesses={setBusinesses} setParentUiState={setUiState} />}
             {uiState.isAddingBusiness && <GeneralButton buttonType="button" buttonText="Cancel" onClick={toggleAddBusiness} />}
             {!uiState.isAddingBusiness && <GeneralButton buttonType="button" buttonText="Add New Business" onClick={toggleAddBusiness} />}
         </>
