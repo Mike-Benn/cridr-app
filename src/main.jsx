@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom/client'
 import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import MainLayout from './components/layouts/MainLayout.jsx'
-import CardPointsDashboard from './components/card-points/CardPointsDashboard.jsx'
-import NewCardPointsTransaction from './components/card-points/NewCardPointsTransaction.jsx'
-import RetailerSavingsDashboard from './components/retailer-savings/RetailerSavingsDashboard.jsx'
-import NewRetailerSavingsTransaction from './components/retailer-savings/NewRetailerSavingsTransaction.jsx'
 import IncentivesDashboard from './components/incentives/IncentivesDashboard.jsx'
 import NewIncentiveTransaction from './components/incentives/NewIncentiveTransaction.jsx'
 import NewCreditCardOffer from "./components/credit-card-offers/NewCreditCardOffer.jsx"
@@ -43,10 +39,6 @@ const router = createBrowserRouter([
           { path: "/credit-card-offers", element: <OffersDashboard /> },
           { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
           { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
-          { path: "/card-points", element: <CardPointsDashboard /> },
-          { path: "/card-points/new", element: <NewCardPointsTransaction /> },
-          { path: "/retailer-savings", element: <RetailerSavingsDashboard /> },
-          { path: "/retailer-savings/new", element: <NewRetailerSavingsTransaction /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/incentives/new", element: <NewIncentiveTransaction /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
