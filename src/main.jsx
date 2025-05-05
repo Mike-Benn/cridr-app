@@ -12,9 +12,6 @@ import NewIncentiveTransaction from './components/incentives/NewIncentiveTransac
 import NewCreditCardOffer from "./components/credit-card-offers/NewCreditCardOffer.jsx"
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
-import NewCollectibleSubcategory from './components/collectibles/NewCollectibleSubcategory.jsx'
-import NewFuelTransaction from './components/fuel/components/NewFuelTransaction.jsx'
-import NewVehicleForm from "./components/user-profile/asset-manager/vehicles/NewVehicleForm.jsx"
 import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
 import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
 import SignInPage from "./components/sign-in/SignInPage.jsx"
@@ -46,8 +43,6 @@ const router = createBrowserRouter([
           { path: "/credit-card-offers", element: <OffersDashboard /> },
           { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
           { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
-          { path: "/fuel-transaction/new", element: <NewFuelTransaction />},
-          { path: "/fuel-transaction/new-vehicle", element: <NewVehicleForm />},
           { path: "/card-points", element: <CardPointsDashboard /> },
           { path: "/card-points/new", element: <NewCardPointsTransaction /> },
           { path: "/retailer-savings", element: <RetailerSavingsDashboard /> },
@@ -55,7 +50,6 @@ const router = createBrowserRouter([
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/incentives/new", element: <NewIncentiveTransaction /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
-          { path: "/collectibles/new-subcategory", element: <NewCollectibleSubcategory /> },
           { path: "/profile", element: <UserProfileDashboard /> },
           { path: "/profile/manager", element: <AssetManagerDashboard /> },
           { path: "/profile/manager/credit-cards", element: <CreditCardManagerDashboard /> },
