@@ -1,78 +1,92 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import GeneralButton from "../general/buttons/GeneralButton"
-import UserIncentiveTransactionSummary from "./UserIncentiveTransactionSummary";
 import apiClient from "../../api/apiClient";
-import { SelectField } from "../general/form-fields/InputFields";
-import { prepareIncentiveTransactionData } from "../../utils/incentives/utils";
+import NewIncentiveForm from "./NewIncentiveForm";
+
 
 function IncentivesDashboard() {
-    const defaultYearOption = [<option key="all" value="all">All</option>];
-    const [selectedYearId, setSelectedYearId] = useState("all");
-    const [transactionYears, setTransactionYears] = useState([]);
-    const [preparedTransactionData, setPreparedTransactionData] = useState({});
-    const [loadingStates, setLoadingStates] = useState({
-        mountLoading: true,
-        dependencyLoading: true,
+
+    const [uiState, setUiState] = useState({
+        viewMode: "viewing",
+        businessList: [],
     })
-        
-    useEffect(() => {
-        document.title = "Incentives | Cridr";
-        const getUniqueYearsByUserId = async () => {
-            try {
-                const response = await apiClient.get("/incentive-transaction/unique-years");
-                if (response.status === 200 && Array.isArray(response.data.data)) {
-                    setTransactionYears(response.data.data);
-                    setLoadingStates((prev) => ({ ...prev, mountLoading: false }));
-                }
-            } catch (error) {
-                console.error("Unable to retrieve unique transaction years for user.", error)
-                setLoadingStates((prev) => ({ ...prev, mountLoading: false }));
-            }
-        }
-        getUniqueYearsByUserId();
-    }, []);
-    
 
-    useEffect(() => {
-        setLoadingStates((prev) => ({ ...prev, dependencyLoading: true }));
-        const getIncentiveTransactionData = async () => {
-            try {
-                if (selectedYearId === "all") {
-                    const response = await apiClient.get("/incentive-transaction");
-                    if (response.status === 200 && Array.isArray(response.data.data)) {
-                        setPreparedTransactionData(prepareIncentiveTransactionData(response.data.data));
-                        setLoadingStates((prev) => ({ ...prev, dependencyLoading: false }))
-                    }
-                } else {
-                    const response = await apiClient.get(`/incentive-transaction/?year=${selectedYearId}`);
-                    if (response.status === 200 && Array.isArray(response.data.data)) {
-                        setPreparedTransactionData(prepareIncentiveTransactionData(response.data.data));
-                        setLoadingStates((prev) => ({ ...prev, dependencyLoading: false }))
-                    }
-                }
-            } catch (error) {
-                console.log(error.response?.data?.message);
-                setLoadingStates((prev) => ({ ...prev, dependencyLoading: false }));
-            }
-        }
-        getIncentiveTransactionData();
+    const [incentiveFormData, setIncentiveFormData] = useState({
+        selectedBusinessId: "",
+        incentiveDescription: "",
+        incentiveAmount: "",
+        transactionDate: "",
+    })
 
-    }, [selectedYearId])
-
-    const handleYearIdChange = (e) => {
-        setSelectedYearId(e.target.value)
+    const incentiveFormTemplate = {
+        selectedBusinessId: "",
+        incentiveDescription: "",
+        incentiveAmount: "",
+        transactionDate: "",
     }
 
-    if (loadingStates.mountLoading || loadingStates.dependencyLoading) return <p>Loading...</p>
+    useEffect(() => {
+        const getBusinesses = async () => {
+            const params = new URLSearchParams();
+            params.append("featureNames", "Incentives");
+            try {
+                const [businessesResponse] = await Promise.all([
+                    apiClient.get("/businesses", { params: params })
+                ])
+                setUiState((prev) => ({ ...prev, businessList: businessesResponse.data.data }))
+            } catch (error) {
+                console.log(error.response?.data?.message)
+            }
+        }
+        getBusinesses();
+    })
+
+    const handleIncentiveFormChange = (e) => {
+        const { name, value } = e.target;
+        setIncentiveFormData((prev) => ({ 
+            ...prev,
+            [name]: value,
+        })) 
+    }
+
+    const handleIncentiveFormSubmit = async (e) => {
+        e.preventDefault();
+        const submitAction = e.nativeEvent.submitter.value;
+        const newIncentiveTransaction = {
+            business_id: incentiveFormData.selectedBusinessId,
+            incentive_description: incentiveFormData.incentiveDescription,
+            incentive_amount: incentiveFormData.incentiveAmount,
+            transaction_date: incentiveFormData.transactionDate,
+        }
+        try {
+            const response = apiClient.post("/incentives", newIncentiveTransaction);
+            console.log(response.data?.message);
+            setIncentiveFormData(incentiveFormTemplate);
+            if (submitAction === "submit") setUiState((prev) => ({ ...prev, viewMode: "viewing" }));
+            
+        } catch (error) {
+            console.log(error.response?.data?.message);
+        }
+    }
+
+    const incentiveFormHandlers = {
+        handleIncentiveFormChange,
+        handleIncentiveFormSubmit,
+    }
+
+    const toggleViewMode = () => {
+        setUiState((prev) => ({ ...prev, viewMode: prev.viewMode === "editing" ? "viewing" : "editing" }));
+    }
 
     return (
         <>
-            <Link to="new"><GeneralButton buttonType="button" buttonText="Add New Incentive" /></Link>
-            <SelectField fieldId="incentive-transaction-summary-year-select" labelText="Select Transaction Year" optionList={transactionYears} onChange={handleYearIdChange} value={selectedYearId} optionTextAccessor="unique_year" optionIdAccessor="unique_year" defaultOptions={defaultYearOption} />
-            <UserIncentiveTransactionSummary preparedTransactionData={preparedTransactionData}/>
+            {uiState.viewMode === "viewing" && <GeneralButton buttonType="button" buttonText="Add Incentive" onClick={toggleViewMode} />}
+            {uiState.viewMode === "editing" && <GeneralButton buttonType="button" buttonText="Cancel" onClick={toggleViewMode} />}
+            {uiState.viewMode === "editing" && <NewIncentiveForm incentiveFormData={incentiveFormData} handlers={incentiveFormHandlers} uiState={uiState} />}
         </>
     )
+
+    
 }
 
 export default IncentivesDashboard
