@@ -14,8 +14,10 @@ function NewExpenseTransaction() {
             selectedMainCategoryId: "",
             selectedSubCategoryId: "",
             selectedBusinessId: "",
+            selectedCreditCardId: "",
             transactionNotes: "",
             transactionAmount: "",
+            cardPointsEarned: "",
             transactionDate: "",
         },
         fuelFields: {
@@ -30,8 +32,10 @@ function NewExpenseTransaction() {
             selectedMainCategoryId: "",
             selectedSubCategoryId: "",
             selectedBusinessId: "",
+            selectedCreditCardId: "",
             transactionNotes: "",
             transactionAmount: "",
+            cardPointsEarned: "",
             transactionDate: "",
         },
         fuelFields: {
@@ -46,7 +50,9 @@ function NewExpenseTransaction() {
         mainCategoryList: [],
         subCategoryList: [],
         businessList: [],
+        creditCardList: [],
         redeemingFuelPoints: false,
+        earnedCardPoints: false,
 
     })
     useEffect(() => {
@@ -54,11 +60,11 @@ function NewExpenseTransaction() {
             const params = new URLSearchParams();
             params.append("featureNames", "Expenses");
             try {
-                const [mainCategoriesResponse, subCategoriesResponse, businessesResponse, vehiclesResponse] = await Promise.all([
+                const [mainCategoriesResponse, subCategoriesResponse, businessesResponse, creditCardsResponse] = await Promise.all([
                     apiClient.get("/expenses/categories/main"),
                     apiClient.get("/expenses/categories/sub"),
                     apiClient.get("/businesses", { params: params }),
-                    apiClient.get("/vehicles"),
+                    apiClient.get("/credit-cards"),
                     
                 ])
                 setUiState((prev) => ({ 
@@ -66,8 +72,8 @@ function NewExpenseTransaction() {
                     viewMode: "viewing",
                     mainCategoryList: mainCategoriesResponse.data.data,
                     subCategoryList: subCategoriesResponse.data.data,
-                    vehicleList: vehiclesResponse.data.data,
                     businessList: businessesResponse.data.data,
+                    creditCardList: creditCardsResponse.data.data,
                 }))
 
             } catch (error) {
@@ -89,6 +95,10 @@ function NewExpenseTransaction() {
 
     const toggleRedeemingFuelPoints = () => {
         setUiState((prev) => ({ ...prev, redeemingFuelPoints: !prev.redeemingFuelPoints }))
+    }
+
+    const toggleEarnedCardPoints = () => {
+        setUiState((prev) => ({ ...prev, earnedCardPoints: !prev.earnedCardPoints }))
     }
 
     const handleFuelFieldChange = (e) => {
@@ -136,34 +146,46 @@ function NewExpenseTransaction() {
         };
 
         try {
+
+            const requests = [apiClient.post("/expenses", newExpenseTransaction)];
+
             if (uiState.redeemingFuelPoints) {
                 const fuelPointsTransaction = {
                     gallons_filled: expenseFormData.fuelFields.gallonsFilled,
                     fuel_points_redeemed: expenseFormData.fuelFields.fuelPointsRedeemed,
+                    transaction_date: expenseFormData.fuelFields.transactionDate,
+                }
+                requests.push(apiClient.post("/fuel-points", fuelPointsTransaction));
+            }
+
+            if (uiState.earnedCardPoints) {
+                const cardPointsTransaction = {
+                    credit_card_id: expenseFormData.commonFields.selectedCreditCardId,
+                    business_id: expenseFormData.commonFields.selectedBusinessId,
+                    card_points_amount: expenseFormData.commonFields.cardPointsEarned,
                     transaction_date: expenseFormData.commonFields.transactionDate,
                 }
-                const [newExpenseResponse, newFuelPointResponse] = await Promise.all([
-                    apiClient.post("/expenses", newExpenseTransaction),
-                    apiClient.post("/fuel-points", fuelPointsTransaction)
-                ])
-                console.log(newExpenseResponse.data.message);
-                console.log(newFuelPointResponse.data.message);
-            } else {
-                const newExpenseResponse = await apiClient.post("/expenses", newExpenseTransaction);
-                console.log(newExpenseResponse.data.message);
+                requests.push(apiClient.post("/card-points", cardPointsTransaction));
             }
+            const responseList = await Promise.all(requests);
+            for (let i = 0; i < responseList.length; i++) {
+                console.log(responseList[i].data?.message);
+            }
+
             if (submitAction === "submit") {
                 setExpenseFormData(blankExpenseFormData);
                 setUiState((prev) => ({ 
                     ...prev, 
                     viewMode: "viewing",
                     redeemingFuelPoints: false, 
+                    earnedCardPoints: false,
                 }));
             } else {
                 setExpenseFormData(blankExpenseFormData);
                 setUiState((prev) => ({
                     ...prev,
                     redeemingFuelPoints: false,
+                    earnedCardPoints: false,
                 }))
             }
         } catch (error) {
@@ -175,7 +197,8 @@ function NewExpenseTransaction() {
         handleCommonFieldChange,
         handleExpenseSubmit,
         handleFuelFieldChange,
-        toggleRedeemingFuelPoints
+        toggleRedeemingFuelPoints,
+        toggleEarnedCardPoints,
     }
     
     const generateFormToRender = () => {
