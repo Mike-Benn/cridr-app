@@ -19,10 +19,8 @@ function NewBusinessForm({ setBusinesses, setParentUiState }) {
         },
         businessFeatures: {
             "Coupons": false,
-            "Fuel Points": false,
-            "Retail Savings": false,
             "Incentives": false,
-            "Credit Card": false,
+            "Expenses": false,
         },
     })
     
@@ -58,10 +56,7 @@ function NewBusinessForm({ setBusinesses, setParentUiState }) {
             },
             businessFeatures: {
                 "Coupons": false,
-                "Fuel Points": false,
-                "Retail Savings": false,
                 "Incentives": false,
-                "Credit Card": false,
                 "Expenses": false,
             },
         }))
@@ -131,6 +126,7 @@ function NewBusinessForm({ setBusinesses, setParentUiState }) {
                     <CheckboxField labelText="Incentives" checked={newBusiness.businessFeatures["Incentives"]} onChange={handleBusinessFeaturesChange} name="Incentives" />
                     <CheckboxField labelText="Credit Card Offers" checked={newBusiness.businessFeatures["Credit Card"]} onChange={handleBusinessFeaturesChange} name="Credit Card" />
                     <CheckboxField labelText="Expenses" checked={newBusiness.businessFeatures["Expenses"]} onChange={handleBusinessFeaturesChange} name="Expenses" />
+                    <CheckboxField labelText="Card Points" checked={newBusiness.businessFeatures["Card Points"]} onChange={handleBusinessFeaturesChange} name="Card Points" />
                 </fieldset>
                 <GeneralButton buttonType="submit" buttonText="Add Business" value="submit" />
                 <GeneralButton buttonType="submit" buttonText="Add Another" value="submitAnother" />
