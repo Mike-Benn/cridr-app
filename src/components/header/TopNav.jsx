@@ -25,10 +25,9 @@ function TopNav() {
             <ul>
                 <Link to="/"><li>Home</li></Link>
                 <Link to="/credit-card-offers"><li>Offers</li></Link>
-                <Link to="/card-points"><li>Card Points</li></Link>
                 <Link to="/incentives"><li>Incentives</li></Link>
-                <Link to="/retailer-savings"><li>Retailer Savings</li></Link>
                 <Link to="/expenses"><li>Expenses</li></Link>
+                <Link to="/savings-summary"><li>Savings Summary</li></Link>
             </ul>
             <GeneralButton buttonType="button" buttonText="Log Out" onClick={handleUserLogOut} />
             <Link to="/profile"><GeneralButton buttonType="button" buttonText="Edit Profile" /></Link>
