@@ -59,10 +59,10 @@ function IncentivesDashboard() {
             transaction_date: incentiveFormData.transactionDate,
         }
         try {
-            const response = apiClient.post("/incentives", newIncentiveTransaction);
+            const response = await apiClient.post("/incentives", newIncentiveTransaction);
             console.log(response.data?.message);
-            setIncentiveFormData(incentiveFormTemplate);
             if (submitAction === "submit") setUiState((prev) => ({ ...prev, viewMode: "viewing" }));
+            setIncentiveFormData(incentiveFormTemplate);
             
         } catch (error) {
             console.log(error.response?.data?.message);
@@ -76,6 +76,7 @@ function IncentivesDashboard() {
 
     const toggleViewMode = () => {
         setUiState((prev) => ({ ...prev, viewMode: prev.viewMode === "editing" ? "viewing" : "editing" }));
+        setIncentiveFormData(incentiveFormTemplate);
     }
 
     return (
