@@ -14,6 +14,7 @@ import CreditCardManagerDashboard from "./components/user-profile/asset-manager/
 import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
+import RedeemedOffersDashboard from './components/credit-card-offers/RedeemedOffersDashboard.jsx'
 
 const router = createBrowserRouter([
   
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
           { path: "/", element: <RootPanel />},
           { path: "/offers", element: <OffersDashboard /> },
           { path: "/offers/available", element: <AvailableOffersDashboard />},
+          { path: "/offers/redeemed", element: <RedeemedOffersDashboard /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
           { path: "/profile", element: <UserProfileDashboard /> },
