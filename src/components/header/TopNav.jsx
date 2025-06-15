@@ -24,7 +24,7 @@ function TopNav() {
             <h2>{path}</h2>
             <ul>
                 <Link to="/"><li>Home</li></Link>
-                <Link to="/credit-card-offers"><li>Offers</li></Link>
+                <Link to="/offers"><li>Offers</li></Link>
                 <Link to="/incentives"><li>Incentives</li></Link>
                 <Link to="/expenses"><li>Expenses</li></Link>
                 <Link to="/savings-summary"><li>Savings Summary</li></Link>
