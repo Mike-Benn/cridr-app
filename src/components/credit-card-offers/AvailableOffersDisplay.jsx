@@ -1,26 +1,53 @@
 import apiClient from "../../api/apiClient"
-import { OfferListItem } from "../../utils/offers/utils";
+import OfferListItem from "./OfferListItem";
 import { filterOutAndReturnById } from "../../utils/general/utils";
 import PropTypes from "prop-types";
 
 
-function AvailableOffersDisplay({ offers, setOffers }) {
+function AvailableOffersDisplay({ offersList, handlers }) {
     
     const handleDeleteOffer = async (offerId) => {
-        const offerAndUpdatedList = filterOutAndReturnById(offerId, offers, "available_offer_id");
-        const previousOffers = [...offers];
-        setOffers(offerAndUpdatedList.newArray);
+        const offerAndUpdatedList = filterOutAndReturnById(offerId, offersList, "offers_id"); // newArray, filteredItem
+        const previousOffers = [...offersList];
+        handlers.setUiState((prev) => ({ ...prev, offersList: offerAndUpdatedList.newArray }));
         try {
-            await apiClient.delete(`/credit-card-offers/available?available_offer_id=${offerAndUpdatedList.filteredItem.available_offer_id}`)
+            const params = new URLSearchParams();
+            params.append("offerId", offerAndUpdatedList.filteredItem.offers_id)
+            await apiClient.delete("/offers", { params })
         } catch (error) {
-            setOffers(previousOffers);
+            handlers.setUiState((prev) => ({ ...prev, offersList: previousOffers }));
             alert("There was an error deleting offer, please try again.")
             console.error("Unable to delete offer.", error);
         }
     }
 
-    const offerListItems = offers.map(offer => 
-        <OfferListItem key={offer.available_offer_id} offer={offer} onDelete={handleDeleteOffer} />
+    const handleRedeemOffer = async (offer) => {
+        const redeemedOffer = {
+            offers_id: offer.offers_id,
+            amount_saved: offer.amount_saved,
+            redeemed_date: new Date(),
+        }
+        const offerAndUpdatedList = filterOutAndReturnById(offer.offers_id, offersList, "offers_id");
+        const previousOffers = [...offersList];
+        handlers.setUiState((prev) => ({ ...prev, offersList: offerAndUpdatedList.newArray }))
+        try {
+            const response = await apiClient.post("/offers/redeemed", redeemedOffer);
+            console.log(response.data.message);
+        } catch (error) {
+            handlers.setUiState((prev) => ({ ...prev, offersList: previousOffers }));
+            alert("There was an error completing your offer, please try again.");
+            console.log(error.response.data.message);
+
+        }
+    }
+
+    const offerActionsHandlers = {
+        handleRedeemOffer,
+        handleDeleteOffer,
+    }
+
+    const offerListItems = offersList.map(offer => 
+        <OfferListItem key={offer.offers_id} offer={offer} handlers={offerActionsHandlers}/>
     );
 
     return (
