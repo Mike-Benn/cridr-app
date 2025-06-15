@@ -25,7 +25,7 @@ function AvailableOffersDisplay({ offersList, handlers }) {
         const redeemedOffer = {
             offers_id: offer.offers_id,
             amount_saved: offer.amount_saved,
-            redeemed_date: new Date(),
+            redeemed_date: offer.redeemed_date,
         }
         const offerAndUpdatedList = filterOutAndReturnById(offer.offers_id, offersList, "offers_id");
         const previousOffers = [...offersList];

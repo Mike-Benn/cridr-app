@@ -11,10 +11,12 @@ function OfferActions({ offer, handlers }) {
 
     const [couponFormData, setCouponFormData] = useState({
         amountSaved: "",
+        redemptionDate: "",
     })
 
     const couponFormDataTemplate = {
         amountSaved: "",
+        redemptionDate: "",
     }
 
     const handleCouponFormDataChange = (e) => {
@@ -25,10 +27,6 @@ function OfferActions({ offer, handlers }) {
         })) 
     }  
 
-    const handleRedeemOffer = () => {
-        offer.amount_saved = couponFormData.amountSaved;
-        handlers.handleRedeemOffer(offer);
-    }
 
     const toggleIsCompleting = () => {
         setCouponFormData(couponFormDataTemplate)
@@ -37,7 +35,7 @@ function OfferActions({ offer, handlers }) {
 
     const couponFormHandlers = {
         handleCouponFormDataChange,
-        handleRedeemOffer,
+        handleRedeemOffer: handlers.handleRedeemOffer,
         toggleIsCompleting,
     }
 
@@ -45,7 +43,7 @@ function OfferActions({ offer, handlers }) {
         <>
             <DeleteListItemButton id={offer.offers_id} onClick={handlers.handleDeleteOffer}  />
             {!uiState.isCompleting && <GeneralButton buttonType="button" buttonText="Complete" onClick={toggleIsCompleting} />}
-            {uiState.isCompleting && <CompleteCouponForm couponFormData={couponFormData} handlers={couponFormHandlers} />}
+            {uiState.isCompleting && <CompleteCouponForm couponFormData={couponFormData} handlers={couponFormHandlers} offer={offer} />}
         </>
     )
 }

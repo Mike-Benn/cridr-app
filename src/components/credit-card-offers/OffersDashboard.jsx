@@ -14,7 +14,7 @@ function OffersDashboard() {
     return (
         <>
             <Link to="available"><GeneralButton buttonType="button" buttonText="Available Offers" /></Link>
-            <Link to="completed"><GeneralButton buttonType="button" buttonText="Completed Offers" /></Link>
+            <Link to="redeemed"><GeneralButton buttonType="button" buttonText="Redeemed Offers" /></Link>
         </>
 
     )
