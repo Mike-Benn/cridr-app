@@ -4,7 +4,6 @@ import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import IncentivesDashboard from './components/incentives/IncentivesDashboard.jsx'
-import NewCreditCardOffer from "./components/credit-card-offers/NewCreditCardOffer.jsx"
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
 import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
@@ -35,9 +34,8 @@ const router = createBrowserRouter([
         element: <ProtectedRoute><MainLayout /></ProtectedRoute>,
         children: [
           { path: "/", element: <RootPanel />},
-          { path: "/credit-card-offers", element: <OffersDashboard /> },
-          { path: "/credit-card-offers/available", element: <AvailableOffersDashboard />},
-          { path: "/credit-card-offers/available/new", element: <NewCreditCardOffer/> },
+          { path: "/offers", element: <OffersDashboard /> },
+          { path: "/offers/available", element: <AvailableOffersDashboard />},
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
           { path: "/profile", element: <UserProfileDashboard /> },
