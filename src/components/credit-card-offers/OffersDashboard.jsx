@@ -1,6 +1,5 @@
 import { useEffect } from "react"
-
-import GeneralButton from "../general/buttons/GeneralButton"
+import  Button  from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
 
@@ -13,8 +12,8 @@ function OffersDashboard() {
     
     return (
         <>
-            <Link to="available"><GeneralButton buttonType="button" buttonText="Available Offers" /></Link>
-            <Link to="redeemed"><GeneralButton buttonType="button" buttonText="Redeemed Offers" /></Link>
+            <Button variant="outlined" component={Link} to="available">Available Offers</Button>
+            <Button variant="outlined" component={Link} to="redeemed">Redeemed Offers</Button>
         </>
 
     )
