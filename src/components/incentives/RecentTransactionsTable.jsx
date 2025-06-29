@@ -7,30 +7,7 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper";
 
 function RecentTransactionsTable({ transactionData }) {
-
-    transactionData = [
-        {
-            id: 1,
-            date: "2025-06-18",
-            description: "Arby's coupon",
-            amount: 3.25
-        },
-        {
-            id: 2,
-            date: "2025-06-19",
-            description: "Wendy's coupon",
-            amount: 5.55
-        },
-        {
-            id: 3,
-            date: "2025-06-21",
-            description: "Mcdonald's coupon",
-            amount: 7.23
-        }
-    ]
-        
     
-
     return (
         <TableContainer component={Paper}>
             <Table aria-label="Recent Transactions">
@@ -43,10 +20,16 @@ function RecentTransactionsTable({ transactionData }) {
                 </TableHead>
                 <TableBody>
                     {transactionData.map(txn => 
-                        <TableRow key={txn.id}>
-                            <TableCell>{txn.date}</TableCell>
-                            <TableCell>{txn.description}</TableCell>
-                            <TableCell>{txn.amount}</TableCell>
+                        <TableRow key={txn.transaction_incentive_id}>
+                            <TableCell>{
+                                new Date(txn.transaction_date).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                })
+                                }</TableCell>
+                            <TableCell>{txn.incentive_description}</TableCell>
+                            <TableCell>{txn.incentive_amount}</TableCell>
                         </TableRow>
                     )}
                 </TableBody>

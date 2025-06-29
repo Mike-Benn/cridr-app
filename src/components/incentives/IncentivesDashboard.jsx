@@ -1,93 +1,59 @@
 import { useEffect, useState } from "react"
-import GeneralButton from "../general/buttons/GeneralButton"
 import apiClient from "../../api/apiClient";
 import NewIncentiveForm from "./NewIncentiveForm";
-
+import IncentivesDisplay from "./IncentivesDisplay"
+import Button from "@mui/material/Button"
 
 function IncentivesDashboard() {
 
     const [uiState, setUiState] = useState({
-        viewMode: "viewing",
+        viewMode: "loading",
         businessList: [],
+        incentiveTransactionList: [],
     })
 
-    const [incentiveFormData, setIncentiveFormData] = useState({
-        selectedBusinessId: "",
-        incentiveDescription: "",
-        incentiveAmount: "",
-        transactionDate: "",
-    })
-
-    const incentiveFormTemplate = {
-        selectedBusinessId: "",
-        incentiveDescription: "",
-        incentiveAmount: "",
-        transactionDate: "",
-    }
 
     useEffect(() => {
-        const getBusinesses = async () => {
-            const params = new URLSearchParams();
-            params.append("featureNames", "Incentives");
+        const getData = async () => {
             try {
-                const [businessesResponse] = await Promise.all([
-                    apiClient.get("/businesses", { params: params })
+                const [businessesResponse, incentivesResponse] = await Promise.all([
+                    apiClient.get("/businesses", { params: { featureNames: "Incentives" }}),
+                    apiClient.get("/incentives", { params: { order: "DESC", limit: 5 }})
                 ])
-                setUiState((prev) => ({ ...prev, businessList: businessesResponse.data.data }))
+                setUiState((prev) => ({
+                    ...prev,
+                    businessList: businessesResponse.data.data,
+                    incentiveTransactionList: incentivesResponse.data.data,
+                    viewMode: "viewing",
+
+                }))
             } catch (error) {
                 console.log(error.response?.data?.message)
             }
         }
-        getBusinesses();
-    })
-
-    const handleIncentiveFormChange = (e) => {
-        const { name, value } = e.target;
-        setIncentiveFormData((prev) => ({ 
-            ...prev,
-            [name]: value,
-        })) 
-    }
-
-    const handleIncentiveFormSubmit = async (e) => {
-        e.preventDefault();
-        const submitAction = e.nativeEvent.submitter.value;
-        const newIncentiveTransaction = {
-            business_id: incentiveFormData.selectedBusinessId,
-            incentive_description: incentiveFormData.incentiveDescription,
-            incentive_amount: incentiveFormData.incentiveAmount,
-            transaction_date: incentiveFormData.transactionDate,
-        }
-        try {
-            const response = await apiClient.post("/incentives", newIncentiveTransaction);
-            console.log(response.data?.message);
-            if (submitAction === "submit") setUiState((prev) => ({ ...prev, viewMode: "viewing" }));
-            setIncentiveFormData(incentiveFormTemplate);
-            
-        } catch (error) {
-            console.log(error.response?.data?.message);
-        }
-    }
-
-    const incentiveFormHandlers = {
-        handleIncentiveFormChange,
-        handleIncentiveFormSubmit,
-    }
+        getData();
+    }, [])
 
     const toggleViewMode = () => {
         setUiState((prev) => ({ ...prev, viewMode: prev.viewMode === "editing" ? "viewing" : "editing" }));
-        setIncentiveFormData(incentiveFormTemplate);
     }
 
+    if (uiState.viewMode === "loading") return <p>Loading...</p>
+
+    const handlers = {
+        toggleViewMode,
+        setUiState,
+    }
+
+    const stateData = {
+        incentiveTransactionList: uiState.incentiveTransactionList,
+    }
     return (
         <>
-            {uiState.viewMode === "viewing" && <GeneralButton buttonType="button" buttonText="Add Incentive" onClick={toggleViewMode} />}
-            {uiState.viewMode === "editing" && <GeneralButton buttonType="button" buttonText="Cancel" onClick={toggleViewMode} />}
-            {uiState.viewMode === "editing" && <NewIncentiveForm incentiveFormData={incentiveFormData} handlers={incentiveFormHandlers} uiState={uiState} />}
+            {uiState.viewMode === "viewing" && <IncentivesDisplay incentiveTransactionList={uiState.incentiveTransactionList} handlers={handlers} />}
+            {uiState.viewMode === "editing" && <NewIncentiveForm businessList={uiState.businessList} handlers={handlers} stateData={stateData}/> }
         </>
     )
-
-    
 }
 
 export default IncentivesDashboard
