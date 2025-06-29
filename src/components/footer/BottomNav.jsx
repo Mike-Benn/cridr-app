@@ -22,25 +22,28 @@ function BottomNav() {
 
 
     return (
-        <BottomNavigation
-            showLabels
-            value={currPath}
-            onChange={(event, newTabIndex) => {
-                setTabIndex(newTabIndex);
-            }}
-            sx={{
-                position: "fixed",
-                left: 0,
-                right: 0,
-                bottom: 0,
-            }}
-        >
-            <BottomNavigationAction label="Home" icon={<HomeIcon />} component={Link} to="/" value="/" />
-            <BottomNavigationAction label="Offers" icon={<OffersIcon />} component={Link} to="/offers" value="/offers" />
-            <BottomNavigationAction label="Incentives" icon={<IncentivesIcon />} component={Link} to="/incentives" value="/incentives" />
-            <BottomNavigationAction label="Expenses" icon={<ExpensesIcon />} component={Link} to="/expenses" value="/expenses" />
-            <BottomNavigationAction label="Summary" icon={<SummaryIcon />} component={Link} to="/summary" value="/summary" />
-        </BottomNavigation>
+        <>
+            <BottomNavigation
+                showLabels
+                value={currPath}
+                onChange={(event, newTabIndex) => {
+                    setTabIndex(newTabIndex);
+                }}
+                sx={{
+                    position: "fixed",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                }}
+            >
+                <BottomNavigationAction label="Home" icon={<HomeIcon />} component={Link} to="/" value="/" />
+                <BottomNavigationAction label="Offers" icon={<OffersIcon />} component={Link} to="/offers" value="/offers" />
+                <BottomNavigationAction label="Incentives" icon={<IncentivesIcon />} component={Link} to="/incentives" value="/incentives" />
+                <BottomNavigationAction label="Expenses" icon={<ExpensesIcon />} component={Link} to="/expenses" value="/expenses" />
+                <BottomNavigationAction label="Summary" icon={<SummaryIcon />} component={Link} to="/summary" value="/summary" />
+            </BottomNavigation>
+            <BottomNavigation />
+        </>
     )
 }
 
