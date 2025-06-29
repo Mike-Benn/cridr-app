@@ -31,8 +31,8 @@ function ProfileMenu() {
     const isOpen = Boolean(anchorEl);
     return (
         <>
-            <IconButton onClick={toggleMenu}>
-                <AccountIcon fontSize="large" />
+            <IconButton color="inherit" onClick={toggleMenu}>
+                <AccountIcon color="inherit" fontSize="large" />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

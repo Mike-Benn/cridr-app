@@ -1,13 +1,23 @@
 import ProfileMenu from "./ProfileMenu"
 import Typography from "@mui/material/Typography"
-import styles from "./TopNav.module.css"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import { Link } from "react-router-dom"
 function TopNav() {
-    
     return (
-        <header className={styles.header}>
-            <Typography variant="h4" component="h1">Cridr App</Typography>
-            <ProfileMenu />
-        </header>
+        <>
+            <AppBar position="fixed">
+                <Toolbar sx={{
+                    justifyContent: "space-between",
+                }}>
+                    <Typography variant="h4" component="h1">
+                        <Link to="/">Cridr App</Link>
+                    </Typography>
+                    <ProfileMenu />
+                </Toolbar>
+            </AppBar>
+            <Toolbar/>
+        </>
     )
 }
 
