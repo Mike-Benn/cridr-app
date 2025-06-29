@@ -1,4 +1,5 @@
 import React from 'react'
+import "./css/global.css"
 import ReactDOM from 'react-dom/client'
 import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
@@ -15,6 +16,7 @@ import UserProfileDashboard from './components/user-profile/UserProfileDashboard
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
 import RedeemedOffersDashboard from './components/credit-card-offers/RedeemedOffersDashboard.jsx'
+
 
 const router = createBrowserRouter([
   
