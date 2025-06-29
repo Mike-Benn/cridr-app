@@ -12,7 +12,6 @@ function RecentTransactionsMobile({ incentiveTransactionList }) {
                     width: "100%",
                     px: 2,
                     boxSizing: "border-box",
-                    border: "2px solid red"
                 }}>
                     <CardContent>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -29,7 +28,7 @@ function RecentTransactionsMobile({ incentiveTransactionList }) {
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Typography variant="body1">Amount</Typography>
-                            <Typography variant="body1" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{txn.incentive_amount}</Typography>
+                            <Typography variant="body1" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>${txn.incentive_amount}</Typography>
                         </Box>
                     </CardContent>
                 </Card>

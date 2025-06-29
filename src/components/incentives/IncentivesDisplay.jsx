@@ -7,7 +7,7 @@ function IncentivesDisplay({ incentiveTransactionList, handlers }) {
     return (
         <div className={styles.displayContainer}>
             <Button variant="contained" onClick={handlers.toggleViewMode} sx={{ alignSelf: "center" }}>Add Incentive</Button>
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Recent Transactions</Typography>
+            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Recent Incentives</Typography>
             <RecentTransactionsMobile incentiveTransactionList={incentiveTransactionList} />
         </div>
         
