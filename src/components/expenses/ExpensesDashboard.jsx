@@ -8,7 +8,8 @@ function ExpensesDashboard() {
         viewMode: "loading",
         expenseTransactionList: [],
         mainCategoryList: [],
-        subcategoryList: [],
+        subcategoryMap: {},
+        businessList: [],
 
     })
 
@@ -16,16 +17,18 @@ function ExpensesDashboard() {
         document.title = "Expenses | Cridr";
         const getData = async () => {
             try {
-                const [expensesResponse, mainCategoriesResponse, subcategoriesResponse] = await Promise.all([
+                const [expensesResponse, categoriesResponse, businessesResponse] = await Promise.all([
                     apiClient.get("/expenses", { params: { order: "DESC", limit: 5 }}),
-                    apiClient.get("/main-categories"),
-                    apiClient.get("/subcategories"),
+                    apiClient.get("/categories", { params: { type: "all" }}),
+                    apiClient.get("/businesses", { params: { featureNames: "Expenses" }})
                 ])
+                console.log(categoriesResponse.data)
                 setUiState((prev) => ({
                     ...prev,
                     expenseTransactionList: expensesResponse.data.data,
-                    mainCategoryList: mainCategoriesResponse.data.data,
-                    subcategoryList: subcategoriesResponse.data.data,
+                    mainCategoryList: categoriesResponse.data.data.mainCategoriesData,
+                    subcategoryMap: categoriesResponse.data.data.subcategoriesData,
+                    businessList: businessesResponse.data.data,
                     viewMode: "viewing"
                 }))
             } catch (error) {
@@ -49,7 +52,8 @@ function ExpensesDashboard() {
 
     const formUiData = {
         mainCategoryList: uiState.mainCategoryList,
-        subcategoryList: uiState.subcategoryList,
+        subcategoryMap: uiState.subcategoryMap,
+        businessList: uiState.businessList,
     }
 
 
