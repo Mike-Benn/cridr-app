@@ -1,6 +1,14 @@
 import DeleteListItemButton from "../../components/general/buttons/DeleteListItemButton";
 import PropTypes from "prop-types";
 
+function readableDate(timezoneDate) {
+    const date = new Date(timezoneDate);
+    return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    })
+}
 
 function OfferListItem({ offer, onDelete }) {
     return <li>{offer.credit_card_name} - {offer.available_offer_participating_business} - {offer.cashback_rate}% - Expires: {new Date(offer.available_offer_expiration_date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} <DeleteListItemButton id={offer.offers_id} onClick={onDelete} /> </li>
@@ -13,4 +21,5 @@ OfferListItem.propTypes = {
 }
 export {
     OfferListItem,
+    readableDate,
 }

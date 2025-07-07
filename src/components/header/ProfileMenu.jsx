@@ -1,7 +1,7 @@
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
 import AccountIcon from "@mui/icons-material/AccountCircle"
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton"
 import { useState, useContext } from "react";
 import AuthContext from "../../auth/AuthContext";
 import { Link } from "react-router-dom";
