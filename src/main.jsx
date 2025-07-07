@@ -7,15 +7,13 @@ import MainLayout from './components/layouts/MainLayout.jsx'
 import IncentivesDashboard from './components/incentives/IncentivesDashboard.jsx'
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import App from "./App.jsx"
-import OffersDashboard from './components/credit-card-offers/OffersDashboard.jsx'
-import AvailableOffersDashboard from './components/credit-card-offers/AvailableOffersDashboard.jsx'
+import OffersDashboard from './components/offers/OffersDashboard.jsx'
 import SignInPage from "./components/sign-in/SignInPage.jsx"
 import SignUpPage from './components/sign-up/SignUpPage.jsx'
 import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.jsx"
 import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
-import RedeemedOffersDashboard from './components/credit-card-offers/RedeemedOffersDashboard.jsx'
 
 
 const router = createBrowserRouter([
@@ -38,8 +36,6 @@ const router = createBrowserRouter([
         children: [
           { path: "/", element: <RootPanel />},
           { path: "/offers", element: <OffersDashboard /> },
-          { path: "/offers/available", element: <AvailableOffersDashboard />},
-          { path: "/offers/redeemed", element: <RedeemedOffersDashboard /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
           { path: "/profile", element: <UserProfileDashboard /> },
