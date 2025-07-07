@@ -29,7 +29,7 @@ function NewIncentiveForm({ businessList, handlers, stateData }) {
             incentive_amount: data.amount,
             transaction_date: data.transactionDate,
         }
-        const incentiveTransactionList = [...stateData.incentiveTransactionList];
+        const incentiveTransactionList = stateData.incentiveTransactionList;
         try {
             const response = await apiClient.post("/incentives", newIncentiveTransaction);
             newIncentiveTransaction["transaction_incentive_id"] = response.data.data.transaction_incentive_id;
