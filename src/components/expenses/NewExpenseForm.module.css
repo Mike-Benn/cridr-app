@@ -9,6 +9,12 @@
     gap: 8px;
 }
 
+.formBody {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
 .formFields {
     display: flex;
     flex-direction: column;
@@ -20,3 +26,15 @@
     flex-direction: row;
     gap: 2px;
 }
+
+.creditCardSection, .fuelPointSection, .expenseDetailsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.defaultOption {
+    font-style: italic;
+    
+}
+
