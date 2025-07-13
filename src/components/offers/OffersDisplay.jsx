@@ -15,9 +15,7 @@ import Button from "@mui/material/Button"
 
 
 function OffersDisplay({ uiState, handlers }) {
-
-    const availableOffersList = uiState.selectedCardId ? uiState.availableOffersMap[uiState.selectedCardId] : [];
-
+    
     const handleDeleteOffer = async (offerId) => {
         const originalList = uiState.availableOffersMap[uiState.selectedCardId];
         const creditCardId = uiState.selectedCardId;
@@ -55,8 +53,17 @@ function OffersDisplay({ uiState, handlers }) {
                 }
             }))
         }
-        
     }
+
+    const getAvailableOffersList = () => {
+        if (!uiState.selectedCardId) return [];
+        if (uiState.selectedCardId === "all") {
+            return uiState.availableOffersList;
+        }
+        return uiState.availableOffersMap[uiState.selectedCardId]
+    }
+    
+    const availableOffersList = getAvailableOffersList();
     const creditCardList = uiState.creditCardList.filter(card => 
         uiState.availableOffersMap.hasOwnProperty(card.credit_card_id) && uiState.availableOffersMap[card.credit_card_id].length > 0
     )
@@ -73,21 +80,26 @@ function OffersDisplay({ uiState, handlers }) {
                     onChange={handlers.handleChange}
                     name="selectedCardId"
                 >
+                    <MenuItem key="all" value="all">
+                        All offers
+                    </MenuItem>
                     {creditCardList.map(card => (
                         <MenuItem key={card.credit_card_id} value={card.credit_card_id}>{card.credit_card_name}</MenuItem>
                     ))}
                 </Select>
             </FormControl>
-            <List>
-                {availableOffersList.map(offer => (
-                    <ListItem divider key={offer.offers_id}>
-                        <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
-                        <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </ListItem>
-                ))}
-            </List>
+            {availableOffersList.length > 0 && 
+                <List>
+                    {availableOffersList.map(offer => (
+                        <ListItem divider key={offer.offers_id}>
+                            <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
+                            <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItem>
+                    ))}
+                </List>
+            }
             <Button variant="contained" onClick={handlers.toggleViewMode} sx={{ alignSelf: "flex-start" }}>Add offer</Button>
 
         </div>
