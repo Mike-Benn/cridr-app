@@ -62,10 +62,10 @@ function OffersDisplay({ uiState, handlers }) {
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <Typography variant="h6">Card Offers</Typography>
-                <Button variant="contained" onClick={handlers.toggleViewMode} sx={{ alignSelf: "flex-start" }}>Add offer</Button>
+                <Typography variant="h6" sx={{ fontWeight: "bold", alignSelf: "center" }}>Card Offers</Typography>
+                <Button variant="contained" size="small" onClick={handlers.toggleViewMode} sx={{ alignSelf: "flex-end" }}>Add offer</Button>
             </header>
-            <section className={styles.cardOffers}>
+            <section className={styles.activeOffers}>
                 <FormControl fullWidth>
                     <InputLabel id="select-card-account-label">Card Account</InputLabel>
                     <Select
@@ -82,24 +82,23 @@ function OffersDisplay({ uiState, handlers }) {
                     </Select>
                 </FormControl>
                 {availableOffersList.length > 0 && 
-                    <List>
-                        {availableOffersList.map(offer => (
-                            <ListItem divider key={offer.offers_id}>
-                                <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
-                                <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    <div className={styles.a}>
+                        <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Active Offers</Typography>
+                        <List>
+                            {availableOffersList.map(offer => (
+                                <ListItem divider key={offer.offers_id}>
+                                    <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
+                                    <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
                 }
             </section>
-
         </main>
-        
-        
     )
-    
 }
 
 export default OffersDisplay
