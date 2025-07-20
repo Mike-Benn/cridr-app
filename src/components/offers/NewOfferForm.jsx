@@ -68,7 +68,7 @@ function NewOfferForm({ uiState, handlers }) {
     
     return (
         <form className={styles.form} onSubmit={handleSubmit(submitForm)}>
-            <Typography variant="h6">Offer Details</Typography>
+            <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }} >Offer Details</Typography>
             <div className={styles.formFields}>
                 <Controller
                     name="creditCardId"
