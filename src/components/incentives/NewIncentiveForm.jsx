@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography"
 import styles from "./NewIncentiveForm.module.css"
 import apiClient from "../../api/apiClient"
 import { insertByDate } from "../../utils/incentives/utils"
+import FormControl from "@mui/material/FormControl"
+import InputLabel from "@mui/material/InputLabel"
 
 function NewIncentiveForm({ businessList, handlers, stateData }) {
 
@@ -18,8 +20,6 @@ function NewIncentiveForm({ businessList, handlers, stateData }) {
             transactionDate: "",
         }
     });
-
-
 
     const submitForm = async (data, e) => {
         const submitAction = e.nativeEvent.submitter.value;
@@ -43,7 +43,6 @@ function NewIncentiveForm({ businessList, handlers, stateData }) {
             if (submitAction === "submit") handlers.toggleViewMode();
             reset();
         } catch (error) {
-            console.log(error.response?.data?.message)
             console.log(error)
         }
     }
@@ -51,36 +50,27 @@ function NewIncentiveForm({ businessList, handlers, stateData }) {
     return (
         <div className={styles.formContainer}> 
             <form className={styles.form} onSubmit={handleSubmit(submitForm)} >
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>New Incentive</Typography>
+                <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Incentive</Typography>
                 <div className={styles.formFields}>
                     <Controller
                         name="businessId"
                         control={control}
                         rules={{ required: "You must select a business" }}
                         render={({ field, fieldState: { error } }) => (
-                            <>
+                            <FormControl fullWidth error={!!error}>
+                                <InputLabel id="select-business-new-incentive-label">Business</InputLabel>
                                 <Select
                                     {...field}
-                                    displayEmpty
-                                    fullWidth
-                                    error={!!error}
-                                    sx={{ margin: "none"}}
+                                    labelId="select-business-new-incentive-label"
+                                    label="Business"
                                 >
-                                    <MenuItem value="">
-                                        <Typography variant="body2" fontStyle="italic">Select a business</Typography>
-                                    </MenuItem>
                                     {businessList.map(biz => (
                                         <MenuItem key={biz.business_id} value={biz.business_id}>
                                             {biz.business_name}
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {error && (
-                                    <p style={{ color: "red", marginTop: "0.25rem" }}>
-                                        {error.message}
-                                    </p>
-                                )}
-                            </>
+                            </FormControl>
                         )}
                     />
                     <Controller
