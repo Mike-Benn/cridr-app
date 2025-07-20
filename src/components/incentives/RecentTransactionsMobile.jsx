@@ -1,39 +1,25 @@
-import Stack  from "@mui/material/Stack";
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import Typography from "@mui/material/Typography"
-import Box from "@mui/material/Box"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemText from "@mui/material/ListItemText"
+import styles from "./RecentTransactionsMobile.module.css"
+import { readableDate } from "../../utils/offers/utils"
 
-function RecentTransactionsMobile({ incentiveTransactionList }) { 
+function RecentTransactionsMobile({ uiState }) { 
+    const listHead = uiState.incentiveTransactionList.slice(0, 5);
     return (
-        <Stack alignItems="center" spacing={1.5}>
-            {incentiveTransactionList.map(txn => 
-                <Card key={txn.transaction_incentive_id} sx={{
-                    width: "100%",
-                    px: 2,
-                    boxSizing: "border-box",
-                }}>
-                    <CardContent>
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography variant="body1">Date</Typography>
-                            <Typography variant="body1">{new Date(txn.transaction_date).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                            })}</Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography variant="body1" sx={{ flex: 1 }}>Description</Typography>
-                            <Typography variant="body1" sx={{ flex: 1, textAlign: "right", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{txn.incentive_description}</Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography variant="body1">Amount</Typography>
-                            <Typography variant="body1" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>${txn.incentive_amount}</Typography>
-                        </Box>
-                    </CardContent>
-                </Card>
-            )}
-        </Stack>
+        <>
+            {listHead.length > 0 && 
+                <div className={styles.recentIncentivesList}>
+                    <List>
+                        {listHead.map(trx => 
+                            <ListItem divider key={trx.transaction_incentive_id}>
+                                <ListItemText primary={`${uiState.businessMap[trx.business_id].business_name} | ${trx.incentive_description}`} secondary={`Date: ${readableDate(trx.transaction_date)}`} />
+                            </ListItem>
+                        )}
+                    </List>
+                </div>
+            }
+        </>
     )
 }
 
