@@ -29,7 +29,7 @@ function IncentivesDisplay({ uiState, handlers }) {
                 </div>
             </header>
             <section className={styles.recentIncentives}>
-                <Typography variant="subtitle1">Recent Incentives</Typography>
+                <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Recent Incentives</Typography>
                 <RecentTransactionsMobile uiState={uiState} />
             </section>
         </main>
