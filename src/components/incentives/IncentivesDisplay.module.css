@@ -1,9 +1,19 @@
 
 
-.displayContainer {
+.main {
     display: flex;
-    gap: 8px;
+    gap: 16px;
     flex-direction: column;
     padding: 16px;
+}
 
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.subheader {
+    display: flex;
+    justify-content: space-between;
 }
