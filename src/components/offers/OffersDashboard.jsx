@@ -9,10 +9,10 @@ function OffersDashboard() {
         viewMode: "loading",
         creditCardList: [],
         businessList: [],
+        businessMap: {},
         selectedCardId: "",
         availableOffersMap: {},
         availableOffersList: [],
-        isDeleting: false,
     })
     useEffect(() => {
         document.title = "Offers | Cridr";
@@ -20,7 +20,7 @@ function OffersDashboard() {
             try {
                 const [creditCardResponse, businessesResponse, offersResponse] = await Promise.all([
                     apiClient.get("/credit-cards"),
-                    apiClient.get("/businesses", { params: { featureNames: "Coupons" } }),
+                    apiClient.get("/businesses", { params: { featureNames: "Coupons", includeMap: "true" } }),
                     apiClient.get("/offers", { params: { includeMap: "true" } })
                 ])
                 setUiState((prev) => ({
@@ -28,11 +28,12 @@ function OffersDashboard() {
                     creditCardList: creditCardResponse.data.data,
                     availableOffersMap: offersResponse.data.data.availableOffersMap,
                     availableOffersList: offersResponse.data.data.availableOffersList,
-                    businessList: businessesResponse.data.data,
+                    businessList: businessesResponse.data.data.businessList,
+                    businessMap: businessesResponse.data.data.businessMap,
                     viewMode: "viewing"
                 }))
             } catch (error) {
-                console.log(error.response?.data?.message)
+                console.log(error)
             }
         }
         getData();
@@ -42,6 +43,7 @@ function OffersDashboard() {
         setUiState(prev => ({
             ...prev,
             viewMode: uiState.viewMode === "viewing" ? "editing" : "viewing",
+            selectedCardId: "",
         }))
     }
 
@@ -58,7 +60,6 @@ function OffersDashboard() {
         toggleViewMode,
         handleChange,
     }
-    console.log(uiState.availableOffersList)
     return (
         <>
             {uiState.viewMode === "viewing" &&
