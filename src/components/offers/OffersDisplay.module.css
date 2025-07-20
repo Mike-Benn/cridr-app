@@ -1,8 +1,16 @@
-
-
-.displayMain {
+.main {
     display: flex;
-    gap: 8px;
+    gap: 16px;
     flex-direction: column;
     padding: 16px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardOffers {
+    display: flex;
+    flex-direction: column;
 }
