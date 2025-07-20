@@ -1,4 +1,4 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList, getAccessToken };
+export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList, getAccessToken, formatCurrency };
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -81,4 +81,11 @@ function filterOutAndReturnById(idValue, arr, idAccessor) {
 
 function getAccessToken() {
     return localStorage.getItem("accessToken");
+}
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount / 100);
 }
