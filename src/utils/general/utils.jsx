@@ -1,4 +1,20 @@
-export { getPathName , capitalizeFirstLetter , getReadableDate , calculateFuelPointSavings , calculateCardPoints , calculateRetailItemSavings , filterOutAndReturnById, addOptionToList, getAccessToken, formatCurrency };
+import { parse, format } from 'date-fns';
+
+
+export { 
+    getPathName, 
+    capitalizeFirstLetter, 
+    getReadableDate, 
+    calculateFuelPointSavings, 
+    calculateCardPoints, 
+    calculateRetailItemSavings, 
+    filterOutAndReturnById, 
+    addOptionToList, 
+    getAccessToken, 
+    formatCurrency, 
+    readableDate,
+    readableMonth,
+};
 
 function capitalizeFirstLetter(word) {
     const firstLetter = word.charAt(0).toUpperCase();
@@ -88,4 +104,19 @@ function formatCurrency(amount) {
         style: 'currency',
         currency: 'USD'
     }).format(amount / 100);
+}
+
+function readableDate(timezoneDate) {
+    const date = new Date(timezoneDate);
+    return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    })
+}
+
+// yyyy-mm -> month year
+function readableMonth(rawDate) {
+    const date = parse(rawDate, 'yyyy-MM', new Date());
+    return format(date, 'MMMM yyyy');
 }
