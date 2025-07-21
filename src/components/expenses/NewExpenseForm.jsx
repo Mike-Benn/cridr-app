@@ -9,6 +9,8 @@ import Checkbox from "@mui/material/Checkbox"
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useEffect } from "react";
 import apiClient from "../../api/apiClient";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 
 
 
@@ -47,6 +49,16 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
 
     useEffect(() => {
         resetField("subcategoryId", { defaultValue: "" });
+        resetField("redeemingFuelPoints", { defaultValue: false })
+        resetField("earnedCreditCardPoints", { defaultValue: false })
+        resetField("transactionDate", { defaultValue: "" });
+        resetField("businessId", { defaultValue: "" });
+        resetField("expenseAmount", { defaultValue: "" });
+        resetField("description", { defaultValue: "" });
+        resetField("creditCardId", { defaultValue: "" });
+        resetField("cardPointsAmount", { defaultValue: "" });
+        resetField("gallons", { defaultValue: "" });
+        resetField("fuelPointsAmount", { defaultValue: "" });
     }, [selectedMainCategoryId])
 
     let selectedSubcategory;
@@ -136,35 +148,30 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(submitForm)}>
+            <Typography variant="h5" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Expense</Typography>
             <div className={styles.formBody}>
-                <div className={styles.expenseDetailsSection}>
-                    <Typography variant="h6">Expense Details</Typography>
+                <section className={styles.expenseDetails}>
+                    <Typography variant="body1" sx={{ fontSize: "1.1rem" }}>Expense Details</Typography>
                     <div className={styles.formFields}>
                         <Controller
                             name="mainCategoryId"
                             control={control}
                             rules={{ required: "You must select a main category" }}
                             render={({ field, fieldState: { error } }) => (
-                                <>
+                                <FormControl fullWidth error={!!error}>
+                                    <InputLabel id="select-expense-main-category-label">Main expense category</InputLabel>
                                     <Select
                                         {...field}
-                                        displayEmpty
-                                        fullWidth
-                                        error={!!error}
+                                        labelId="select-expense-main-category-label"
+                                        label="Main expense category"
                                     >
-                                        <MenuItem value="">
-                                            <span className={styles.defaultOption}>Select main expense category</span>
-                                        </MenuItem>
                                         {formUiData.mainCategoryList.map(cat => (
                                             <MenuItem key={cat.expense_main_category_id} value={cat.expense_main_category_id}>
                                                 {cat.expense_main_category_name}
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {error && (
-                                        <p style={{ color: "red", marginTop: "0.25rem" }}>{error.message}</p>
-                                    )}
-                                </>
+                                </FormControl>
                             )}
                         />
                         <Controller
@@ -172,63 +179,57 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                             control={control}
                             rules={{ required: "You must select a subcategory" }}
                             render={({ field, fieldState: { error } }) => (
-                                <>
+                                <FormControl fullWidth error={!!error}>
+                                    <InputLabel id="select-expense-subcategory-label">Secondary expense category</InputLabel>
                                     <Select
                                         {...field}
-                                        displayEmpty
-                                        fullWidth
-                                        error={!!error}
+                                        labelId="select-expense-subcategory-label"
+                                        label="Secondary expense category"
                                         disabled={!selectedMainCategoryId}
                                     >
-                                        <MenuItem value="">
-                                            <span className={styles.defaultOption}>Select secondary expense category</span>
-                                        </MenuItem>
                                         {selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].map(subcat => (
                                             <MenuItem key={subcat.expense_sub_category_id} value={subcat.expense_sub_category_id}>
                                                 {subcat.expense_sub_category_name}
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {error && (
-                                        <p style={{ color: "red", marginTop: "0.25rem" }}>{error.message}</p>
-                                    )}
-                                </>
+                                </FormControl>
                             )}
                         />
                         { selectedMainCategoryId && selectedSubcategoryId && (
                             <>  
-                                <Controller
-                                    name="earnedCreditCardPoints"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    {...field}
-                                                    checked={field.value}
-                                                />
-                                            }
-                                            label="Earned credit card points"
-                                        />
-                                    )}
-                                />
-                                { selectedSubcategory && selectedSubcategory.expense_sub_category_name === "car fuel" && <Controller
-                                    name="redeemingFuelPoints"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    {...field}
-                                                    checked={field.value}
-                                                />
-                                            }
-                                            label="Redeemed fuel points"  
-                                        />
-                                    )}
-                                />
-                                }       
-
+                                <section className={styles.checkboxFields}>
+                                    <Controller
+                                        name="earnedCreditCardPoints"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        {...field}
+                                                        checked={field.value}
+                                                    />
+                                                }
+                                                label="Earned credit card points"
+                                            />
+                                        )}
+                                    />
+                                    { selectedSubcategory && selectedSubcategory.expense_sub_category_name === "car fuel" && <Controller
+                                        name="redeemingFuelPoints"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        {...field}
+                                                        checked={field.value}
+                                                    />
+                                                }
+                                                label="Redeemed fuel points"  
+                                            />
+                                        )}
+                                    />}  
+                                </section>   
                                 <Controller
                                     name="transactionDate"
                                     control={control}
@@ -255,28 +256,20 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                                     control={control}
                                     rules={{ required: "You must select a business" }}
                                     render={({ field, fieldState: { error } }) => (
-                                        <>
+                                        <FormControl fullWidth error={!!error}>
+                                            <InputLabel id="select-business-label">Business</InputLabel>
                                             <Select
                                                 {...field}
-                                                displayEmpty
-                                                fullWidth
-                                                error={!!error}
+                                                labelId="select-business-label"
+                                                label="Business"
                                             >
-                                                <MenuItem value="">
-                                                    <span className={styles.defaultOption}>Select a business</span>
-                                                </MenuItem>
                                                 {formUiData.businessList.map(biz => (
                                                     <MenuItem key={biz.business_id} value={biz.business_id}>
                                                         {biz.business_name}
                                                     </MenuItem>
                                                 ))}
                                             </Select>
-                                            {error && (
-                                                <p style={{ color: red, marginTop: "0.25rem" }}>
-                                                    {error.message}
-                                                </p>
-                                            )}
-                                        </>
+                                        </FormControl>
                                     )}
                                 />
                                 <Controller
@@ -329,40 +322,30 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                             </>
                         )}
                     </div>
-                </div>
+                </section>
                 { selectedMainCategoryId && selectedSubcategoryId && didEarnCardPoints && 
-                    <div className={styles.creditCardSection}>
-                        <Typography variant="h6">
-                            Credit Card Points
-                        </Typography>
+                    <section className={styles.cardPoints}>
+                        <Typography variant="body1" sx={{ fontSize: "1.1rem" }}>Credit Card Points</Typography>
                         <div className={styles.formFields}>
                             <Controller
                                 name="creditCardId"
                                 control={control}
                                 rules={{ required: "You must select a credit card" }}
                                 render={({ field, fieldState: { error } }) => (
-                                    <>
+                                    <FormControl fullWidth error={!!error}>
+                                        <InputLabel id="select-credit-card-label">Credit card</InputLabel>
                                         <Select
                                             {...field}
-                                            displayEmpty
-                                            fullWidth
-                                            error={!!error}
+                                            labelId="select-credit-card-label"
+                                            label="Credit card"
                                         >
-                                            <MenuItem value="">
-                                                <span className={styles.defaultOption}>Select a credit card</span>
-                                            </MenuItem>
                                             {formUiData.creditCardList.map(card => (
                                                 <MenuItem key={card.credit_card_id} value={card.credit_card_id}>
                                                     {card.credit_card_name}
                                                 </MenuItem>
                                             ))}
                                         </Select>
-                                        {error && (
-                                            <p style={{ color: red, marginTop: "0.25rem" }}>
-                                                {error.message}
-                                            </p>
-                                        )}
-                                    </>
+                                    </FormControl>
                                 )}
                             />
                             <Controller
@@ -396,14 +379,11 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                                 )}
                             />
                         </div>
-
-                    </div>
+                    </section>
                 }
                 { selectedMainCategoryId && selectedSubcategoryId && isRedeemingFuelPoints &&
-                    <div className={styles.fuelPointSection}>
-                        <Typography variant="h6">
-                            Fuel Points Redemption
-                        </Typography>
+                    <div className={styles.fuelPoints}>
+                        <Typography variant="body1" sx={{ fontSize: "1.1rem" }}>Fuel Points Redemption</Typography>
                         <div className={styles.formFields}>
                             <Controller
                                 name="gallons"
@@ -470,7 +450,6 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                     </div>
                 }
             </div>
-
             { selectedMainCategoryId && selectedSubcategoryId && 
                 <div className={styles.buttonContainer}>
                     <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
@@ -478,10 +457,8 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                     <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
                 </div>
             }
-            
         </form>
+    
     )
-
 }
-
 export default NewExpenseForm
