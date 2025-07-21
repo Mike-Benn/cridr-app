@@ -48,113 +48,112 @@ function NewIncentiveForm({ businessList, handlers, stateData }) {
     }
 
     return (
-        <div className={styles.formContainer}> 
-            <form className={styles.form} onSubmit={handleSubmit(submitForm)} >
-                <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Incentive</Typography>
-                <div className={styles.formFields}>
-                    <Controller
-                        name="businessId"
-                        control={control}
-                        rules={{ required: "You must select a business" }}
-                        render={({ field, fieldState: { error } }) => (
-                            <FormControl fullWidth error={!!error}>
-                                <InputLabel id="select-business-new-incentive-label">Business</InputLabel>
-                                <Select
-                                    {...field}
-                                    labelId="select-business-new-incentive-label"
-                                    label="Business"
-                                >
-                                    {businessList.map(biz => (
-                                        <MenuItem key={biz.business_id} value={biz.business_id}>
-                                            {biz.business_name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        )}
-                    />
-                    <Controller
-                        name="description"
-                        control={control}
-                        rules={{ required: "Description is required" }}
-                        render={({ field, fieldState: { error } }) => (
-                            <TextField
+        <form className={styles.form} onSubmit={handleSubmit(submitForm)} >
+            <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Incentive</Typography>
+            <div className={styles.formFields}>
+                <Controller
+                    name="businessId"
+                    control={control}
+                    rules={{ required: "You must select a business" }}
+                    render={({ field, fieldState: { error } }) => (
+                        <FormControl fullWidth error={!!error}>
+                            <InputLabel id="select-business-new-incentive-label">Business</InputLabel>
+                            <Select
                                 {...field}
-                                label="Description"
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                fullWidth
-                                variant="outlined"
-                                margin="none"
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="amount"
-                        control={control}
-                        rules={{
-                            required: "Amount is required",
-                            min: {
-                            value: 0,
-                            message: "Amount must be at least 0",
-                            },
-                            validate: (value) => {
-                            const parsed = parseFloat(value);
-                            if (isNaN(parsed)) return "Must be a number";
-                            if (!/^\d+(\.\d{1,2})?$/.test(value)) return "Max 2 decimal places";
-                            return true;
+                                labelId="select-business-new-incentive-label"
+                                label="Business"
+                            >
+                                {businessList.map(biz => (
+                                    <MenuItem key={biz.business_id} value={biz.business_id}>
+                                        {biz.business_name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                />
+                <Controller
+                    name="description"
+                    control={control}
+                    rules={{ required: "Description is required" }}
+                    render={({ field, fieldState: { error } }) => (
+                        <TextField
+                            {...field}
+                            label="Description"
+                            error={!!error}
+                            helperText={error ? error.message : null}
+                            fullWidth
+                            variant="outlined"
+                            margin="none"
+                        />
+                    )}
+                />
+                <Controller
+                    name="amount"
+                    control={control}
+                    rules={{
+                        required: "Amount is required",
+                        min: {
+                        value: 0,
+                        message: "Amount must be at least 0",
+                        },
+                        validate: (value) => {
+                        const parsed = parseFloat(value);
+                        if (isNaN(parsed)) return "Must be a number";
+                        if (!/^\d+(\.\d{1,2})?$/.test(value)) return "Max 2 decimal places";
+                        return true;
+                        },
+                    }}
+                    render={({ field, fieldState: { error } }) => (
+                        <TextField
+                        {...field}
+                        type="number"
+                        label="Incentive Amount"
+                        variant="outlined"
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        fullWidth
+                        margin="none"
+                        slotProps={{
+                            input: {
+                            step: "0.01",
+                            min: 0,
                             },
                         }}
-                        render={({ field, fieldState: { error } }) => (
-                            <TextField
+                        />
+                    )}
+                />
+                <Controller 
+                    name="transactionDate"
+                    control={control}
+                    rules={{ required: "Date is required" }}
+                    render={({ field, fieldState: { error } }) => (
+                        <TextField 
                             {...field}
-                            type="number"
-                            label="Incentive Amount"
+                            label="Transaction date"
+                            type="date"
                             variant="outlined"
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true,
+                                }
+                            }}
                             error={!!error}
                             helperText={error ? error.message : null}
                             fullWidth
                             margin="none"
-                            slotProps={{
-                                input: {
-                                step: "0.01",
-                                min: 0,
-                                },
-                            }}
-                            />
-                        )}
-                    />
-                    <Controller 
-                        name="transactionDate"
-                        control={control}
-                        rules={{ required: "Date is required" }}
-                        render={({ field, fieldState: { error } }) => (
-                            <TextField 
-                                {...field}
-                                label="Transaction date"
-                                type="date"
-                                variant="outlined"
-                                slotProps={{
-                                    inputLabel: {
-                                        shrink: true,
-                                    }
-                                }}
-                                error={!!error}
-                                helperText={error ? error.message : null}
-                                fullWidth
-                                margin="none"
-                            />
-                        )}
-                    />
-                </div>
-                <div className={styles.buttonContainer}>
-                    <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
-                    <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
-                    <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
-                </div>
-                
-            </form>
-        </div>
+                        />
+                    )}
+                />
+            </div>
+            <div className={styles.buttonContainer}>
+                <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
+                <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
+                <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
+            </div>
+            
+        </form>
+        
     )
 
 }
