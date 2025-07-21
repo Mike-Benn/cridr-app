@@ -1,15 +1,13 @@
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
-import styles from "./RecentTransactionsMobile.module.css"
 import { readableDate } from "../../utils/offers/utils"
-
 function RecentTransactionsMobile({ uiState }) { 
     const listHead = uiState.incentiveTransactionList.slice(0, 5);
     return (
         <>
             {listHead.length > 0 && 
-                <div className={styles.recentIncentivesList}>
+                <div>
                     <List>
                         {listHead.map(trx => 
                             <ListItem divider key={trx.transaction_incentive_id}>
