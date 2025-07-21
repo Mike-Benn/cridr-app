@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ExpensesDisplay from "./ExpensesDisplay";
 import apiClient from "../../api/apiClient";
 import NewExpenseForm from "./NewExpenseForm";
+import { format } from "date-fns"
 function ExpensesDashboard() {
     
     const [uiState, setUiState] = useState({
@@ -12,6 +13,9 @@ function ExpensesDashboard() {
         businessList: [],
         creditCardList: [],
         businessMap: {},
+        expenseSum: 0,
+        uniqueMonthList: [],
+        selectedMonth: format(new Date(), 'yyyy-MM'),
 
     })
 
@@ -19,15 +23,15 @@ function ExpensesDashboard() {
         document.title = "Expenses | Cridr";
         const getData = async () => {
             try {
-                const [expensesResponse, categoriesResponse, businessesResponse, creditCardsResponse] = await Promise.all([
-                    apiClient.get("/expenses", { params: { order: "DESC", limit: 5 }}),
+                const [uniqueMonthsResponse, categoriesResponse, businessesResponse, creditCardsResponse] = await Promise.all([
+                    apiClient.get("/expenses/months"),
                     apiClient.get("/categories", { params: { type: "all" }}),
                     apiClient.get("/businesses", { params: { featureNames: "Expenses", includeMap: "true" }}),
-                    apiClient.get("/credit-cards")
+                    apiClient.get("/credit-cards"),
                 ])
                 setUiState((prev) => ({
                     ...prev,
-                    expenseTransactionList: expensesResponse.data.data,
+                    uniqueMonthList: uniqueMonthsResponse.data.data,
                     mainCategoryList: categoriesResponse.data.data.mainCategoriesData,
                     subcategoryMap: categoriesResponse.data.data.subcategoriesData,
                     businessList: businessesResponse.data.data.businessList,
@@ -36,12 +40,27 @@ function ExpensesDashboard() {
                     viewMode: "viewing"
                 }))
             } catch (error) {
-                console.log(error.response?.data?.message);
+                console.log(error);
             }
         }
         getData();
         
     }, [])
+
+    useEffect(() => {
+        const getExpenses = async () => {
+            try {
+                const expensesResponse = await apiClient.get("/expenses", { params: { order: "DESC", month: uiState.selectedMonth }})
+                setUiState(prev => ({
+                    ...prev,
+                    expenseTransactionList: expensesResponse.data.data,
+                }))
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getExpenses();
+    }, [uiState.selectedMonth])
 
     const toggleViewMode = () => {
         setUiState((prev) => ({ ...prev, viewMode: uiState.viewMode === "viewing" ? "editing" : "viewing" } ))
@@ -49,9 +68,18 @@ function ExpensesDashboard() {
 
     if (uiState.viewMode === "loading") return <p>Loading...</p>
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUiState(prev => ({
+            ...prev,
+            [name]: value,
+        }))
+    }
+
     const handlers = {
         toggleViewMode,
         setUiState,
+        handleChange,
     }
 
     const formUiData = {
@@ -69,7 +97,7 @@ function ExpensesDashboard() {
     }
     return (
         <>
-            {uiState.viewMode === "viewing" && <ExpensesDisplay expenseTransactionList={uiState.expenseTransactionList} handlers={handlers}/>}
+            {uiState.viewMode === "viewing" && <ExpensesDisplay uiState={uiState} handlers={handlers} />}
             {uiState.viewMode === "editing" && <NewExpenseForm stateData={stateData} formUiData={formUiData} handlers={handlers} />}
         </>
     )
