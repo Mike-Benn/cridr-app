@@ -1,18 +1,21 @@
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
-import { readableDate } from "../../utils/general/utils"
+import { readableDate, formatCurrency } from "../../utils/general/utils"
+import Typography from "@mui/material/Typography";
+
 
 function RecentExpensesMobile({ uiState }) { 
-    const listHead = uiState.expenseTransactionList.slice(0, 5);
+    const expenseList = uiState.expenseTransactionList;
     return (
         <>
-            {listHead.length > 0 && 
+            {expenseList.length > 0 && 
                 <div>
                     <List>
-                        {listHead.map(exp =>
+                        {expenseList.map(exp =>
                             <ListItem divider key={exp.transaction_expense_id}>
                                 <ListItemText primary={`${uiState.businessMap[exp.business_id].business_name}`} secondary={`Date: ${readableDate(exp.expense_transaction_date)}`}/>
+                                <Typography variant="subtitle1">{formatCurrency(exp.expense_amount)}</Typography>
                             </ListItem>
                         )}
                     </List>
