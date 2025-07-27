@@ -15,7 +15,7 @@ function ExpensesDisplay({ uiState, handlers }) {
                 <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold"}}>Expenses</Typography>
                 <div className={styles.subheader}>
                     <div className={styles.monthlySpend}>
-                        <Typography variant="body2" sx={{ fontSize: "1.5rem" }}>{`${formatCurrency(uiState.expenseSum)}`}</Typography>
+                        <Typography variant="body2" sx={{ fontSize: "1.5rem" }}>{formatCurrency(uiState.expenseSum)}</Typography>
                         <Typography variant="caption">Monthly spend</Typography>
                     </div>
                     <Button variant="contained" size="small" onClick={handlers.toggleViewMode} sx={{ alignSelf: "center" }}>Add Expense</Button>
