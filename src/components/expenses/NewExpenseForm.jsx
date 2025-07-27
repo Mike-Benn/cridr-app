@@ -11,10 +11,9 @@ import { useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import { parse, isSameMonth } from "date-fns"
 
-
-
-function NewExpenseForm({ stateData, formUiData, handlers }) {
+function NewExpenseForm({ formUiData, handlers, uiState }) {
     const { handleSubmit, control, watch, reset, resetField, formState: { isSubmitting } } = useForm({
         defaultValues: {
             mainCategoryId: "",
@@ -66,39 +65,15 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
         selectedSubcategory = getSubcategory( formUiData.subcategoryMap[selectedMainCategoryId], selectedSubcategoryId)
     }
 
-    const insertByDate = (arr, elementToInsert) => {
-
-        const newArray = [];
-        let index = 0;
-        let inserted = false;
-        while (newArray.length < 5 && arr[index]) {
-            const currElement = arr[index];
-            if (!inserted && elementToInsert.expense_transaction_date >= currElement.expense_transaction_date) {
-                newArray.push(elementToInsert);
-                inserted = true;
-                if (newArray.length < 5) {
-                    newArray.push(currElement);
-                } else {
-                    break;
-                }
-            } else {
-                newArray.push(currElement)
-            }
-            index++;
-        }
-        if (newArray.length < 5 && !inserted) {
-            newArray.push(elementToInsert)
-        }
-        return { newArray, inserted }
-    }
-
     const submitForm = async (data, e) => {
+        if (data.expenseAmount === "." || "") return;
+        const parsedExpenseAmount = Math.round(parseFloat(data.expenseAmount) * 100);
         const submitAction = e.nativeEvent.submitter.value;
         const requests = [];
         const newExpense = {
             business_id: data.businessId,
             transaction_expense_notes: data.description,
-            expense_amount: data.expenseAmount,
+            expense_amount: parsedExpenseAmount,
             expense_main_category_id: data.mainCategoryId,
             expense_sub_category_id: data.subcategoryId,
             expense_transaction_date: data.transactionDate,
@@ -126,29 +101,25 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
         
         try {
             const [expenseResponse] = await Promise.all(requests);
-            const expenseTransactionList = stateData.expenseTransactionList;
-            const businessName = formUiData.businessMap[newExpense.business_id].business_name;
-            newExpense["transaction_expense_id"] = expenseResponse.data.data[0].transaction_expense_id;
-            newExpense["business_name"] = businessName;
-            const { newArray: newExpenseTransactionList, inserted } = insertByDate(expenseTransactionList, newExpense);
-            if (inserted) {
-                handlers.setUiState((prev) => ({
+            const currentMonth = parse(uiState.selectedMonth, "yyyy-MM", new Date());
+            const expenseMonth = new Date(newExpense.expense_transaction_date);
+            if (isSameMonth(currentMonth, expenseMonth)) {
+                handlers.setUiFlags(prev => ({
                     ...prev,
-                    expenseTransactionList: newExpenseTransactionList,
+                    needsRefreshed: true,
                 }))
             }
             if (submitAction === "submit") handlers.toggleViewMode();
             reset();
 
         } catch (error) {
-            console.log(error.response?.data?.message)
             console.log(error)
         }
     }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(submitForm)}>
-            <Typography variant="h5" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Expense</Typography>
+            <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Expense</Typography>
             <div className={styles.formBody}>
                 <section className={styles.expenseDetails}>
                     <Typography variant="body1" sx={{ fontSize: "1.1rem" }}>Expense Details</Typography>
@@ -178,23 +149,29 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                             name="subcategoryId"
                             control={control}
                             rules={{ required: "You must select a subcategory" }}
-                            render={({ field, fieldState: { error } }) => (
-                                <FormControl fullWidth error={!!error}>
-                                    <InputLabel id="select-expense-subcategory-label">Secondary expense category</InputLabel>
-                                    <Select
-                                        {...field}
-                                        labelId="select-expense-subcategory-label"
-                                        label="Secondary expense category"
-                                        disabled={!selectedMainCategoryId}
-                                    >
-                                        {selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].map(subcat => (
-                                            <MenuItem key={subcat.expense_sub_category_id} value={subcat.expense_sub_category_id}>
-                                                {subcat.expense_sub_category_name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            )}
+                            render={({ field, fieldState: { error } }) => {
+                                const safeSubcategoryId = selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].some(subcat => subcat.expense_sub_category_id === field.value)
+                                    ? field.value
+                                    : "";
+                                return (
+                                    <FormControl fullWidth error={!!error}>
+                                        <InputLabel id="select-expense-subcategory-label">Secondary expense category</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="select-expense-subcategory-label"
+                                            label="Secondary expense category"
+                                            disabled={!selectedMainCategoryId}
+                                            value={safeSubcategoryId}
+                                        >
+                                            {selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].map(subcat => (
+                                                <MenuItem key={subcat.expense_sub_category_id} value={subcat.expense_sub_category_id}>
+                                                    {subcat.expense_sub_category_name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )
+                            }}
                         />
                         { selectedMainCategoryId && selectedSubcategoryId && (
                             <>  
@@ -304,16 +281,15 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                                     render={({ field, fieldState: { error } }) => (
                                         <TextField
                                             {...field}
-                                            type="number"
                                             label="Expense amount"
                                             variant="outlined"
                                             error={!!error}
                                             helperText={error ? error.message : null}
                                             fullWidth
-                                            slotProps={{
-                                                input: {
-                                                    step: "0.01",
-                                                    min: 0,
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (value === '' || /^\d+(\.\d{0,2})?$/.test(value)) {
+                                                    field.onChange(value);
                                                 }
                                             }}
                                         />
@@ -450,13 +426,11 @@ function NewExpenseForm({ stateData, formUiData, handlers }) {
                     </div>
                 }
             </div>
-            { selectedMainCategoryId && selectedSubcategoryId && 
-                <div className={styles.buttonContainer}>
-                    <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
-                    <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
-                    <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
-                </div>
-            }
+            <div className={styles.buttonContainer}>
+                <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
+                <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
+                <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
+            </div>
         </form>
     
     )
