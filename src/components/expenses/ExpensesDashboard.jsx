@@ -3,7 +3,6 @@ import ExpensesDisplay from "./ExpensesDisplay";
 import apiClient from "../../api/apiClient";
 import NewExpenseForm from "./NewExpenseForm";
 function ExpensesDashboard() {
-
     const [uiState, setUiState] = useState({
         viewMode: "viewing",
         expenseTransactionList: [],
@@ -18,10 +17,9 @@ function ExpensesDashboard() {
     })
 
     const [uiFlags, setUiFlags] = useState({
-        loadingCount: 0,
+        loadingCount: 1,
         needsRefreshed: false,
     })
-    const isLoading = uiFlags.loadingCount > 0;
     const startLoad = () => setUiFlags(prev => ({
         ...prev,
         loadingCount: prev.loadingCount + 1,
@@ -53,7 +51,6 @@ function ExpensesDashboard() {
         document.title = "Expenses | Cridr";
         const getData = async () => {
             try {
-                startLoad();
                 const [uniqueMonthsResponse, categoriesResponse, businessesResponse, creditCardsResponse] = await Promise.all([
                     apiClient.get("/expenses/months"),
                     apiClient.get("/categories", { params: { type: "all" }}),
@@ -121,8 +118,9 @@ function ExpensesDashboard() {
     const stateData = {
         expenseTransactionList: uiState.expenseTransactionList,
         
-
     }
+    const isLoading = uiFlags.loadingCount > 0;
+
     return (
         <>
             {!isLoading && !uiFlags.needsRefreshed && uiState.viewMode === "viewing" && <ExpensesDisplay uiState={uiState} handlers={handlers} loading={isLoading} />}
