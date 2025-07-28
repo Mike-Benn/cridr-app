@@ -3,19 +3,14 @@ import FormControl from "@mui/material/FormControl"
 import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import styles from "./OffersDisplay.module.css"
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemText from "@mui/material/ListItemText"
 import Typography from "@mui/material/Typography"
-import { readableDate } from "../../utils/offers/utils"
-import DeleteIcon from "@mui/icons-material/Clear"
-import IconButton from "@mui/material/IconButton"
 import apiClient from "../../api/apiClient"
 import Button from "@mui/material/Button"
-
+import ActiveOffersList from "./ActiveOffersList"
 
 function OffersDisplay({ uiState, handlers }) {
 
+    // Outdated, availableOffersMap is not being fetched anymore
     const handleDeleteOffer = async (offerId) => {
         try {
             await apiClient.delete(`/offers/${offerId}`);
@@ -46,24 +41,18 @@ function OffersDisplay({ uiState, handlers }) {
             console.log(error);
         }
     }
-
-    const getAvailableOffersList = () => {
-        if (!uiState.selectedCardId) return [];
-        if (uiState.selectedCardId === "all") {
-            return uiState.availableOffersList;
-        }
-        return uiState.availableOffersMap[uiState.selectedCardId]
-    }
     
-    const availableOffersList = getAvailableOffersList();
-    const creditCardList = uiState.creditCardList.filter(card => 
-        uiState.availableOffersMap.hasOwnProperty(card.credit_card_id) && uiState.availableOffersMap[card.credit_card_id].length > 0
-    )
     return (
         <main className={styles.main}>
             <header className={styles.header}>
                 <Typography variant="h6" sx={{ fontWeight: "bold", alignSelf: "center" }}>Card Offers</Typography>
-                <Button variant="contained" size="small" onClick={handlers.toggleViewMode} sx={{ alignSelf: "flex-end" }}>Add offer</Button>
+                <div className={styles.subheader}>
+                    <div className={styles.totalOffers}>
+                        <Typography variant="body2" sx={{ fontSize: "1.5rem" }}>-1</Typography>
+                        <Typography variant="caption">Offers</Typography>
+                    </div>
+                    <Button variant="contained" size="small" onClick={handlers.toggleViewMode} sx={{ alignSelf: "center" }}>Add offer</Button>
+                </div>
             </header>
             <section className={styles.activeOffers}>
                 <FormControl fullWidth>
@@ -76,26 +65,15 @@ function OffersDisplay({ uiState, handlers }) {
                         onChange={handlers.handleChange}
                         name="selectedCardId"
                     >
-                        {creditCardList.map(card => (
+                        {uiState.creditCardList.map(card => (
                             <MenuItem key={card.credit_card_id} value={card.credit_card_id}>{card.credit_card_name}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
-                {availableOffersList.length > 0 && 
-                    <div className={styles.a}>
-                        <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Active Offers</Typography>
-                        <List>
-                            {availableOffersList.map(offer => (
-                                <ListItem divider key={offer.offers_id}>
-                                    <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
-                                    <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </div>
-                }
+                <div className={styles.offerList}>
+                    <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Active Offers</Typography>
+                    <ActiveOffersList uiState={uiState} />
+                </div>
             </section>
         </main>
     )
