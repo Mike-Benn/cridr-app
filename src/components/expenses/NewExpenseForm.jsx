@@ -66,7 +66,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
     }
 
     const submitForm = async (data, e) => {
-        if (data.expenseAmount === "." || "") return;
+        if (data.expenseAmount === "." || data.expenseAmount === "") return;
         const parsedExpenseAmount = Math.round(parseFloat(data.expenseAmount) * 100);
         const submitAction = e.nativeEvent.submitter.value;
         const requests = [];
