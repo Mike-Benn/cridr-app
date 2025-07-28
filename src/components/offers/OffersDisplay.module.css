@@ -11,6 +11,11 @@
     gap: 16px;
 }
 
+.subheader {
+    display: flex;
+    justify-content: space-between;
+}
+
 .activeOffers {
     display: flex;
     flex-direction: column;

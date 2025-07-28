@@ -6,44 +6,83 @@ import NewOfferForm from "./NewOfferForm";
 function OffersDashboard() {
 
     const [uiState, setUiState] = useState({
-        viewMode: "loading",
+        viewMode: "viewing",
         creditCardList: [],
         businessList: [],
         businessMap: {},
         selectedCardId: "",
-        availableOffersMap: {},
         availableOffersList: [],
     })
+
+    const [uiFlags, setUiFlags] = useState({
+        loadingCount: 1,
+        needsRefreshed: false,
+    })
+
+    const startLoad = () => setUiFlags(prev => ({
+        ...prev,
+        loadingCount: prev.loadingCount + 1
+    }))
+
+    const endLoad = () => setUiFlags(prev => ({
+        ...prev, loadingCount: prev.loadingCount - 1
+    }))
+
+    const getOffers = async () => {
+        startLoad();
+        try {
+            const [offersResponse] = await Promise.all([
+                apiClient.get("/offers", { params: { cardId: uiState.selectedCardId, order: "ASC" } }),
+            ])
+            setUiState(prev => ({
+                ...prev,
+                availableOffersList: offersResponse.data.data
+            }))
+        } catch (error) {
+            console.log(error)
+        }
+        endLoad();
+    }
+
     useEffect(() => {
         document.title = "Offers | Cridr";
         const getData = async () => {
             try {
-                const [creditCardResponse, businessesResponse, offersResponse] = await Promise.all([
+                const [creditCardResponse, businessesResponse] = await Promise.all([
                     apiClient.get("/credit-cards"),
                     apiClient.get("/businesses", { params: { featureNames: "Coupons", includeMap: "true" } }),
-                    apiClient.get("/offers", { params: { includeMap: "true" } })
                 ])
+                const firstCard = creditCardResponse.data.data[0].credit_card_id;
                 setUiState((prev) => ({
                     ...prev,
                     creditCardList: creditCardResponse.data.data,
-                    availableOffersMap: offersResponse.data.data.availableOffersMap,
-                    availableOffersList: offersResponse.data.data.availableOffersList,
                     businessList: businessesResponse.data.data.businessList,
                     businessMap: businessesResponse.data.data.businessMap,
-                    viewMode: "viewing"
+                    selectedCardId: firstCard,
                 }))
             } catch (error) {
                 console.log(error)
             }
+            endLoad();
         }
         getData();
     }, [])
+
+    useEffect(() => {
+        if (uiState.selectedCardId === "") return;
+        getOffers();
+    }, [uiState.selectedCardId])
+
+    useEffect(() => {
+        if (!uiFlags.needsRefreshed || uiState.viewMode !== "viewing") return;
+        getOffers();
+        setUiFlags(prev => ({ ...prev, needsRefreshed: false }))
+    }, [uiFlags.needsRefreshed, uiState.viewMode])
 
     const toggleViewMode = () => {
         setUiState(prev => ({
             ...prev,
             viewMode: uiState.viewMode === "viewing" ? "editing" : "viewing",
-            selectedCardId: "",
         }))
     }
 
@@ -59,16 +98,14 @@ function OffersDashboard() {
         setUiState,
         toggleViewMode,
         handleChange,
+        setUiFlags,
     }
+
+    const isLoading = uiFlags.loadingCount > 0;
     return (
         <>
-            {uiState.viewMode === "viewing" &&
-                <OffersDisplay uiState={uiState} handlers={handlers} />
-            }
-
-            {uiState.viewMode === "editing" &&
-                <NewOfferForm uiState={uiState} handlers={handlers}/>
-            }
+            {!isLoading && ! uiFlags.needsRefreshed && uiState.viewMode === "viewing" && <OffersDisplay uiState={uiState} handlers={handlers} />}
+            {!isLoading && uiState.viewMode === "editing" && <NewOfferForm uiState={uiState} handlers={handlers}/>}
         </>
     )
     
