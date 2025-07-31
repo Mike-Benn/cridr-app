@@ -43,8 +43,11 @@ function NewIncentiveForm({ uiState, handlers }) {
                     }
                 })
             }            
-            if (submitAction === "submit") handlers.toggleViewMode();
-            reset();
+            if (submitAction === "submit") {
+                handlers.toggleViewMode();
+            } else {
+                reset();
+            }
         } catch (error) {
             console.log(error)
         }
