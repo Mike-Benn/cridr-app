@@ -1,14 +1,20 @@
 .form {
+    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 16px;
 }
 
-.buttonContainer {
+.formBody {
     display: flex;
-    flex-direction: row;
-    gap: 6px;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.offerDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .formFields {
@@ -16,3 +22,10 @@
     flex-direction: column;
     gap: 16px;
 }
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
