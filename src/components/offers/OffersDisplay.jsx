@@ -48,7 +48,7 @@ function OffersDisplay({ uiState, handlers }) {
                 <Typography variant="h6" sx={{ fontWeight: "bold", alignSelf: "center" }}>Card Offers</Typography>
                 <div className={styles.subheader}>
                     <div className={styles.totalOffers}>
-                        <Typography variant="body2" sx={{ fontSize: "1.5rem" }}>-1</Typography>
+                        <Typography variant="body2" sx={{ fontSize: "1.5rem", justifySelf: "center" }}>{uiState.availableOffersList.length}</Typography>
                         <Typography variant="caption">Offers</Typography>
                     </div>
                     <Button variant="contained" size="small" onClick={handlers.toggleViewMode} sx={{ alignSelf: "center" }}>Add offer</Button>
