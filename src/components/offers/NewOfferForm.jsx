@@ -9,8 +9,9 @@ import apiClient from "../../api/apiClient";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel"
 
+
 function NewOfferForm({ uiState, handlers }) {
-    const { handleSubmit, control, watch, reset, resetField, formState: { isSubmitting } } = useForm({
+    const { handleSubmit, control, reset, formState: { isSubmitting } } = useForm({
         defaultValues: {
             creditCardId: "",
             businessId: "",
@@ -18,21 +19,7 @@ function NewOfferForm({ uiState, handlers }) {
             expirationDate: "",
         }
     });
-    const insertNewOfferIntoList = (offerList, newOffer) => {
-        if (!offerList) return [newOffer];
-        const newArray = [];
-        let inserted = false;
-        for (let i = 0; i < offerList.length; i++) {
-            const offer = offerList[i];
-            if (!inserted && newOffer.expiration_date < offer.expiration_date) {
-                newArray.push(newOffer);
-                inserted = true;
-            }
-            newArray.push(offer);
-        }
-        if (!inserted) newArray.push(newOffer);
-        return newArray;
-    }
+    
     const submitForm = async (data, e) => {
         const submitAction = e.nativeEvent.submitter.value;
         const newOffer = {
@@ -42,17 +29,16 @@ function NewOfferForm({ uiState, handlers }) {
             expiration_date: data.expirationDate,
         }
         try {
-            const newOfferResponse = await apiClient.post("/offers", newOffer);
-            newOffer["offers_id"] = newOfferResponse.data.data[0].offers_id;
-            newOffer["business_name"] = uiState.businessMap[newOffer.business_id].business_name;
-            const updatedMapList = insertNewOfferIntoList(uiState.availableOffersMap[newOffer.credit_card_id], newOffer);
-            handlers.setUiState((prev) => ({
-                ...prev,
-                availableOffersMap: {
-                    ...prev.availableOffersMap,
-                    [newOffer.credit_card_id]: updatedMapList,
-                }
-            }))
+            const response = await apiClient.post("/offers", newOffer);
+            if (uiState.selectedCardId === newOffer.credit_card_id) {
+                handlers.setUiFlags(prev => {
+                    if (prev.needsRefreshed) return prev;
+                    return {
+                        ...prev,
+                        needsRefreshed: true,
+                    }
+                })
+            }
 
             // Maybe doesn't need reset call
             if (submitAction === "submit") {
@@ -61,7 +47,6 @@ function NewOfferForm({ uiState, handlers }) {
                 reset();
             }
         } catch (error) {
-            console.log(error.response?.data?.message);
             console.log(error)
         }
     }
@@ -69,84 +54,88 @@ function NewOfferForm({ uiState, handlers }) {
     return (
         <form className={styles.form} onSubmit={handleSubmit(submitForm)}>
             <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }} >Offer Details</Typography>
-            <div className={styles.formFields}>
-                <Controller
-                    name="creditCardId"
-                    control={control}
-                    rules={{ required: "You must select a credit card" }}
-                    render={({ field, fieldState: { error } }) => (
-                        <FormControl fullWidth error={!!error} >
-                            <InputLabel id="select-card-new-offer-label">Card Account</InputLabel>
-                            <Select
-                                {...field}
-                                labelId="select-card-new-offer-label"
-                                label="Card Account"
-                            >
-                                {uiState.creditCardList.map(card => (
-                                    <MenuItem key={card.credit_card_id} value={card.credit_card_id}>
-                                        {card.credit_card_name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    )}
-                />
-                <Controller
-                    name="businessId"
-                    control={control}
-                    rules={{ required: "You must select a business" }}
-                    render={({ field, fieldState: { error } }) => (
-                        <FormControl fullWidth error={!!error}>
-                            <InputLabel id="select-business-new-offer-label">Business</InputLabel>
-                            <Select
-                                {...field}
-                                labelId="select-business-new-offer-label"
-                                label="Business"
-                            >
-                                {uiState.businessList.map(biz => (
-                                    <MenuItem key={biz.business_id} value={biz.business_id}>
-                                        {biz.business_name}
-                                    </MenuItem>
-                                ))}   
-                            </Select>
-                        </FormControl>
-                    )}
-                />
-                <Controller
-                    name="description"
-                    control={control}
-                    render={({ field, fieldState: { error } }) => (
-                        <TextField
-                            {...field}
-                            label="Description"
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                            fullWidth
-                            variant="outlined"  
+            <div className={styles.formBody}>
+                <div className={styles.offerDetails}>
+                    <div className={styles.formFields}>
+                        <Controller
+                            name="creditCardId"
+                            control={control}
+                            rules={{ required: "You must select a credit card" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <FormControl fullWidth error={!!error} >
+                                    <InputLabel id="select-card-new-offer-label">Card Account</InputLabel>
+                                    <Select
+                                        {...field}
+                                        labelId="select-card-new-offer-label"
+                                        label="Card Account"
+                                    >
+                                        {uiState.creditCardList.map(card => (
+                                            <MenuItem key={card.credit_card_id} value={card.credit_card_id}>
+                                                {card.credit_card_name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
                         />
-                    )}
-                />
-                <Controller
-                    name="expirationDate"
-                    control={control}
-                    rules={{ required: "Expiration date is required" }}
-                    render={({ field, fieldState: { error } }) => (
-                        <TextField
-                            {...field}
-                            label="Transaction date"
-                            type="date"
-                            variant="outlined"
-                            slotProps={{
-                                inputLabel: {
-                                    shrink: true,
-                                }
-                            }}
-                            error={!!error}
-                            helperText={error ? error.message : null}
-                            fullWidth
+                        <Controller
+                            name="businessId"
+                            control={control}
+                            rules={{ required: "You must select a business" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <FormControl fullWidth error={!!error}>
+                                    <InputLabel id="select-business-new-offer-label">Business</InputLabel>
+                                    <Select
+                                        {...field}
+                                        labelId="select-business-new-offer-label"
+                                        label="Business"
+                                    >
+                                        {uiState.businessList.map(biz => (
+                                            <MenuItem key={biz.business_id} value={biz.business_id}>
+                                                {biz.business_name}
+                                            </MenuItem>
+                                        ))}   
+                                    </Select>
+                                </FormControl>
+                            )}
                         />
-                    )}
-                />
+                        <Controller
+                            name="description"
+                            control={control}
+                            render={({ field, fieldState: { error } }) => (
+                                <TextField
+                                    {...field}
+                                    label="Description"
+                                    error={!!error}
+                                    helperText={error ? error.message : null}
+                                    fullWidth
+                                    variant="outlined"  
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="expirationDate"
+                            control={control}
+                            rules={{ required: "Expiration date is required" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <TextField
+                                    {...field}
+                                    label="Transaction date"
+                                    type="date"
+                                    variant="outlined"
+                                    slotProps={{
+                                        inputLabel: {
+                                            shrink: true,
+                                        }
+                                    }}
+                                    error={!!error}
+                                    helperText={error ? error.message : null}
+                                    fullWidth
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
             </div>
             <div className={styles.buttonContainer}>
                 <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
