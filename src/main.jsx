@@ -1,7 +1,6 @@
 import React from 'react'
 import "./css/global.css"
 import ReactDOM from 'react-dom/client'
-import RootPanel from './components/root/RootPanel.jsx'
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import MainLayout from './components/layouts/MainLayout.jsx'
 import IncentivesDashboard from './components/incentives/IncentivesDashboard.jsx'
@@ -14,6 +13,7 @@ import CreditCardManagerDashboard from "./components/user-profile/asset-manager/
 import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
 import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
+import HomeDashboard from "./components/home/HomeDashboard.jsx"
 
 
 const router = createBrowserRouter([
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <ProtectedRoute><MainLayout /></ProtectedRoute>,
         children: [
-          { path: "/", element: <RootPanel />},
+          { path: "/", element: <HomeDashboard />},
           { path: "/offers", element: <OffersDashboard /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
