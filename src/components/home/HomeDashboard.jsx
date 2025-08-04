@@ -3,6 +3,7 @@ import ToggleButton from "@mui/material/ToggleButton"
 import { useState } from "react"
 import styles from "./HomeDashboard.module.css"
 import IncentivesSummaryView from "./IncentivesSummaryView"
+import ExpensesSummaryView from "./ExpensesSummaryView"
 
 function HomeDashboard() {
     const [uiState, setUiState] = useState({
@@ -26,7 +27,9 @@ function HomeDashboard() {
                 <ToggleButton value="expenses" name="summaryView">Expenses</ToggleButton>
                 <ToggleButton value="incentives" name="summaryView">Incentives</ToggleButton>
             </ToggleButtonGroup>
+            {uiState.summaryView === "expenses" && <ExpensesSummaryView />}
             {uiState.summaryView === "incentives" && <IncentivesSummaryView />}
+
         </main>
     )
 }
