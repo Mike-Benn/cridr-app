@@ -1,4 +1,4 @@
-import { parse, format } from 'date-fns';
+import { parse, format, getYear, getMonth } from 'date-fns';
 
 
 export { 
@@ -14,6 +14,7 @@ export {
     formatCurrency, 
     readableDate,
     readableMonth,
+    getMonthDatesFromYear,
 };
 
 function capitalizeFirstLetter(word) {
@@ -118,5 +119,35 @@ function readableDate(timezoneDate) {
 // yyyy-mm -> month year
 function readableMonth(rawDate) {
     const date = parse(rawDate, 'yyyy-MM', new Date());
-    return format(date, 'MMMM yyyy');
+    return format(date, 'MMMM');
+}
+
+function getMonthDatesFromYear(year) {
+    const monthNames = [
+        "01", 
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+    ]
+    const parsedYear = Number(year);
+    const date = new Date();
+    const currYear = getYear(date);
+    if (currYear === parsedYear) {
+        const values = []
+        const currMonth = getMonth(date) + 1;
+        for (let i = 0; i < currMonth; i++) {
+            values.push(monthNames[i])
+        }
+        return values;
+    } else {
+        return monthNames;
+    }
 }
