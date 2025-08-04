@@ -20,7 +20,7 @@ export default function IncentivesSummaryView() {
         tabValue: 0,
         selectedMonth: "all",
         selectedYear: getYear(new Date()),
-        businessStats: [],
+        incentivesStats: [],
         
     })
 
@@ -30,7 +30,7 @@ export default function IncentivesSummaryView() {
                 const statsResponse = await apiClient.get("/incentives/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth }})
                 setUiState(prev => ({
                     ...prev,
-                    businessStats: statsResponse.data.data,
+                    incentivesStats: statsResponse.data.data,
                 }))
             } catch (error) {
                 console.log(error);
@@ -52,7 +52,7 @@ export default function IncentivesSummaryView() {
 
     const handleTabChange = (e, newValue) => {
         setUiState(prev => {
-            if (prev.tabValue === newValue) return prev;
+            if (prev.selectedYear === newValue) return prev;
             return {
                 ...prev,
                 selectedYear: newValue
@@ -85,10 +85,10 @@ export default function IncentivesSummaryView() {
                 </Select>
             </FormControl>
             <TabPanel value={uiState.selectedYear} index={currYear}>
-                <IncentivesSummaryTable tableData={uiState.businessStats} />
+                <IncentivesSummaryTable tableData={uiState.incentivesStats} />
             </TabPanel>
             <TabPanel value={uiState.selectedYear} index={prevYear}>
-                <IncentivesSummaryTable tableData={uiState.businessStats} />
+                <IncentivesSummaryTable tableData={uiState.incentivesStats} />
             </TabPanel>
 
 
