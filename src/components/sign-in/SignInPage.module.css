@@ -1,0 +1,20 @@
+main {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+}
+
+.signUpLink {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signUpLink:visited {
+  color: #1976d2; 
+}
+
+.signUpLink:hover {
+  text-decoration: underline;
+}
