@@ -1,0 +1,105 @@
+import Tab from "@mui/material/Tab"
+import Tabs from "@mui/material/Tabs"
+import TabPanel from "./TabPanel"
+import { useState, useEffect } from "react"
+import { getYear, format } from "date-fns"
+import styles from "./IncentivesSummaryView.module.css"
+import apiClient from "../../api/apiClient"
+import FormControl from "@mui/material/FormControl"
+import InputLabel from "@mui/material/InputLabel"
+import Select from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
+import { getMonthDatesFromYear } from "../../utils/general/utils"
+import IncentivesSummaryTable from "./IncentivesSummaryTable"
+
+export default function IncentivesSummaryView() {
+    const currDate = new Date();
+    const currYear = getYear(currDate);
+    const prevYear = getYear(currDate) - 1;
+    const [uiState, setUiState] = useState({
+        tabValue: 0,
+        selectedMonth: "all",
+        selectedYear: getYear(new Date()),
+        businessStats: [],
+        
+    })
+
+    useEffect(() => {
+        const getStats = async () => {
+            try {
+                const statsResponse = await apiClient.get("/incentives/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth }})
+                setUiState(prev => ({
+                    ...prev,
+                    businessStats: statsResponse.data.data,
+                }))
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getStats()
+    }, [uiState.selectedYear, uiState.selectedMonth])
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUiState(prev => {
+            if (prev[name] === value) return prev;
+            return {
+                ...prev,
+                [name]: value,
+            }
+        })
+    }
+
+    const handleTabChange = (e, newValue) => {
+        setUiState(prev => {
+            if (prev.tabValue === newValue) return prev;
+            return {
+                ...prev,
+                selectedYear: newValue
+            }
+        })
+    }
+    const monthList = getMonthDatesFromYear(uiState.selectedYear)
+    return (
+        <section>
+            <div className={styles.tabs}>
+                <Tabs value={uiState.selectedYear} onChange={handleTabChange}>
+                    <Tab label="Year-to-date" name="selectedYear" value={currYear} sx={{ fontSize: "0.75em" }}></Tab>
+                    <Tab label={`${prevYear} Year-end summary`} name="selectedYear" value={prevYear} sx={{ fontSize: "0.75rem" }}></Tab>
+                </Tabs>
+            </div>
+            <FormControl className={styles.selectMonth}>
+                <InputLabel id="summary-select-incentive-month-label">Month</InputLabel>
+                <Select
+                    labelId="summary-select-incentive-month-label"
+                    value={uiState.selectedMonth}
+                    label="Month"
+                    onChange={handleChange}
+                    name="selectedMonth"
+                    
+                >
+                    <MenuItem key="all" value="all">All months</MenuItem>
+                    {monthList.map(month =>
+                        <MenuItem key={month} value={month}>{format(new Date(2000, (month - 1), 1), 'MMMM')}</MenuItem>
+                    )}
+                </Select>
+            </FormControl>
+            <TabPanel value={uiState.selectedYear} index={currYear}>
+                <IncentivesSummaryTable tableData={uiState.businessStats} />
+            </TabPanel>
+            <TabPanel value={uiState.selectedYear} index={prevYear}>
+                <IncentivesSummaryTable tableData={uiState.businessStats} />
+            </TabPanel>
+
+
+        </section>
+    )
+}
+
+
+
+/*
+
+
+
+*/
