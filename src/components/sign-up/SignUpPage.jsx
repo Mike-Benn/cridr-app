@@ -2,6 +2,8 @@ import SignUpForm from "./SignUpForm";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../../auth/AuthContext";
 import { useState, useEffect, useContext } from "react";
+import Typography from "@mui/material/Typography";
+import styles from "./SignUpPage.module.css"
 
 
 function SignUpPage() {
@@ -19,11 +21,12 @@ function SignUpPage() {
     if (isLoading) return null;
 
     return (
-        <div>
+        <main>
             <SignUpForm />
-            <p>Already have an account? <Link to="/log-in">Log in</Link></p>
-        </div>
+            <Typography variant="body1">Already have an account? <Link className={styles.signInLink} to="/log-in">Log in</Link></Typography>
+        </main>
     )
+
 }
 
 export default SignUpPage
