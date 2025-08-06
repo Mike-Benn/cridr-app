@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField"
 
 
 export default function SignInForm() {
-    const { handleSubmit, control, watch, reset, resetField, formState: { isSubmitting } } = useForm({
+    const { handleSubmit, control, formState: { isSubmitting } } = useForm({
         defaultValues: {
             email: "",
             password: ""
@@ -67,7 +67,7 @@ export default function SignInForm() {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className={styles.buttonContainer}>
                 <Button type="submit" variant="contained" disabled={isSubmitting}>Sign in</Button>
             </div>
         </form>
