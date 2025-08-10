@@ -1,7 +1,7 @@
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemText from "@mui/material/ListItemText"
-import { readableDate } from "../../utils/offers/utils";
+import { readableDate } from "../../utils/general/utils";
 import DeleteIcon from "@mui/icons-material/Clear"
 import IconButton from "@mui/material/IconButton"
 

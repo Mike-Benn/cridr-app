@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { readableDate } from "../../utils/offers/utils";
+import { readableDate } from "../../utils/general/utils";
 
 export default function IncentivesView({ uiState, handlers }) {
     return (
