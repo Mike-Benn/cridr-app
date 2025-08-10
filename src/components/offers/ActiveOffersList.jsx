@@ -5,31 +5,22 @@ import { readableDate } from "../../utils/general/utils";
 import DeleteIcon from "@mui/icons-material/Clear"
 import IconButton from "@mui/material/IconButton"
 
-
-/*
-<ListItem divider key={offer.offers_id}>
-                                <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
-                                <IconButton onClick={() => handleDeleteOffer(offer.offers_id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItem>
-*/
-
-function ActiveOffersList({ uiState }) {
+function ActiveOffersList({ uiState, onClick }) {
     const offersList = uiState.availableOffersList;
     return (
         <>
-            {offersList.length > 0 && 
-                <div>
-                    <List>
-                        {offersList.map(offer =>
-                            <ListItem divider key={offer.offers_id}>
-                                <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
-                            </ListItem>
-                        )}
-                    </List>
-                </div>
-            }
+            <div>
+                <List>
+                    {offersList.map(offer =>
+                        <ListItem divider key={offer.offers_id}>
+                            <ListItemText primary={`${offer.business_name} | ${offer.offer_description}`} secondary={`Expiration: ${readableDate(offer.expiration_date)}`} />
+                            <IconButton onClick={() => onClick(offer.offers_id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </ListItem>
+                    )}
+                </List>
+            </div>
         </>
     )
 }

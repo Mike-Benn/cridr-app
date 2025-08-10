@@ -4,43 +4,10 @@ import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import styles from "./OffersDisplay.module.css"
 import Typography from "@mui/material/Typography"
-import apiClient from "../../api/apiClient"
 import Button from "@mui/material/Button"
 import ActiveOffersList from "./ActiveOffersList"
 
 function OffersDisplay({ uiState, handlers }) {
-
-    // Outdated, availableOffersMap is not being fetched anymore
-    const handleDeleteOffer = async (offerId) => {
-        try {
-            await apiClient.delete(`/offers/${offerId}`);
-            const creditCardId = uiState.selectedCardId;
-            const filteredMapList = uiState.availableOffersMap[creditCardId].filter(offer => offer.offers_id !== offerId)
-            if (filteredMapList.length === 0) {
-                handlers.setUiState(prev => {
-                    const newMap = {...prev.availableOffersMap}
-                    delete newMap[creditCardId];
-                    return {
-                        ...prev,
-                        selectedCardId: "",
-                        availableOffersMap: newMap,
-                    }
-                })
-            } else {
-                handlers.setUiState(prev => ({
-                    ...prev,
-                    availableOffersMap: {
-                        ...prev.availableOffersMap,
-                        [creditCardId]: filteredMapList,
-
-                    }
-                }))
-            }
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
     
     return (
         <main className={styles.main}>
@@ -72,7 +39,7 @@ function OffersDisplay({ uiState, handlers }) {
                 </FormControl>
                 <div className={styles.offerList}>
                     <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Active Offers</Typography>
-                    <ActiveOffersList uiState={uiState} />
+                    <ActiveOffersList uiState={uiState} onClick={handlers.handleDeleteOffer} />
                 </div>
             </section>
         </main>

@@ -94,18 +94,32 @@ function OffersDashboard() {
         }))
     }
 
-    const handlers = {
-        setUiState,
+    const handleDeleteOffer = async (offerId) => {
+        try {
+            await apiClient.delete(`/offers/${offerId}`);
+            setUiFlags(prev => ({ ...prev, needsRefreshed: true }))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const summaryHandlers = {
         toggleViewMode,
         handleChange,
+        handleDeleteOffer,
+    }
+
+    const formHandlers = {
+        toggleViewMode,
         setUiFlags,
     }
 
     const isLoading = uiFlags.loadingCount > 0;
     return (
         <>
-            {!isLoading && ! uiFlags.needsRefreshed && uiState.viewMode === "viewing" && <OffersDisplay uiState={uiState} handlers={handlers} />}
-            {!isLoading && uiState.viewMode === "editing" && <NewOfferForm uiState={uiState} handlers={handlers}/>}
+            {!isLoading && ! uiFlags.needsRefreshed && uiState.viewMode === "viewing" && <OffersDisplay uiState={uiState} handlers={summaryHandlers} />}
+            {!isLoading && uiState.viewMode === "editing" && <NewOfferForm uiState={uiState} handlers={formHandlers}/>}
         </>
     )
     

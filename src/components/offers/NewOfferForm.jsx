@@ -39,8 +39,6 @@ function NewOfferForm({ uiState, handlers }) {
                     }
                 })
             }
-
-            // Maybe doesn't need reset call
             if (submitAction === "submit") {
                 handlers.toggleViewMode()
             } else {
@@ -50,7 +48,7 @@ function NewOfferForm({ uiState, handlers }) {
             console.log(error)
         }
     }
-    
+
     return (
         <form className={styles.form} onSubmit={handleSubmit(submitForm)}>
             <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }} >Offer Details</Typography>
