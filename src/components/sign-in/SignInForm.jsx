@@ -38,10 +38,18 @@ export default function SignInForm() {
                         <Controller
                             name="email"
                             control={control}
+                            rules={{
+                                required: "Email is required",
+                                validate: {
+                                    isEmail: (value) => /^\S+@\S+\.\S+$/.test(value.trim()) || 'Invalid email format',
+
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
                                     label="Email"
+                                    type="email"
                                     error={!!error}
                                     helperText={error ? error.message : null}
                                     fullWidth
@@ -52,6 +60,17 @@ export default function SignInForm() {
                         <Controller
                             name="password"
                             control={control}
+                            rules={{
+                                required: "Password is required",
+                                minLength: {
+                                    value: 8,
+                                    message: "Minimum length is 8 characters"
+                                },
+                                maxLength: {
+                                    value: 96,
+                                    message: "Maximum length is 96 characters"
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
