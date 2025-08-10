@@ -1,5 +1,4 @@
-.form {
-    padding: 16px;
+form, .cardPoints, .fuelPoints, .expenseDetails {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -11,17 +10,12 @@
     gap: 36px;
 }
 
-.cardPoints, .fuelPoints, .expenseDetails {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
 .formFields {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 .buttonContainer {
     display: flex;
     flex-direction: row;

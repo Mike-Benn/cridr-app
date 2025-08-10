@@ -11,9 +11,8 @@ import { useEffect } from "react";
 import apiClient from "../../api/apiClient";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { parse, isSameMonth } from "date-fns"
 
-function NewExpenseForm({ formUiData, handlers, uiState }) {
+export default function NewExpenseForm({ uiState, handlers }) {
     const { handleSubmit, control, watch, reset, resetField, formState: { isSubmitting } } = useForm({
         defaultValues: {
             mainCategoryId: "",
@@ -62,7 +61,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
 
     let selectedSubcategory;
     if ( selectedMainCategoryId && selectedSubcategoryId) {
-        selectedSubcategory = getSubcategory( formUiData.subcategoryMap[selectedMainCategoryId], selectedSubcategoryId)
+        selectedSubcategory = getSubcategory(uiState.subcategoryMap[selectedMainCategoryId], selectedSubcategoryId)
     }
 
     const submitForm = async (data, e) => {
@@ -101,17 +100,22 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
         
         try {
             const [expenseResponse] = await Promise.all(requests);
-            const currentMonth = parse(uiState.selectedMonth, "yyyy-MM", new Date());
-            const expenseMonth = new Date(newExpense.expense_transaction_date);
-            if (isSameMonth(currentMonth, expenseMonth)) {
-                handlers.setUiFlags(prev => ({
-                    ...prev,
-                    needsRefreshed: true,
-                }))
+            const transactionList = uiState.expenseTransactionList;
+            const oldestExpense = transactionList.length > 0 ? transactionList[transactionList.length - 1] : undefined;
+            if (!oldestExpense || new Date(newExpense.expense_transaction_date) > new Date(oldestExpense.expense_transaction_date)) {
+                handlers.setUiFlags(prev => {
+                    if (prev.needsRefreshed) return prev;
+                    return {
+                        ...prev,
+                        needsRefreshed: true,
+                    }
+                })
             }
-            if (submitAction === "submit") handlers.toggleViewMode();
-            reset();
-
+            if (submitAction === "submit") {
+                handlers.toggleView();
+            } else {
+                reset();
+            }
         } catch (error) {
             console.log(error)
         }
@@ -136,7 +140,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
                                         labelId="select-expense-main-category-label"
                                         label="Main expense category"
                                     >
-                                        {formUiData.mainCategoryList.map(cat => (
+                                        {uiState.mainCategoryList.map(cat => (
                                             <MenuItem key={cat.expense_main_category_id} value={cat.expense_main_category_id}>
                                                 {cat.expense_main_category_name}
                                             </MenuItem>
@@ -150,7 +154,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
                             control={control}
                             rules={{ required: "You must select a subcategory" }}
                             render={({ field, fieldState: { error } }) => {
-                                const safeSubcategoryId = selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].some(subcat => subcat.expense_sub_category_id === field.value)
+                                const safeSubcategoryId = selectedMainCategoryId && uiState.subcategoryMap[selectedMainCategoryId].some(subcat => subcat.expense_sub_category_id === field.value)
                                     ? field.value
                                     : "";
                                 return (
@@ -163,7 +167,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
                                             disabled={!selectedMainCategoryId}
                                             value={safeSubcategoryId}
                                         >
-                                            {selectedMainCategoryId && formUiData.subcategoryMap[selectedMainCategoryId].map(subcat => (
+                                            {selectedMainCategoryId && uiState.subcategoryMap[selectedMainCategoryId].map(subcat => (
                                                 <MenuItem key={subcat.expense_sub_category_id} value={subcat.expense_sub_category_id}>
                                                     {subcat.expense_sub_category_name}
                                                 </MenuItem>
@@ -240,7 +244,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
                                                 labelId="select-business-label"
                                                 label="Business"
                                             >
-                                                {formUiData.businessList.map(biz => (
+                                                {uiState.businessList.map(biz => (
                                                     <MenuItem key={biz.business_id} value={biz.business_id}>
                                                         {biz.business_name}
                                                     </MenuItem>
@@ -315,7 +319,7 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
                                             labelId="select-credit-card-label"
                                             label="Credit card"
                                         >
-                                            {formUiData.creditCardList.map(card => (
+                                            {uiState.creditCardList.map(card => (
                                                 <MenuItem key={card.credit_card_id} value={card.credit_card_id}>
                                                     {card.credit_card_name}
                                                 </MenuItem>
@@ -429,10 +433,9 @@ function NewExpenseForm({ formUiData, handlers, uiState }) {
             <div className={styles.buttonContainer}>
                 <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
                 <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
-                <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
+                <Button variant="contained" onClick={handlers.toggleView}>Cancel</Button>
             </div>
         </form>
     
     )
 }
-export default NewExpenseForm

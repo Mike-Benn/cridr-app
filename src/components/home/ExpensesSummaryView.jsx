@@ -26,7 +26,7 @@ export default function ExpensesSummaryView() {
     useEffect(() => {
         const getStats = async () => {
             try {
-                const statsResponse = await apiClient.get("/expenses/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth } })
+                const statsResponse = await apiClient.get("/expenses/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth, groupByCategory: "true" } })
                 setUiState(prev => ({
                     ...prev,
                     expensesStats: statsResponse.data.data,
