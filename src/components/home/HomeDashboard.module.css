@@ -1,9 +1,16 @@
 
-.main {
+main {
     display: flex;
     flex-direction: column;
     padding: 16px;
+    gap: 16px;
     
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .buttonGroup {

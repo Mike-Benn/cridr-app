@@ -4,6 +4,7 @@ import { useState } from "react"
 import styles from "./HomeDashboard.module.css"
 import IncentivesSummaryView from "./IncentivesSummaryView"
 import ExpensesSummaryView from "./ExpensesSummaryView"
+import Typography from "@mui/material/Typography"
 
 function HomeDashboard() {
     const [uiState, setUiState] = useState({
@@ -17,16 +18,19 @@ function HomeDashboard() {
 
     return (
         <main className={styles.main}>
-            <ToggleButtonGroup
-                value={uiState.summaryView}
-                exclusive
-                onChange={handleChange}
-                name="summaryView"
-                className={styles.buttonGroup}
-            >
-                <ToggleButton value="expenses" name="summaryView">Expenses</ToggleButton>
-                <ToggleButton value="incentives" name="summaryView">Incentives</ToggleButton>
-            </ToggleButtonGroup>
+            <header>
+                <Typography variant="h6" sx={{ fontWeight: "bold", alignSelf: "center" }}>Summary</Typography>
+                <ToggleButtonGroup
+                    value={uiState.summaryView}
+                    exclusive
+                    onChange={handleChange}
+                    name="summaryView"
+                    className={styles.buttonGroup}
+                >
+                    <ToggleButton value="expenses" name="summaryView">Expenses</ToggleButton>
+                    <ToggleButton value="incentives" name="summaryView">Incentives</ToggleButton>
+                </ToggleButtonGroup>
+            </header>
             {uiState.summaryView === "expenses" && <ExpensesSummaryView />}
             {uiState.summaryView === "incentives" && <IncentivesSummaryView />}
 

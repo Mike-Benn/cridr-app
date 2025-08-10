@@ -27,7 +27,6 @@ export default function ExpensesSummaryView() {
         const getStats = async () => {
             try {
                 const statsResponse = await apiClient.get("/expenses/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth } })
-                console.log(statsResponse);
                 setUiState(prev => ({
                     ...prev,
                     expensesStats: statsResponse.data.data,
@@ -59,6 +58,7 @@ export default function ExpensesSummaryView() {
             }
         })
     }
+    
     const monthList = getMonthDatesFromYear(uiState.selectedYear)
     return (
         <section>
