@@ -13,7 +13,6 @@ export default function IncentivesDashboard() {
         incentiveSum: 0,
         businessList: [],
     })
-
     const [uiFlags, setUiFlags] = useState({
         loadingCount: 1,
         needsRefreshed: false,
@@ -51,7 +50,6 @@ export default function IncentivesDashboard() {
         const getBusinesses = async () => {
             try {
                 const businessesResponse = await apiClient.get("/businesses", { params: { featureNames: "Incentives" }})
-                console.log(businessesResponse)
                 setUiState(prev => ({
                     ...prev,
                     businessList: businessesResponse.data.data,
@@ -63,6 +61,7 @@ export default function IncentivesDashboard() {
             
         }
         getBusinesses();
+        getIncentives();
     }, [])
 
     useEffect(() => {
