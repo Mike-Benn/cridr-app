@@ -9,9 +9,6 @@ import App from "./App.jsx"
 import OffersDashboard from './components/offers/OffersDashboard.jsx'
 import SignInPage from "./components/sign-in/SignInPage.jsx"
 import SignUpPage from './components/sign-up/SignUpPage.jsx'
-import CreditCardManagerDashboard from "./components/user-profile/asset-manager/credit-cards/CreditCardManagerDashboard.jsx"
-import UserProfileDashboard from './components/user-profile/UserProfileDashboard.jsx'
-import AssetManagerDashboard from './components/user-profile/asset-manager/AssetManagerDashboard.jsx'
 import ExpensesDashboard from './components/expenses/ExpensesDashboard.jsx'
 import HomeDashboard from "./components/home/HomeDashboard.jsx"
 
@@ -38,10 +35,6 @@ const router = createBrowserRouter([
           { path: "/offers", element: <OffersDashboard /> },
           { path: "/incentives", element: <IncentivesDashboard /> },
           { path: "/expenses", element: <ExpensesDashboard /> },
-          { path: "/profile", element: <UserProfileDashboard /> },
-          { path: "/profile/manager", element: <AssetManagerDashboard /> },
-          { path: "/profile/manager/credit-cards", element: <CreditCardManagerDashboard /> },
-          
         ]
       }
     ]
