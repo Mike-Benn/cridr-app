@@ -8,9 +8,8 @@ import styles from "./NewIncentiveForm.module.css"
 import apiClient from "../../api/apiClient"
 import FormControl from "@mui/material/FormControl"
 import InputLabel from "@mui/material/InputLabel"
-import { parse, isSameMonth } from "date-fns"
 
-function NewIncentiveForm({ uiState, handlers }) {
+export default function NewIncentiveForm({ uiState, handlers }) {
     const { handleSubmit, control, reset, formState: { isSubmitting } } = useForm({
         defaultValues: {
             businessId: "",
@@ -23,7 +22,7 @@ function NewIncentiveForm({ uiState, handlers }) {
     const submitForm = async (data, e) => {
         if (data.amount === "." || data.amount === "") return;
         const submitAction = e.nativeEvent.submitter.value;
-        const parsedIncentiveAmount = Math.round(parseFloat(data.incentiveAmount) * 100);
+        const parsedIncentiveAmount = Math.round(parseFloat(data.amount) * 100);
         const newIncentive = {
             business_id: data.businessId,
             incentive_description: data.description,
@@ -32,19 +31,19 @@ function NewIncentiveForm({ uiState, handlers }) {
         }
         try {
             const response = await apiClient.post("/incentives", newIncentive);
-            const currentMonth = parse(uiState.selectedMonth, "yyyy-MM", new Date());
-            const incentiveMonth = new Date(newIncentive.transaction_date);
-            if (isSameMonth(currentMonth, incentiveMonth)) {
+            const transactionList = uiState.incentiveTransactionList;
+            const oldestIncentive = transactionList.length > 0 ? transactionList[transactionList.length - 1] : undefined;
+            if (!oldestIncentive || new Date(newIncentive.transaction_date) > new Date(oldestIncentive.transaction_date)) {
                 handlers.setUiFlags(prev => {
                     if (prev.needsRefreshed) return prev;
                     return {
                         ...prev,
-                        needsRefreshed: true,
+                        needsRefreshed: true
                     }
                 })
-            }            
+            }
             if (submitAction === "submit") {
-                handlers.toggleViewMode();
+                handlers.toggleView();
             } else {
                 reset();
             }
@@ -54,7 +53,7 @@ function NewIncentiveForm({ uiState, handlers }) {
     }
 
     return (
-        <form className={styles.form} onSubmit={handleSubmit(submitForm)} >
+        <form onSubmit={handleSubmit(submitForm)} >
             <Typography variant="h6" sx={{ alignSelf: "center", fontWeight: "bold" }}>New Incentive</Typography>
             <div className={styles.formBody}>
                 <div className={styles.incentiveDetails}>
@@ -143,7 +142,7 @@ function NewIncentiveForm({ uiState, handlers }) {
             <div className={styles.buttonContainer}>
                 <Button type="submit" variant="contained" value="submit" disabled={isSubmitting}>Submit</Button>
                 <Button type="submit" variant="contained" value="submitAnother" disabled={isSubmitting}>Add another</Button>
-                <Button variant="contained" onClick={handlers.toggleViewMode}>Cancel</Button>
+                <Button variant="contained" onClick={handlers.toggleView}>Cancel</Button>
             </div>
             
         </form>
@@ -151,5 +150,3 @@ function NewIncentiveForm({ uiState, handlers }) {
     )
 
 }
-
-export default NewIncentiveForm

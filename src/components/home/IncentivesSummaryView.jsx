@@ -27,7 +27,7 @@ export default function IncentivesSummaryView() {
     useEffect(() => {
         const getStats = async () => {
             try {
-                const statsResponse = await apiClient.get("/incentives/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth }})
+                const statsResponse = await apiClient.get("/incentives/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth, groupByBusiness: "true" }})
                 setUiState(prev => ({
                     ...prev,
                     incentivesStats: statsResponse.data.data,

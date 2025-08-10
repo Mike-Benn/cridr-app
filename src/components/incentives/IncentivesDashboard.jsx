@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react";
+import styles from "./IncentivesDashboard.module.css"
+import IncentivesView from "./IncentivesView";
 import apiClient from "../../api/apiClient";
 import NewIncentiveForm from "./NewIncentiveForm";
-import IncentivesDisplay from "./IncentivesDisplay";
 
-
-function IncentivesDashboard() {
+export default function IncentivesDashboard() {
+    
 
     const [uiState, setUiState] = useState({
-        viewMode: "viewing",
-        businessList: [],
-        businessMap: {},
+        view: "summary",
         incentiveTransactionList: [],
-        incentiveSum: 1,
-        uniqueMonthList: [],
-        selectedMonth: "",
+        incentiveSum: 0,
+        businessList: [],
     })
+
     const [uiFlags, setUiFlags] = useState({
         loadingCount: 1,
         needsRefreshed: false,
@@ -22,20 +21,20 @@ function IncentivesDashboard() {
 
     const startLoad = () => setUiFlags(prev => ({
         ...prev,
-        loadingCount: prev.loadingCount + 1
+        loadingCount: prev.loadingCount + 1,
     }))
 
     const endLoad = () => setUiFlags(prev => ({
-        ...prev,
-        loadingCount: prev.loadingCount - 1
+        ...prev, 
+        loadingCount: prev.loadingCount - 1,
     }))
 
     const getIncentives = async () => {
         startLoad();
         try {
             const [incentivesResponse, statsResponse] = await Promise.all([
-                apiClient.get("/incentives", { params: { order: "DESC", month: uiState.selectedMonth }}),
-                apiClient.get("/incentives/stats", { params: { month: uiState.selectedMonth }})
+                apiClient.get("/incentives", { params: { order: "DESC", limit: 5 }}),
+                apiClient.get("/incentives/stats")
             ])
             setUiState(prev => ({
                 ...prev,
@@ -47,70 +46,54 @@ function IncentivesDashboard() {
         }
         endLoad();
     }
-
     useEffect(() => {
         document.title = "Incentives | Cridr"
-        const getData = async () => {
+        const getBusinesses = async () => {
             try {
-                const [businessesResponse, uniqueMonthsResponse] = await Promise.all([
-                    apiClient.get("/businesses", { params: { featureNames: "Incentives", includeMap: "true" }}),
-                    apiClient.get("/incentives/months")
-                ])
-                const firstMonth = uniqueMonthsResponse.data.data[0].month ?? "";
-                setUiState((prev) => ({
+                const businessesResponse = await apiClient.get("/businesses", { params: { featureNames: "Incentives" }})
+                console.log(businessesResponse)
+                setUiState(prev => ({
                     ...prev,
-                    businessList: businessesResponse.data.data.businessList,
-                    businessMap: businessesResponse.data.data.businessMap,
-                    uniqueMonthList: uniqueMonthsResponse.data.data,
-                    selectedMonth: firstMonth,
+                    businessList: businessesResponse.data.data,
                 }))
             } catch (error) {
-                console.log(error.response?.data?.message)
+                console.log(error)
             }
             endLoad();
-
+            
         }
-        getData();
+        getBusinesses();
     }, [])
 
     useEffect(() => {
-        if (uiState.selectedMonth === "") return;
+        if (!uiFlags.needsRefreshed || uiState.view !== "summary") return;
         getIncentives();
-    }, [uiState.selectedMonth])
+        setUiFlags(prev => ({ ...prev, needsRefreshed: false }));
+    }, [uiFlags.needsRefreshed, uiState.view])
+    
 
-    useEffect(() => {
-        if (!uiFlags.needsRefreshed || uiState.viewMode !== "viewing") return;
-        getIncentives();
-
-        setUiFlags(prev => ({ ...prev, needsRefreshed: false }))
-    }, [uiFlags.needsRefreshed, uiState.viewMode])
-
-    const toggleViewMode = () => {
-        setUiState((prev) => ({ ...prev, viewMode: prev.viewMode === "editing" ? "viewing" : "editing" }));
-    }
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const toggleView = () => {
         setUiState(prev => ({
             ...prev,
-            [name]: value,
+            view: prev.view === "summary" ? "adding" : "summary",
         }))
     }
-    
-    const handlers = {
-        toggleViewMode,
-        setUiState,
-        handleChange,
-        setUiFlags,
-    }
-    const isLoading = uiFlags.loadingCount > 0;
 
+
+    const summaryHandlers = {
+        toggleView,
+    }
+
+    const formHandlers = {
+        setUiFlags,
+        toggleView,
+    }
+
+    const isLoading = uiFlags.loadingCount > 0;
     return (
-        <>
-            {!isLoading && uiState.viewMode === "viewing" && <IncentivesDisplay uiState={uiState} handlers={handlers} />}
-            {!isLoading && uiState.viewMode === "editing" && <NewIncentiveForm uiState={uiState} handlers={handlers} /> }
-        </>
+        <main>
+            {!isLoading && uiState.view === "summary" && <IncentivesView uiState={uiState} handlers={summaryHandlers} />}
+            {!isLoading && uiState.view === "adding" && <NewIncentiveForm uiState={uiState} handlers={formHandlers} />}
+        </main>
     )
 }
-
-export default IncentivesDashboard
