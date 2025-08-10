@@ -49,6 +49,7 @@ export default function SignUpForm() {
                                     helperText={error ? error.message : null}
                                     fullWidth
                                     variant="outlined"
+                                    autoComplete="new-password"
                                 />
                             )}
                         />
@@ -64,6 +65,7 @@ export default function SignUpForm() {
                                     helperText={error ? error.message : null}
                                     fullWidth
                                     variant="outlined"
+                                    autoComplete="new-password"
                                 />
                             )}
                         />
@@ -79,7 +81,8 @@ export default function SignUpForm() {
                                     error={!!error}
                                     helperText={error ? error.message : null}
                                     fullWidth
-                                    variant="outlined"  
+                                    variant="outlined"
+                                    autoComplete="new-password"
                                 />
                             )}
                         />
