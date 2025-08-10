@@ -39,7 +39,7 @@ function OffersDisplay({ uiState, handlers }) {
                 </FormControl>
                 <div className={styles.offerList}>
                     <Typography variant="subtitle1" sx={{ paddingLeft: "16px" }}>Active Offers</Typography>
-                    <ActiveOffersList uiState={uiState} onClick={handlers.handleDeleteOffer} />
+                    <ActiveOffersList uiState={uiState} onClick={handlers.toggleAlertOn} />
                 </div>
             </section>
         </main>

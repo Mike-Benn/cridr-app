@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import apiClient from "../../api/apiClient";
 import OffersDisplay from "./OffersDisplay"
 import NewOfferForm from "./NewOfferForm";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 function OffersDashboard() {
 
@@ -12,7 +18,10 @@ function OffersDashboard() {
         businessMap: {},
         selectedCardId: "",
         availableOffersList: [],
+        idToDelete: "",
     })
+
+    const [alertStatus, setAlertStatus] = useState(false);
 
     const [uiFlags, setUiFlags] = useState({
         loadingCount: 1,
@@ -94,20 +103,34 @@ function OffersDashboard() {
         }))
     }
 
-    const handleDeleteOffer = async (offerId) => {
+    const handleConfirmDelete = async () => {
         try {
-            await apiClient.delete(`/offers/${offerId}`);
+            await apiClient.delete(`/offers/${uiState.idToDelete}`);
+            setUiState(prev => ({ ...prev, idToDelete: "" }))
             setUiFlags(prev => ({ ...prev, needsRefreshed: true }))
+            setAlertStatus(false);
 
         } catch (error) {
             console.log(error)
         }
     }
 
+    const toggleAlertOn = (offerId) => {
+        setUiState(prev => ({ ...prev, idToDelete: offerId }))
+        setAlertStatus(true);
+
+    }
+
+    const toggleAlertOff = () => {
+        setUiState(prev => ({ ...prev, idToDelete: "" }))
+        setAlertStatus(false)
+    }
+    
+
     const summaryHandlers = {
         toggleViewMode,
         handleChange,
-        handleDeleteOffer,
+        toggleAlertOn,
     }
 
     const formHandlers = {
@@ -118,6 +141,25 @@ function OffersDashboard() {
     const isLoading = uiFlags.loadingCount > 0;
     return (
         <>
+            <Dialog
+                open={alertStatus}
+                onClose={toggleAlertOff}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Delete offer
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Are you sure you want to delete this offer?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={toggleAlertOff}>Disagree</Button>
+                    <Button onClick={handleConfirmDelete} autoFocus>Agree</Button>
+                </DialogActions>
+            </Dialog>
             {!isLoading && ! uiFlags.needsRefreshed && uiState.viewMode === "viewing" && <OffersDisplay uiState={uiState} handlers={summaryHandlers} />}
             {!isLoading && uiState.viewMode === "editing" && <NewOfferForm uiState={uiState} handlers={formHandlers}/>}
         </>
