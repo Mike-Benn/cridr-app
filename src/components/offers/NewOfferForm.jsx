@@ -60,13 +60,13 @@ function NewOfferForm({ uiState, handlers }) {
                             name="creditCardId"
                             control={control}
                             rules={{ 
-                                required: "You must select a credit card",
-                                validate: {
-                                    validId: value => {
-                                        const cardIds = uiState.creditCardList.map(card => Number(card.credit_card_id));
-                                        return cardIds.includes(Number(value)) || "Invalid credit card selected";
-                                    }
+                                validate: value => {
+                                    if (!value) return "Credit card is required";
+                                    const cardIds = uiState.creditCardList.map(card => Number(card.credit_card_id));
+                                    if (!cardIds.includes(Number(value))) return "Invalid credit card selected"
+                                    return true;
                                 }
+
                             }}
                             render={({ field, fieldState: { error } }) => (
                                 <FormControl fullWidth error={!!error} >
@@ -89,12 +89,11 @@ function NewOfferForm({ uiState, handlers }) {
                             name="businessId"
                             control={control}
                             rules={{
-                                required: "You must select a business",
-                                validate: {
-                                    validId: value => {
-                                        const businessIds = uiState.businessList.map(biz => Number(biz.business_id))
-                                        return businessIds.includes(Number(value)) || "Invalid business selected"
-                                    }
+                                validate: value => {
+                                    if (!value) return "Business is required";
+                                    const businessIds = uiState.businessList.map(biz => Number(biz.business_id));
+                                    if (!businessIds.includes(Number(value))) return "Invalid business selected"
+                                    return true;
                                 }
                             }}
                             render={({ field, fieldState: { error } }) => (
