@@ -23,9 +23,11 @@ export default function IncentivesSummaryView() {
         incentivesStats: [],
         
     })
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const getStats = async () => {
+            setIsLoading(true);
             try {
                 const statsResponse = await apiClient.get("/incentives/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth, groupByBusiness: "true" }})
                 setUiState(prev => ({
@@ -35,6 +37,7 @@ export default function IncentivesSummaryView() {
             } catch (error) {
                 console.log(error);
             }
+            setIsLoading(false);
         }
         getStats()
     }, [uiState.selectedYear, uiState.selectedMonth])
@@ -85,10 +88,10 @@ export default function IncentivesSummaryView() {
                 </Select>
             </FormControl>
             <TabPanel value={uiState.selectedYear} index={currYear}>
-                <IncentivesSummaryTable tableData={uiState.incentivesStats} />
+                <IncentivesSummaryTable tableData={uiState.incentivesStats} isLoading={isLoading} />
             </TabPanel>
             <TabPanel value={uiState.selectedYear} index={prevYear}>
-                <IncentivesSummaryTable tableData={uiState.incentivesStats} />
+                <IncentivesSummaryTable tableData={uiState.incentivesStats} isLoading={isLoading} />
             </TabPanel>
 
 
