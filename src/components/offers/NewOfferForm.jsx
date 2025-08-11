@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography"
 import apiClient from "../../api/apiClient";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel"
+import { startOfToday } from "date-fns"
 
 
 function NewOfferForm({ uiState, handlers }) {
@@ -58,7 +59,15 @@ function NewOfferForm({ uiState, handlers }) {
                         <Controller
                             name="creditCardId"
                             control={control}
-                            rules={{ required: "You must select a credit card" }}
+                            rules={{ 
+                                required: "You must select a credit card",
+                                validate: {
+                                    validId: value => {
+                                        const cardIds = uiState.creditCardList.map(card => Number(card.credit_card_id));
+                                        return cardIds.includes(Number(value)) || "Invalid credit card selected";
+                                    }
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <FormControl fullWidth error={!!error} >
                                     <InputLabel id="select-card-new-offer-label">Card Account</InputLabel>
@@ -79,7 +88,15 @@ function NewOfferForm({ uiState, handlers }) {
                         <Controller
                             name="businessId"
                             control={control}
-                            rules={{ required: "You must select a business" }}
+                            rules={{
+                                required: "You must select a business",
+                                validate: {
+                                    validId: value => {
+                                        const businessIds = uiState.businessList.map(biz => Number(biz.business_id))
+                                        return businessIds.includes(Number(value)) || "Invalid business selected"
+                                    }
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <FormControl fullWidth error={!!error}>
                                     <InputLabel id="select-business-new-offer-label">Business</InputLabel>
@@ -100,6 +117,15 @@ function NewOfferForm({ uiState, handlers }) {
                         <Controller
                             name="description"
                             control={control}
+                            rules={{
+                                validate: value => {
+                                    const trimmedValue = value.trim();
+                                    if (!trimmedValue) return "Description is required";
+                                    if (trimmedValue.length > 50) return "Maximum length is 50 characters";
+                                    return true;
+                                }
+                            
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
@@ -114,7 +140,16 @@ function NewOfferForm({ uiState, handlers }) {
                         <Controller
                             name="expirationDate"
                             control={control}
-                            rules={{ required: "Expiration date is required" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Expiration date is required";
+                                    const expirationDate = new Date(value);
+                                    if (isNaN(expirationDate.getTime())) return "Invalid date format"
+                                    const today = startOfToday();
+                                    if (expirationDate < today) return "Expiration date has passed"
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
