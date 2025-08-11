@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import styles from "./SignUpForm.module.css"
 
 export default function SignUpForm() {
-    const { handleSubmit, control, watch, reset, resetField, formState: { isSubmitting } } = useForm({
+    const { handleSubmit, control, formState: { isSubmitting } } = useForm({
         defaultValues: {
             email: "",
             password: "",
@@ -41,6 +41,9 @@ export default function SignUpForm() {
                         <Controller
                             name="email"
                             control={control}
+                            rules={{
+                                required: "Email is required",
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
