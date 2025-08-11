@@ -22,9 +22,11 @@ export default function ExpensesSummaryView() {
         selectedYear: getYear(new Date()),
         expensesStats: [],
     })
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const getStats = async () => {
+            setIsLoading(true);
             try {
                 const statsResponse = await apiClient.get("/expenses/stats", { params: { year: uiState.selectedYear, month: uiState.selectedMonth === "all" ? undefined : uiState.selectedMonth, groupByCategory: "true" } })
                 setUiState(prev => ({
@@ -34,6 +36,7 @@ export default function ExpensesSummaryView() {
             } catch (error) {
                 console.log(error);
             }
+            setIsLoading(false)
         }
         getStats();
     }, [uiState.selectedYear, uiState.selectedMonth])
@@ -76,7 +79,6 @@ export default function ExpensesSummaryView() {
                     label="Month"
                     onChange={handleChange}
                     name="selectedMonth"
-                    
                 >
                     <MenuItem key="all" value="all">All months</MenuItem>
                     {monthList.map(month =>
@@ -85,10 +87,10 @@ export default function ExpensesSummaryView() {
                 </Select>
             </FormControl>
             <TabPanel value={uiState.selectedYear} index={currYear}>
-                <ExpensesSummaryTable tableData={uiState.expensesStats} />
+                <ExpensesSummaryTable tableData={uiState.expensesStats} isLoading={isLoading} />
             </TabPanel>
             <TabPanel value={uiState.selectedYear} index={prevYear}>
-                <ExpensesSummaryTable tableData={uiState.expensesStats} />
+                <ExpensesSummaryTable tableData={uiState.expensesStats} isLoading={isLoading} />
             </TabPanel>
         </section>
     )
