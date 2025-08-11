@@ -39,9 +39,10 @@ export default function SignInForm() {
                             name="email"
                             control={control}
                             rules={{
-                                validate: {
-                                    isEmail: (value) => /^\S+@\S+\.\S+$/.test(value.trim()) || 'Invalid email format',
-                                    notEmpty: value => value.trim().length > 0 || "Email is required"
+                                validate : value => {
+                                    const trimmed = value.trim();
+                                    if (!trimmed) return "Email is required";
+                                    if (!/^\S+@\S+\.\S+$/.test(trimmed)) return "Invalid email format";
                                 }
                             }}
                             render={({ field, fieldState: { error } }) => (
@@ -68,9 +69,6 @@ export default function SignInForm() {
                                     value: 96,
                                     message: "Maximum length is 96 characters"
                                 },
-                                validate: {
-                                    notEmpty: value => value.trim().length > 0 || "Password is required"
-                                }
                             }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
