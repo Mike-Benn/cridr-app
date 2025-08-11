@@ -7,6 +7,7 @@ import ExpensesIcon from "@mui/icons-material/Payment";
 import HomeIcon from "@mui/icons-material/HomeFilled";
 import SummaryIcon from "@mui/icons-material/BarChart"
 import { Link, useLocation } from "react-router-dom";
+import Paper from "@mui/material/Paper";
 
 function BottomNav() {
     // coupons , incentives , expenses , summary , profile
@@ -23,12 +24,7 @@ function BottomNav() {
 
     return (
         <>
-            <BottomNavigation
-                showLabels
-                value={currPath}
-                onChange={(event, newTabIndex) => {
-                    setTabIndex(newTabIndex);
-                }}
+            <Paper elevation={8}
                 sx={{
                     position: "fixed",
                     left: 0,
@@ -37,12 +33,20 @@ function BottomNav() {
                     zIndex: 1300,
                 }}
             >
-                <BottomNavigationAction label="Home" icon={<HomeIcon />} component={Link} to="/" value="/" />
-                <BottomNavigationAction label="Offers" icon={<OffersIcon />} component={Link} to="/offers" value="/offers" />
-                <BottomNavigationAction label="Incentives" icon={<IncentivesIcon />} component={Link} to="/incentives" value="/incentives" />
-                <BottomNavigationAction label="Expenses" icon={<ExpensesIcon />} component={Link} to="/expenses" value="/expenses" />
-                <BottomNavigationAction label="Summary" icon={<SummaryIcon />} component={Link} to="/summary" value="/summary" />
-            </BottomNavigation>
+                <BottomNavigation
+                    showLabels
+                    value={currPath}
+                    onChange={(event, newTabIndex) => {
+                        setTabIndex(newTabIndex);
+                    }}
+                >
+                    <BottomNavigationAction label="Home" icon={<HomeIcon />} component={Link} to="/" value="/" />
+                    <BottomNavigationAction label="Offers" icon={<OffersIcon />} component={Link} to="/offers" value="/offers" />
+                    <BottomNavigationAction label="Incentives" icon={<IncentivesIcon />} component={Link} to="/incentives" value="/incentives" />
+                    <BottomNavigationAction label="Expenses" icon={<ExpensesIcon />} component={Link} to="/expenses" value="/expenses" />
+                    <BottomNavigationAction label="Summary" icon={<SummaryIcon />} component={Link} to="/summary" value="/summary" />
+                </BottomNavigation>
+            </Paper>
             <BottomNavigation />
         </>
     )
