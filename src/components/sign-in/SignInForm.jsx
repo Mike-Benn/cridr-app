@@ -39,10 +39,9 @@ export default function SignInForm() {
                             name="email"
                             control={control}
                             rules={{
-                                required: "Email is required",
                                 validate: {
                                     isEmail: (value) => /^\S+@\S+\.\S+$/.test(value.trim()) || 'Invalid email format',
-
+                                    notEmpty: value => value.trim().length > 0 || "Email is required"
                                 }
                             }}
                             render={({ field, fieldState: { error } }) => (
@@ -61,7 +60,6 @@ export default function SignInForm() {
                             name="password"
                             control={control}
                             rules={{
-                                required: "Password is required",
                                 minLength: {
                                     value: 8,
                                     message: "Minimum length is 8 characters"
@@ -69,6 +67,9 @@ export default function SignInForm() {
                                 maxLength: {
                                     value: 96,
                                     message: "Maximum length is 96 characters"
+                                },
+                                validate: {
+                                    notEmpty: value => value.trim().length > 0 || "Password is required"
                                 }
                             }}
                             render={({ field, fieldState: { error } }) => (
