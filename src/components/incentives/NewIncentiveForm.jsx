@@ -114,8 +114,8 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                             rules={{
                                 validate: value => {
                                     if (!value) return "Amount is required";
-                                    if (value === ".") return "Invalid amount format"
-                                    if (!/^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) return "Invalid amount format"
+                                    if (value === ".") return "Invalid number format"
+                                    if (!/^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) return "Invalid number format"
                                     return true;
                                 }
                             }}
