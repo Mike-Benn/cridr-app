@@ -131,7 +131,14 @@ export default function NewExpenseForm({ uiState, handlers }) {
                         <Controller
                             name="mainCategoryId"
                             control={control}
-                            rules={{ required: "You must select a main category" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Main expense category is required";
+                                    const categoryIds = uiState.mainCategoryList.map(cat => Number(cat.expense_main_category_id));
+                                    if (!categoryIds.includes(Number(value))) return "Invalid main expense category selected";
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <FormControl fullWidth error={!!error}>
                                     <InputLabel id="select-expense-main-category-label">Main expense category</InputLabel>
@@ -152,7 +159,14 @@ export default function NewExpenseForm({ uiState, handlers }) {
                         <Controller
                             name="subcategoryId"
                             control={control}
-                            rules={{ required: "You must select a subcategory" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Secondary expense category is required";
+                                    const categoryIds = uiState.subcategoryMap[selectedMainCategoryId].map(subcat => Number(subcat.expense_sub_category_id));
+                                    if (!categoryIds.includes(Number(value))) return "Invalid secondary expense category selected";
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => {
                                 const safeSubcategoryId = selectedMainCategoryId && uiState.subcategoryMap[selectedMainCategoryId].some(subcat => subcat.expense_sub_category_id === field.value)
                                     ? field.value
@@ -214,7 +228,14 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 <Controller
                                     name="transactionDate"
                                     control={control}
-                                    rules={{ required: "Transaction date is required" }}
+                                    rules={{
+                                        validate: value => {
+                                            if (!value) return "Transaction date is required";
+                                            const transactionDate = new Date(value);
+                                            if (isNaN(transactionDate.getTime())) return "Invalid date format";
+                                            return true;
+                                        }
+                                    }}
                                     render={({ field, fieldState: { error } }) => (
                                         <TextField
                                             {...field}
@@ -235,7 +256,14 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 <Controller
                                     name="businessId"
                                     control={control}
-                                    rules={{ required: "You must select a business" }}
+                                    rules={{
+                                        validate: value => {
+                                            if (!value) return "Business is required";
+                                            const businessIds = uiState.businessList.map(biz => Number(biz.business_id));
+                                            if (!businessIds.includes(Number(values))) return "Invalid business selected";
+                                            return true;
+                                        }
+                                    }}
                                     render={({ field, fieldState: { error } }) => (
                                         <FormControl fullWidth error={!!error}>
                                             <InputLabel id="select-business-label">Business</InputLabel>
@@ -256,6 +284,13 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 <Controller
                                     name="description"
                                     control={control}
+                                    rules={{
+                                        validate: value => {
+                                            const trimmed = value.trim();
+                                            if (trimmed.length > 50) return "Maximum length is 50 characters";
+                                            return true;
+                                        }
+                                    }}
                                     render={({ field, fieldState: { error } }) => (
                                         <TextField
                                             {...field}
@@ -264,21 +299,19 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                             helperText={error ? error.message : null}
                                             fullWidth
                                             variant="outlined"
-                                            
                                         />
                                     )}
                                 />
-                                
                                 <Controller
                                     name="expenseAmount"
                                     control={control}
                                     rules={{
-                                        required: "Amount is required",
-                                        min: { value: 0, message: "Amount must be at least 0"},
-                                        validate: (value) => {
-                                            const parsed = parseFloat(value);
-                                            if (isNaN(parsed)) return "Must be a number";
-                                            if (!/^\d+(\.\d{1,2})?$/.test(value)) return "Max 2 decimal places";
+                                        validate: value => {
+                                            if (!value) return "Expense amount is required";
+                                            if (value === ".") return "Invalid number format"
+                                            if (!/^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) return "Invalid number format"
+                                            const parsedValue = Number(value);
+                                            if (parsedValue <= 0) return "Must be greater than 0";
                                             return true;
                                         }
                                     }}
@@ -290,9 +323,9 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                             error={!!error}
                                             helperText={error ? error.message : null}
                                             fullWidth
-                                            onChange={(e) => {
+                                            onChange={e => {
                                                 const value = e.target.value;
-                                                if (value === '' || /^\d+(\.\d{0,2})?$/.test(value)) {
+                                                if (value === "" || /^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) {
                                                     field.onChange(value);
                                                 }
                                             }}
@@ -310,7 +343,14 @@ export default function NewExpenseForm({ uiState, handlers }) {
                             <Controller
                                 name="creditCardId"
                                 control={control}
-                                rules={{ required: "You must select a credit card" }}
+                                rules={{
+                                    validate: value => {
+                                        if (!value) return "Credit card is required";
+                                        const cardIds = uiState.creditCardList.map(card => Number(card.credit_card_id))
+                                        if (!cardIds.includes(Number(value))) return "Invalid credit card selected";
+                                        return true;
+                                    }
+                                }}
                                 render={({ field, fieldState: { error } }) => (
                                     <FormControl fullWidth error={!!error}>
                                         <InputLabel id="select-credit-card-label">Credit card</InputLabel>
@@ -332,27 +372,27 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 name="cardPointsAmount"
                                 control={control}
                                 rules={{
-                                    required: "Please enter a value",
-                                    min: { value: 1, message: "Must be an integer greater than zero" },
-                                    validate: (value) => {
-                                        const num = Number(value);
-                                        if (isNaN(num) || !Number.isInteger(num)) return "Must be an integer greater than zero";
+                                    validate: value => {
+                                        if (!value) return "Card points earned is required";
+                                        if (value === ".") return "Invalid number format";
+                                        if (!/^\d+$/.test(value)) return "Invalid number format";
+                                        const parsedValue = Number(value);
+                                        if (parsedValue <= 0) return "Must be greater than 0";
                                         return true;
                                     }
                                 }}
                                 render={({ field, fieldState: { error } }) => (
                                     <TextField
                                         {...field}
-                                        type="number"
                                         label="Card points earned"
                                         variant="outlined"
                                         error={!!error}
                                         helperText={error ? error.message : null}
                                         fullWidth
-                                        slotProps={{
-                                            input: {
-                                                step: "1",
-                                                min: "1",
+                                        onChange={e => {
+                                            const value = e.target.value;
+                                            if (value === "" || /^\d+$/.test(value)) {
+                                                field.onChange(value);
                                             }
                                         }}
                                     />
@@ -369,28 +409,27 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 name="gallons"
                                 control={control}
                                 rules={{
-                                    required: "Please enter a value",
-                                    min: { value: "0.001", message: "Value must be greater than 0"},
-                                    validate: (value) => {
-                                        const num = Number(value);
-                                        if (isNaN(num)) return "Value must be a number";
-                                        if (!/^\d+(\.\d{1,3})?$/.test(value)) return "Value can have up to 3 decimal places";
+                                    validate: value => {
+                                        if (!value) return "Gallons dispensed is required";
+                                        if (value === ".") return "Invalid number format";
+                                        if (!/^(0|[1-9]\d*)?(\.\d{0,3})?$/.test(value)) return "Invalid number format";
+                                        const parsedValue = Number(value);
+                                        if (parsedValue <= 0) return "Must be greater than 0";
                                         return true;
                                     }
                                 }}
                                 render={({ field, fieldState: { error } }) => (
                                     <TextField
                                         {...field}
-                                        type="number"
                                         label="Gallons dispensed"
                                         variant="outlined"
                                         error={!!error}
                                         helperText={error ? error.message : null}
                                         fullWidth
-                                        slotProps={{
-                                            input: {
-                                                step: "0.001",
-                                                min: "0.001",
+                                        onChange={e => {
+                                            const value = e.target.value;
+                                            if (value === "" || /^(0|[1-9]\d*)?(\.\d{0,3})?$/.test(value)) {
+                                                field.onChange(value);
                                             }
                                         }}
                                     />
@@ -400,32 +439,33 @@ export default function NewExpenseForm({ uiState, handlers }) {
                                 name="fuelPointsAmount"
                                 control={control}
                                 rules={{
-                                    required: "Please enter a value",
-                                    min: { value: 100, message: "Must be an integer multiple of 100" },
-                                    validate: (value) => {
-                                        const num = Number(value);
-                                        if (isNaN(num) || !Number.isInteger(num) || num % 100 !== 0) return "Must be an integer multiple of 100";
-                                        return true;
+                                    validate: value => {
+                                        if (!value) return "Fuel points redeemed is required";
+                                        if (!/^\d+$/.test(value)) return "Invalid number format";
+                                        const parsedValue = Number(value);
+                                        if (parsedValue <= 0) return "Must be greater than 0";
+                                        if (parsedValue % 100 !== 0) return "Must be a multiple of 100";
+                                        return true; 
                                     }
                                 }}
                                 render={({ field, fieldState: { error } }) => (
                                     <TextField
                                         {...field}
-                                        type="number"
                                         label="Fuel points redeemed"
                                         variant="outlined"
                                         error={!!error}
                                         helperText={error ? error.message : null}
                                         fullWidth
-                                        slotProps={{
-                                            input: {
-                                                step: "100",
-                                                min: 0,
+                                        onChange={e => {
+                                            const value = e.target.value;
+                                            if (value === "" || /^\d+$/.test(value)) {
+                                                field.onChange(value);
                                             }
-                                        }}  
+                                        }}
                                     />
                                 )}
                             />
+                            
                         </div>
                     </div>
                 }
