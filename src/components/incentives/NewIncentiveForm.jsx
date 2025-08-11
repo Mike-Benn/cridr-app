@@ -61,7 +61,14 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                         <Controller
                             name="businessId"
                             control={control}
-                            rules={{ required: "You must select a business" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Business is required";
+                                    const businessIds = uiState.businessList.map(biz => Number(biz.business_id));
+                                    if (!businessIds.includes(Number(value))) return "Invalid business selected"
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <FormControl fullWidth error={!!error}>
                                     <InputLabel id="select-business-new-incentive-label">Business</InputLabel>
@@ -82,7 +89,14 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                         <Controller
                             name="description"
                             control={control}
-                            rules={{ required: "Description is required" }}
+                            rules={{
+                                validate: value => {
+                                    const trimmed = value.trim();
+                                    if (!trimmed) return "Description is required"
+                                    if (trimmed.length > 50) return "Maximum length is 50 characters"
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
@@ -97,7 +111,14 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                         <Controller
                             name="amount"
                             control={control}
-                            rules={{ required: "Amount is required" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Amount is required";
+                                    if (value === ".") return "Invalid amount format"
+                                    if (!/^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) return "Invalid amount format"
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField
                                     {...field}
@@ -108,7 +129,7 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                                     fullWidth
                                     onChange={e => {
                                         const value = e.target.value;
-                                        if (value === "" || /^\d+(\.\d{0,2})?$/.test(value)) {
+                                        if (value === "" || /^(0|[1-9]\d*)?(\.\d{0,2})?$/.test(value)) {
                                             field.onChange(value);
                                         }
                                     }}
@@ -118,7 +139,14 @@ export default function NewIncentiveForm({ uiState, handlers }) {
                         <Controller 
                             name="transactionDate"
                             control={control}
-                            rules={{ required: "Transaction date is required" }}
+                            rules={{
+                                validate: value => {
+                                    if (!value) return "Transaction date is required";
+                                    const transactionDate = new Date(value);
+                                    if (isNaN(transactionDate.getTime())) return "Invalid date format";
+                                    return true;
+                                }
+                            }}
                             render={({ field, fieldState: { error } }) => (
                                 <TextField 
                                     {...field}
